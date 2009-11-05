@@ -1,0 +1,112 @@
+
+	<% i = 1 %>
+	<% @orders.each do |order| %>
+				<div class="job">
+				<table width="100%">
+					<tr>
+					    <td valign="top" width="14%">
+					        <% if order.art_upload_method=='now'%>
+					         <img src="admin/reports/show_me/<%= order.id %>" alt="1" width="60px" height="60px" border="1" align="left"/>
+							<%else%>
+							 <div style="border: 1px dotted gray; width: 80px; height: 60px;" class="thumbnailPlaceholder">
+		
+	</div>
+							<%end%>
+							<label class="batch"><span class="obatch"><%= order.batch %></span><span class="oid"><%= order.id %></span><span class="ovalue">07</span></label><br/>
+							
+						</td>
+						<td valign="top" width="10%">
+						<label class="job_number"><%= order.full_job_number %></label><br/>
+						<label class="shipping_method"><%= order.shipping_method.name if order.shipping_method %></label><br/>
+							<label class="status"><%= order.status %></label>
+						</td>
+						<td valign="top" width="61%">
+							<div class="name_company">
+							<label class="name"><%= order.invoice.customer.name %></label><br/>
+							<label class="company"><%= order.invoice.customer.company %></label><br/>
+							<div class="address">
+							<label class="street"><%= order.invoice.address.street_1 %></label><br/>
+							<!--<% if order.invoice.address.street_2 and not order.invoice.address.street_2.empty? %>
+								<label class="street"><%= order.invoice.address.street_2 %></label><br/>
+							<% end %>-->
+							<label class="city"><%= order.invoice.address.city %></label>
+							<label class="state"><%= order.invoice.address.state %></label> 
+							<label class="zip"><%= order.invoice.address.zip %></label><br/>
+							<label class="country"><%= order.invoice.address.country %></label><br/>
+							</div>
+							<div class="boxcount">
+							<span style="float:left;">BOX COUNT:</span>
+							<span style="float:left;">
+							<label id="s">S</label> <input type="text" size="1" id="s" name="s" />
+							<label id="m">M</label> <input type="text" size="1" id="m" name="m" />
+							<label id="l">L</label> <input type="text" size="1" id="l" name="l" />
+							<label id="p">P</label> <input type="text" size="1" id="p" name="p" />
+							</span>
+							</div>
+							</div>
+							<div class="messengers">
+							<div class="boxcount1"><i>Messengers check here</i></div><br/>
+							<label class="signature">Signature: </label><br/>
+							<label class="printname">PrintName: </label><br/><br/>
+							<label class="date">
+                <div id="pickup_date_<%= order.id %>">
+                  <% if order.status == 'Picked Up' %>
+                    Picked Up Date: <%= order.pickedup_date.blank? ? '' : order.pickedup_date.strftime('%m/%d/%y') %>
+                  <% else %>
+                    Date: <%= order.pickedup_date.blank? ? '' : order.pickedup_date.strftime('%m/%d/%y') %>
+                  <% end %>
+							  </div>
+							</label><br/>
+							</div>
+						</td>
+						<td width="1%"></td>
+						<td valign="top" align="right" width="14%">
+							<div class="phone_numbers">
+							<label class="phone_1"><%= order.invoice.customer.phone %></label><br/>
+							<label class="phone_2"><%= order.invoice.address.phone %></label>
+							</div>
+							<label class="box_suggestions">
+						
+<%= select_tag "order_status_#{order.id}", options_for_select(statuses_array, order.status), :onchange => remote_function(:url => report_change_status_url(:order_id => order.id), :with => "'status=' + $('order_status_#{order.id}').value"),
+	       :style => "width: 140px", :class => "screen_only" %>							 
+							
+                        </lable>
+						</td>
+					</tr>
+				</table>
+				</div>
+				
+				<% if i.modulo(9).zero? and not i.zero? %><div class="break"></div><% end %>
+			<% i += 1 %>
+	<% end %>
+	
+
+
+<style>
+	label.job_number { font-size: 0.9em; font-weight: bold; clear: both;}
+	label.name { font-size: 0.9em; font-weight: bold;line-height:14px;  }
+	label.company { font-size: 0.8em; font-weight: bold; color:#42658b;}
+	label.shipping_method { font-weight: bold; font-size: 0.9em;}
+	label.city,label.street { margin-right: 4px; font-size: 0.7em;line-height:14px;}
+	label.state { margin-right: 4px; font-size: 0.7em;line-height:14px; }
+	label.zip,label.country { font-size: 0.7em;line-height:14px;}
+	label.phone_1, label.phone_2 { text-align: right; width: 100%;}
+	label.box_suggestions { font-size: 0.8em; }
+ 	label.box_suggestions .box_size { padding-left: 0px; letter-spacing: -1.0px; font-size: 0.7em;}
+ 	label.batch{font-size: 0.7em; padding:0;}
+ 	.boxcount{background:#888; border:1px solid #000; font-weight: bold;  font-size: 0.6em; float:left; padding:1px;}
+ 	.boxcount1{background:#888; border:1px solid #000; font-weight: bold; font-size: 0.7em; padding:2px; text-align:center;}
+	.obatch{width:40%; padding:0 3px 0 0; text-align: left;}
+	.oid{width:30%; padding:0 3px; text-align: left;}
+	.ovalue{width:30%; padding:0 0 0 3px; text-align: right;}
+	.address, .name_company  { text-align: left !important;}
+	.name_company{float:left;width:60%;}
+	.messengers{float:right;width:40%;}
+	.signature{font-weight: bold; float:left; font-style:italic;font-size: 0.9em;line-height:20px; margin:-7px 0 0 -25px;}
+	.printname{font-weight: bold; font-style:italic;font-size: 0.9em;line-height:20px; margin-left:-35px;}
+	.date{font-weight: bold; font-style:italic;font-size: 0.9em; margin-left:30px;line-height:20px;}
+	.phone_numbers { width: 100%; text-align: right; font-size: .9em;}
+	.job br { clear: both;}
+	.job { border-bottom: 1px solid black; width: 680px; margin-left: 4px;}
+	.break { page-break-after: always;}
+</style>

@@ -1,0 +1,25 @@
+<%
+@loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'"
+@complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'"
+%>
+
+<div id="subnav">
+<% if @view == 'detail' %>
+<%=	link_to	'back to list',
+ 						{ :view => 'list', :page => session[:page], :action => 'show' },
+						:id => 'backToList' %>
+		
+<% else %>
+	<% @always_list = true %>
+<% end %>
+
+</div>
+
+<%= render :partial => "admin/components/quicksearch"%>
+
+<div id="content">
+
+<%= render :partial => "admin/components/record_viewer" %>
+</div>
+
+<%= render :partial => "admin/components/status" %>

@@ -1,0 +1,37 @@
+<% loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'" -%>
+<% complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'" -%>
+<div id="data" class="list">
+<%=
+
+columns = [ { :label => 'Invoice',
+			  :field => 'id', 
+			  :format => nil },
+			{ :label => 'First Name',
+			  :field => 'first_name', 
+			  :format => nil },
+			{ :label => 'Last Name',
+			  :field => 'last_name', 
+			  :format => nil },
+			{ :label => 'Company',
+			  :field => 'company', 
+			  :format => nil },
+			{ :label => 'Created',
+			  :field => 'created_at', 
+			  :format => "datetime" },
+			{ :label => 'Address',
+			  :field => 'label', 
+			  :format => nil }
+			]
+
+record_table columns, @records, @pages, "application", {:view => 'detail'}, loading, complete
+
+%>
+ 
+<% if @records.length == 0 %>
+
+   <div class="invoice-list">
+      <p>No Invoices Found</p>
+   </div>
+
+<% end %>
+</div>

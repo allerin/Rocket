@@ -1,0 +1,34 @@
+xml.vbox(:id => 'content') { |content|
+
+  content.listbox(:id => "records", :rows => 30, :enableColumnDrag => true, :flex => 1 ){ |lb|
+
+    lb.listcols { |cols| 
+      cols.column :id => "first-name", :width => "100px"
+      cols.column :id => "last-name", :width => "100px"
+      cols.column :id => "company", :width => "160px"
+      cols.column :id => "email", :width => "220px"
+      cols.column :id => "phone", :flex => 1 }
+
+    lb.listhead { |head|
+      head.listheader :label => "First"
+      head.listheader :label => "Last"
+      head.listheader :label => "Company"
+      head.listheader :label => "Email"
+      head.listheader :label => "Phone" }
+      
+    if records.length == 0
+      lb.listitem { |li| li.listcell :label => ''}
+    else
+      records.each do | record |
+        lb.listitem(:id => record.id,
+                    :ondblclick => "$('edit-customer-command').doCommand();") { |li| 
+          li.listcell :label => record.first_name
+          li.listcell :label => record.last_name
+          li.listcell :label => record.company
+          li.listcell :label => record.email
+          li.listcell :label => record.phone }
+      end
+    end
+  }
+}
+

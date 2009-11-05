@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="generator" content="Dev-PHP 1.9.4" />
+		<title><%= @page_title or "Rocket Postcards" %></title>
+		<%= stylesheet_link_tag 'rocket' %>
+		<%= javascript_include_tag :defaults %>
+		<%= javascript_include_tag 'scriptaculous' %>
+		<%= stylesheet_link_tag 'modalbox' %>
+		<%= javascript_include_tag 'modalbox' %>
+		<%= javascript_include_tag 'upload_progress' %>
+		<%= javascript_include_tag 'wz_tooltip' %>
+		<% if request.ssl? %>
+		<meta name="robots" content="noindex, nofollow">
+		<% else -%>
+		<meta name="robots" content="noindex, follow">
+		<% end -%>
+		<% unless @meta_description.to_s.empty? -%>
+		<meta name="description" content="@meta_description" />
+		<% end -%>
+		<% unless @meta_keywords.to_s.empty? -%>
+		<meta name="keywords" content="@meta_keywords" />
+		<% end -%>
+    <%= render :partial => 'components/detect_flash' if @detect_flash %>
+    <meta http-equiv="imagetoolbar" content="no" />
+	</head>
+
+	<body background="/images/lines.gif" leftmargin="0" marginheight="0" marginwidth="0" topmargin="0">
+		<div align="center">
+			
+			<table width="757" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
+				<tr height="100">
+					<td rowspan="3" bgcolor="white" width="20">
+						<img src="/images/spacer-20px.gif" alt="" height="20" width="20" border="0" />
+					</td>
+					<td colspan="2" height="100">
+						
+						<table width="737" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td><a href="/"><img src="/images/logo7.jpg" alt="Rocket Postcards - Color Postcard Printing" height="100" width="242" align="left" border="0" /></a></td>
+								<td align="right"></a>
+									<p>
+									
+									<table width="100" border="0" cellspacing="0" cellpadding="1" align="right">
+
+										<!-- Added by SUHAS to display the name of Logged in Customer - Nov 1, 2008 -->
+										<tr><td colspan="2">
+													<% if session[:customer] and session[:customer] != 0 %>
+													Hello <%= link_to_signin "#{Customer.find(session[:customer]).first_name}", profile_url %>
+													<% end %>
+												</td>
+										</tr>
+										
+										<tr>
+											<td width="20">
+												<img src="/images/cart-icon.gif" alt="" height="19" width="19" border="0" /></td>
+											<td align="right" width="76">												
+												<%= link_to "Cart: <span id='itemsInCart'>#{ @cart.length }</span> items", 
+																		review_cart_url(:return_to_url => request.request_uri) %>
+											</td>
+										</tr>
+									</table>
+									
+									</p>
+								</td>
+							</tr>
+						</table>
+						
+					</td>
+					<td rowspan="3" width="20"><img src="/images/spacer-20px.gif" alt="" height="20" width="20" border="0" /></td>
+				</tr>
+				<tr>
+					<td bgcolor="#999999"><!---<a href="<%= show_product_url(:name => 'postcards') %>"><img src="/images/order-btn.gif" alt="" height="22" width="166" border="0" /></a>---></td>
+					<td align="right" bgcolor="#999999" width="551">
+						<div align="right">
+						
+							<table width="441" border="0" cellspacing="0" cellpadding="2" align="right" bgcolor="#999999">
+								<tr>
+									<td class="white-nav">
+										<div align="center"><%= link_to 'FAQ', faq_url %></div>
+									</td>
+									<td class="white-nav">
+										<div align="center">
+											<%= link_to 'About Rocket', about_url %></div>
+									</td>
+									<td class="white-nav">
+										<div align="center">
+											<%= link_to 'Contact Us', contactus_url %></div>
+									</td>
+									<td class="white-nav">
+										<div align="center">
+											<%= link_to_signin 'My Account', profile_url %>
+										</div>
+									</td>
+								</tr>
+							</table>
+							
+						</div>
+					</td>
+				</tr>
+				
+				<tr height="135">
+					<td valign="top" height="135">
+						<div align="left">
+						
+							<table class="left-nav" width="165" border="0" cellspacing="2" cellpadding="8">
+								<tr><td>
+									<strong><%= link_to 'Printing Services', products_url %><br /></strong>
+									<% for page in @enabled_product_pages %>
+									<%= link_to page.navbar_title, show_product_url(:name => page.name) %><br />
+									<% end %>
+									<%= link_to 'Custom Job Quote', {:controller => 'pages', :action => 'show', 
+																																						:page => 'custom_quote'} %>
+									<%= link_to 'Request Samples', {:controller => 'pages', :action => 'show', 
+																																						:page => 'request_samples'} %>
+								</td></tr>
+								<tr>
+									<td><strong>Other Services<br /></strong>
+										<%= link_to 'Custom Design', custom_design_url %><br />
+										<%= link_to 'Postcard Mailing', mailing_services_url %><br />
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Submit Your Artwork<br />
+										</strong>
+											<%= link_to 'File Upload', upload_url %>
+											<br />
+											<%= link_to 'Artwork Requirements', artrequirements_url %>
+											<br />
+											<%= link_to 'Design Templates', templates_url %>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Print Marketing<br /></strong>
+  									<%= link_to 'Articles', {:controller => 'pages', :action => 'show', :page => 'marketing-articles'} %>
+											<br />
+  									<%= link_to 'Special Offers', {:controller => 'pages', :action => 'show', :page => 'marketing-offers'} %>
+											<br />
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+								</tr>
+							</table>
+							
+						</div>
+					</td>
+					<td valign="top" width="551" height="135">
+						<div align="left">
+						
+							<table width="551" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+										<%= @content_for_layout %>
+								</tr>
+								<tr>
+									<td colspan="2" width="551">
+										<div align="center">
+											
+											<table width="64" border="0" cellspacing="0" cellpadding="0">
+												<tr>
+													<td><br />
+														<img src="/images/dotted-line-orange.gif" alt="" height="4" width="549" border="0" /></td>
+												</tr>
+											</table>
+											
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" width="551">
+										<div align="center">
+											<div class="footer-links">
+												<font color="#515151"><br />
+													 Full-color discount postcard printing for marketing, business and advertising.<br />
+													 Custom printed brochures, flyers, business cards, posters. Design and mailing services. Order online.</font>
+												<div align="center">
+													<div class="footer-links">
+														<div align="center">
+															<div class="footer-links">
+																<div align="center">
+																	<div class="footer-links">
+																		<div align="center">
+																			<div class="footer-links">
+																				<p>	
+																						<%= link_to 'Rocket Postcard Printing Home', products_url %> | 
+																						<%= link_to_signin 'Submit Your Artwork', upload_url %> | 
+																						<%= link_to 'Printing FAQ', faq_url %> |
+																						<%= link_to 'Site Map', show_page_url(:page => 'site_map') %> 
+																				</p>
+																				<p>	
+																						<%= link_to 'Printing Services', products_url %> | 
+																						<%= link_to 'Mailing Services', mailing_services_url %> |
+																						<%= link_to 'Color Postcards', show_product_url(:name => 'custom-postcards') %> |
+																						<%= link_to 'Marketing, Sales Brochures', show_product_url(:name => 'color-brochures') %> |
+																						<%= link_to 'Sales Flyer Printing', show_product_url(:name => 'sales-flyers') %> <br/>
+																						<%= link_to 'Custom Presentation Folders', show_product_url(:name => 'presentation-folders') %> |
+																						<%= link_to 'Business Card Printing', show_product_url(:name => 'business-cards') %> |
+																						<%= link_to 'Club, Rave Flyers', show_product_url(:name => 'club-flyers') %> |
+																						<%= link_to 'Custom Poster Printing', show_product_url(:name => 'posters') %> <br/>
+																						<%= link_to 'Rack Cards', show_product_url(:name => 'rack-cards') %> |
+																						<%= link_to 'Door Hangers', show_product_url(:name => 'door-hangers') %> |
+																						<%= link_to 'Greeting Card Printing', show_product_url(:name => 'greeting-cards') %>
+																					<br />
+																					<br />
+																				</p>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			
+			<div align="center"><p></p><p></p></div>
+			<p></p>
+		</div>
+		<p></p>
+		<%= javascript_include_tag 'wz_tooltip' %>
+	</body>
+
+</html>

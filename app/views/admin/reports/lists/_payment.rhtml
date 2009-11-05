@@ -1,0 +1,141 @@
+<table class=" payment_report" cellspacing="0">
+	<thead>
+		<tr>
+			<th style="width:7%;">Rocket Order #</th>
+			<th style="width:7%;">Billing Method</th>
+		  <th style="width:7%;">Credit card number</th>
+			<th style="width:5%;">Exp</th>
+			<th style="width:10%;">Order Total</th>
+			<th style="width:10%;">Amt Due</th>
+			<th style="width:10%;">Cleard</th>
+			<th style="width:26%;">Current Record ID</th>
+			<th style="width:6%;">Resale</th>
+			<th style="width:6%;">Mail House</th>
+			<th style="width:6%;">Verified</th>
+			<th style="width:6%;">Paid in Full</th>
+			<th style="width:6%;">Paid Date</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+	<% @total = 0 %>
+	<% if @orders.empty? %>
+		<tr class="payment_report">
+			<td colspan="10" style="padding-top: 4px; padding-bottom: 12px;">
+				No matching jobs were found, or you have not specified any search criteria. 
+			</td>
+		</tr>
+	<% else %>
+		<% i = 1 %>
+		<% @orders.each do |order| %>
+			<tr class="payment_report">
+				<td style="width:7%;" class="bold">
+				  <%= link_to order.full_job_number, show_order_url(:id => order.id) %></td>
+				<td style="width:7%;">
+				    <% if order.payment_type.to_s.gsub('Payment','') != 'Credit'%>
+				        <%= order.payment_type.to_s.gsub('Payment','') %>
+				    <% else %>
+                        <!--@t is a local varible for show the master card ,visa etc -->
+                        <%if order.payment.number%>
+                            <% @t = "" %>
+                            <% @t= order.payment.number  %>
+                          
+                            <%if @t[0..0]== '3'%>
+                                Amex 
+                            <%elsif @t[0..0]== '4' %>
+                                Visa
+                            <%elsif @t[0..0]== '5' %>
+                                Master Card
+                            <%elsif @t[0..0]== '6' %>
+                                Discover
+                            <%end%>
+                        <%end%>
+                    <%end%>
+                </td>
+				<td style="width:7%;" class="bold"><%= order.payment.number if order.payment %></td>
+				<td style="width:5%;"><%= format_cc_exp(order.payment.exp_month, order.payment.exp_year) if order.payment  and order.payment.kind_of?(CreditPayment) %></td>
+				<td style="width:10%;" class="bold"><%= number_to_currency(order.total, :unit => '') %></td>
+				<td style="width:10%;"><%= number_to_currency(order.amount_paid, :unit => '') %></td>
+				<td style="width:10%;" class="bold">
+				    <% if order.payment %><%= order.payment.approved? ? 'Approved' : 'Check' %><% end %>				    
+				</td>
+				<td style="width:26%;">
+  				<% if order.paid_at  %>
+    				<span style="font-size:10px;width:40px;"><%= order.batch%></span>
+    				<span style="font-size:10px;width:10px;"><%= order.payment.blank? ? '' : order.payment.id %></span>
+    				<img src="images/paid.gif" alt="paid" />
+    				<span style="font-size:10px;"><%= order.paid_at.strftime("%m/%d/%y") if order.paid_at %></span>
+  				<%else%>
+    				<span style="font-size:10px;"><%= order.batch %></span>
+    				<span style="font-size:10px;"><%= order.payment.blank? ? '' : order.payment.id %></span>
+    				<img src="images/notpaid.gif" alt="paid"  style="position:relative; left:7px;" />
+  			</td>
+  				<%end%>
+				<td style="width:6%;text-align:left;"><%= order.reseller_id %></td>
+				<td style="width:6%;text-align:left;">
+				  <% if  order.mail_house=='1'%>YES<%else%>No<%end%></td>
+				<td style="width:6%;text-align:left;">
+				  <% if  order.tax_free_verified =='1'%>YES<%else%>No<%end%></td>
+        <td style="width:6%;text-align:left;">
+          <img src="/images/full.JPG" onclick="<%= remote_function(:url => report_paid_date_url(:order_id => order.id)) %>"/>
+        </td>
+        <td style="width:6%;text-align:left;">
+          <span id="paid_at_<%= order.id %>">
+            <%= order.paid_at %>
+          </span>
+        </td>
+			</tr>
+				
+				
+			   <%@total += order.total %>
+			<% if params[:print] and i.modulo(44).zero? and not i.zero? %>
+	</table><br/>
+	
+	<table class=" payment_report" cellspacing="2">
+			<thead>
+			<tr>
+			<th style="width:7%;">Rocket Order #</th>
+			<th style="width:7%;">Billing Method</th>
+		    <th style="width:7%;">Credit card number</th>
+			<th style="width:5%;">Exp</th>
+			<th style="width:10%;">Order Total</th>
+			<th style="width:10%;">Amt Due</th>
+			<th style="width:10%;">Cleard</th>
+			<th style="width:26%;">Current Record ID</th>
+			<th style="width:6%;">Resale</th>
+			<th style="width:6%;">Mail House</th>
+			<th style="width:6%;">Verified</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<% end %>
+			<% i += 1 %>
+		<% end %>
+		<tr class="payment_report grand_total">
+			<td colspan="2">&nbsp;</td>
+			<td colspan="2" style="text-align:right;"><strong>Grand Total</strong></td>
+			<td colspan="2"><%= @total%></td>
+			<td colspan="5"></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+        
+<style>
+	table.payment_report { width: 680px; margin-left: 8px; margin-top: -8px; page-break-after: always;}
+	tr.payment_report td { font-size: 11px; line-height:20px; /*border-bottom: 1px solid #888;*/ }
+	tr.payment_report td.bold { font-weight:bold; color:#000; }
+	tr.payment_report td.numeric { text-align: right; }
+	th.numeric { text-align: right;}
+	tr.grand_total td { height: 28px;  }
+	td.grand_total_label { padding-right: 4px; font-size: 11px !important; font-weight: bold; text-align: right; }
+	
+	table.payment_report thead tr {
+	font-size: .6em;
+	text-align: left;
+	border-bottom: 2px solid #000;
+}
+table.payment_report thead th {
+	border-bottom: 2px solid #000;
+}
+</style>

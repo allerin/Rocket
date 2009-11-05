@@ -1,0 +1,20 @@
+<% form_tag(:url => signin_url) do %>
+<%puts signin_url.inspect%>
+<h1>Please Log In</h1>
+
+<%= show_system_messages %>
+
+<p><label for="signin">User Name:</label>
+<%= text_field_tag "signin", @signin,  :size => 30, :class => "text" %></p>
+<br class="clear" />
+
+<p><label for="user_password">Password:</label>
+<%= password_field_tag "password", "", :size => 30, :class => "text" %></p>
+
+
+<br class="clear" />
+<p><%= submit_tag "Sign In" %></p>
+
+<br class="clear"/>
+
+<% end %>

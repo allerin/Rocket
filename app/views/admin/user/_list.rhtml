@@ -1,0 +1,50 @@
+
+
+
+<div id="data" class="list">
+
+
+<table>
+<thead>
+	<tr class="userIndexHeader">
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Username</th>
+		<th>Email</th>
+		<th>Role</th>
+		<th>
+			<%= link_to	'Add New User', { :action => 'new' }, :id => 'addNewUser'		%>
+		</th>
+	</tr>
+</thead>
+
+<tbody>
+
+<% for record in @records %> 
+
+<tr class="userIndex" >
+	<td class="user_<%= record.id %>"><%= link_to record.first_name, { :action => 'show', :view => 'detail', :id => record.id}, :class => "user_#{record.id}" %></td>
+	<td class="user_<%= record.id %>"><%= link_to record.last_name, { :action => 'show', :view => 'detail', :id => record.id}, :class => "user_#{record.id}" %></td>
+	<td class="user_<%= record.id %>"><%= link_to record.screen_name, { :action => 'show', :view => 'detail', :id => record.id}, :class => "user_#{record.id}" %></td>
+	<td class="user_<%= record.id %>"><%= link_to record.email, { :action => 'show', :view => 'detail', :id => record.id}, :class => "user_#{record.id}" %></td>
+	<td class="user_<%= record.id %>"><%= link_to( record.role.title, { :action => 'show', :view => 'detail', :id => record.id}, :class => "user_#{record.id}" ) if record.role %></td>
+	<td>
+		<%= link_to "Remove", { :action => 'remove', :id => record.id }, :id => "remove_link_#{record.id}" %>
+		<div id="removeUser_<%= record.id %>" class="removeUser" style="display: none; position: fixed;"></div>
+	</td>
+</tr>
+
+
+<% end %>
+
+</tbody>
+</table>
+
+<% if @records.length == 0 %>
+
+   <div class="invoice-list">
+      <p>No Orders Found</p>
+   </div>
+
+<% end %>
+</div>

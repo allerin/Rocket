@@ -1,0 +1,57 @@
+<div id="data" class="list">
+
+<table class="productsTable">
+	<thead>
+		<tr>
+			<th>Job #</th>
+			<th>Name</th>
+			<td>Company</th>
+			<th>Status</th>
+			<th>Product</th>
+			<th>Designer</th>
+			<th>Reorder</th>
+			<th>Placed</th>
+			<th>Paid</th>
+		</tr>
+	</thead>
+<% for record in @records %> 
+<tr class="orderIndex" id='design_<%= record.id %>'>
+	<td class="orderId">
+		<%= link_to (record.full_job_number || record.id), view_design_order_url(:id => record.id), :id => "#{record.id}"	%>
+	</td>
+	<td>
+		<%= record.invoice.customer.name if record.invoice and record.invoice.customer %>
+	</td>
+	<td>
+		<%= record.invoice.customer.company if record.invoice and record.invoice.customer.company %>
+	</td>
+	<td>
+		<%= record.status %>&nbsp;
+	</td>
+	<td>
+		<%= record.product.sku if record.product %>&nbsp;
+	</td>
+	<td>
+		<%= record.designer %>&nbsp;
+	</td>
+	<td>
+		<%= record.parent.full_job_number if record.parent %>&nbsp;
+	</td>
+	<td>
+	<%= record.created_at.strftime("%m/%d/%y") if record.created_at %>&nbsp;
+	</td>
+	<td>
+	<%= record.paid_at.strftime("%m/%d/%y") if record.paid_at %>&nbsp;
+	</td>
+</tr>
+<% end %>
+</table>
+
+<% if @records.length == 0 %>
+
+   <div class="invoice-list">
+      <p>No Orders Found</p>
+   </div>
+
+<% end %>
+</div>

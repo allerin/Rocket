@@ -1,0 +1,41 @@
+<form id="shipping_form" name="shipping_form">
+<table width="100%">
+	<tr>
+		<td width="15%" valign="top">
+			Batch:
+			<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]} %>
+			<%= select_tag	'batch', 
+											options_for_select(batches.collect {|b| 
+												["#{b.first} #{('(' + b.last + ')') if b.last}", b.first] }, params[:batch])  %>
+		</td>
+		<td width="25%" valign="top"> 
+			Method:
+			<%= select_tag 'shipping_method_id', options_for_select(ShippingMethod.find(:all, :conditions => "shipping_methods.name != 'Pick Up'",:order=> 'id DESC').collect{|m| [m.name, m.id]}),:include_blank =>true%>
+		</td>
+		<td  width="60%" valign="top">
+		
+			<%= mag_button_to_function	"Make Shipped", "if (confirm('Are you sure you want to make these orders Shipped? This cannot be undone.')) { #{remote_function(:url => report_make_shipped_url(), :with => "'batch=' + $('batch').value + '&shipping_method_id=' + $('shipping_method_id').value")}}",
+																	:class => 'yellow'
+			 %>
+			 <%= mag_button_to_function	"Print List", "window.open('#{report_shipping_list_url}?print=true&list=true&batch=' + $('batch').value+ '&shipping_method_id=' + $('shipping_method_id').value)",
+			 														:class => 'yellow' %>
+			<%= mag_button_to_function "Export List", "window.location='#{report_ship_export_url}?method=shipping&batch=' + $('batch').value",
+			 														:class => 'yellow' %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"></td>
+		<td>
+			
+		</td>
+	</tr>
+</table>
+</form>
+
+<hr class="nice">
+
+	<script>
+	new Form.EventObserver($("shipping_form"), function() { <%= remote_function(:url => report_shipping_list_url, 
+																																					:with => "Form.serialize('shipping_form')") %> }); 
+	setTimeout("<%= remote_function(	:url => report_shipping_list_url, :with => "Form.serialize('shipping_form')") %>", 500)
+	</script>

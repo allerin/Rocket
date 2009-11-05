@@ -1,0 +1,107 @@
+<div id="search_container" style="display: none; border-bottom: 1px solid black; margin-bottom: -2px;">
+	<form id="search_form" name="search_form">
+		<% params[:search] ||= {} %>
+		<table class="productsTable" style="margin-bottom: -6px;">
+			<tr>
+				<td class="label">First Name</td>
+				<td>
+					<%= text_field_tag "search[first_name]", params[:search][:first_name], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">Status</td>
+				<td>
+					<%= select_tag 'search[status]', options_for_select(statuses_array, params[:search][:status]) %>
+				</td>
+				<td class='label' style="padding-left: 32px;">Batch</td>
+				<td>
+					<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]} %>
+					<% batches.insert(0, [nil]) 	%>
+					<%= select_tag	'search[batch]', options_for_select(batches.collect{|b| ["#{b.first} #{('(' + b.last + ')') if b.last}", b.first]},
+					 																										params[:search][:batch]) %>
+
+					<%= text_field_tag "batch_text", params[:search][:batch], :size => 18, 
+															:class => 'search-field', :style => "display: none;" %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Last Name</td>
+				<td>
+					<%= text_field_tag "search[last_name]", params[:search][:last_name], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">SKU</td>
+				<td>
+					<%= select_tag 'search[product_sku]', options_for_select(skus_array(true), params[:search][:sku]) %>
+				</td>
+				<td class="label">
+					Runs
+				</td>
+				<td>
+					<table><tr>
+						<td><%= select_tag 'search[run_a]', options_for_select((1..20).to_a.insert(0,nil), params[:search][:run_a]) %></td>
+						<td><%= select_tag 'search[run_b]', options_for_select((1..20).to_a.insert(0,nil), params[:search][:run_b]) %></td>
+					</tr></table>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Email</td>
+				<td>
+					<%= text_field_tag "search[email]", params[:search][:email], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label" style="padding-left: 32px;">Payment Type</td>
+				<td>
+					<%= select_tag 'search[type]', options_for_select(payment_types_array(true), params[:search][:type]) %>
+				</td>
+				<td class="label">
+					Quantity
+				</td>
+				<td>
+					<%= text_field_tag "search[quantity]", params[:search][:quantity], :size => 10, :class => 'search_field'%>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Company</td>
+				<td>
+					<%= text_field_tag "search[company]", params[:search][:company], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">State</td>
+				<td>
+					<%= select_tag "search[state]", options_for_select(states_array(true, ''), params[:search][:state]) %>
+				</td>
+				<td class="label">Ship</td>
+				<td>
+					<%= select_tag( 'search[shipping_method_id]', options_for_select((ShippingMethod.find(:all).collect{|m| [m.name, m.id] }.insert(0,[])), params[:search][:shipping_method_id])) %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">City</td>
+				<td>
+					<%= text_field_tag "search[city]", params[:search][:city], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">Zip</td>
+				<td>
+					<%= text_field_tag "search[zip]", params[:search][:zip], :size => 18, :class => 'search-field' %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Job #</td>
+				<td>
+					<%= text_field_tag "search[full_job_number]", params[:search][:full_job_number], :size => 10, :class => 'search-field'%>
+				</td>
+				<td class="label">Street</td>
+				<td>
+					<%= text_field_tag "search[street_1]", params[:search][:street_1], :size => 18, :class => 'search-field'%>
+				</td>
+			</tr>
+			<tr>
+				
+			</tr>
+			
+			
+		</table>
+	</form>
+	
+	<script>
+	new Form.EventObserver($("search_form"), function() { <%= remote_function(:url => advanced_order_search_url, 
+																																					:with => "Form.serialize('search_form')") %> }); 
+	</script>
+
+</div>

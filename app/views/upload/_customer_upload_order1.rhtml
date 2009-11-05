@@ -1,0 +1,5 @@
+
+<div id="upload_<%= order.id %>">
+<%= render :partial => ("upload/art/" + order.art_upload_method), :locals => { :order => order } if order.art_upload_method and not order.art_upload_method.empty? %>
+</div>
+							

@@ -1,0 +1,219 @@
+
+<% if params[:form] == 'status' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected '  Status  ', :url => report_form_url(:form => 'status') %>
+            </span>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>            
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+    
+<% elsif params[:form] == 'pickup' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">            
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            </span>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'shipping' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">            
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected ' Shipping ', :url => report_form_url(:form => 'shipping') %>
+            </span>
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'run' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected '   Run    ', :url => report_form_url(:form => 'run') %>
+            </span>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'tax' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+            </span>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'terms' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>            
+        </div>
+    
+        <div class="subnav_row">
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            </span>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+    
+<% elsif params[:form] == 'payment' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>            
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            </span>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'rep' %>  <!-- (custom) -->
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>            
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected ' Custom ', :url => report_form_url(:form => 'rep') %>
+            </span>
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'design' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>            
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>            
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected ' Design  ', :url => report_form_url(:form => 'design') %>
+            </span>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>    
+    </div>
+
+<% elsif params[:form] == 'capture' %>
+    <div id="subnav" style="height: 50px;width :800px;">    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>            
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>            
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>            
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>            
+            <span style="background-color:red;">
+                <%= mag_button_to_remote_selected 'CC Capture', :url => report_form_url(:form => 'capture') %>
+            </span>
+        </div>
+    </div>
+
+<% end %>

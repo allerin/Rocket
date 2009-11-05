@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>	<% if params[:batch] %>
+		<% if params[:shipping_method_id] %>
+			Batch <%= params[:batch] %> <%= ShippingMethod.find(params[:shipping_method_id]).name %> Report
+		<% else %>
+			Batch <%= params[:batch] %> Shipping Report
+		<% end %>
+	<% elsif params[:completed] %>
+		Ready For Shipping Report - <%= Time.now.strftime("%m/%d/%y %H:%M") %>
+	<% end %>
+	</title>
+	<link href="/stylesheets/main.css?1176772755" media="screen" rel="Stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<h1 style="margin-left: 6px; font-size: 1.8em; margin-bottom: 0px;">
+	<% if params[:batch] %>
+		<% if params[:shipping_method_id] %>
+			Batch <%= params[:batch] %> <%= ShippingMethod.find(params[:shipping_method_id]).name %> Report
+		<% else %>
+			Batch <%= params[:batch] %> Pickup Report
+		<% end %>
+	<% elsif params[:completed] %>
+		Ready For Pickup Report - <%= Time.now.strftime("%m/%d/%y %H:%M") %>
+	<% end %>
+</h1>
+<%= render :partial => "admin/reports/lists/shipping_status"%>
+
+<% if params[:print] %>
+	<script>setTimeout('window.print()', 500)</script>
+<% end %>
+
+</body>
+</html>

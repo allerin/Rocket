@@ -1,0 +1,50 @@
+
+    <div id="subnav" style="height: 50px;width :800px;">
+    
+        <div class="subnav_row">
+            <%puts report_form_url(:form => 'status')%>
+            <%= mag_button_to_remote '  Status  ', :url => report_form_url(:form => 'status') %>
+            <%= mag_button_to_remote ' Pick-Up  ', :url => report_form_url(:form => 'pickup') %>
+            <%= mag_button_to_remote ' Shipping ', :url => report_form_url(:form => 'shipping') %>
+            <%= mag_button_to_remote '   Run    ', :url => report_form_url(:form => 'run') %>
+            <%= mag_button_to_remote 'Sales Tax ', :url => report_form_url(:form => 'tax') %>
+        </div>
+    
+        <div class="subnav_row">
+            <%= mag_button_to_remote '  Terms   ', :url => report_form_url(:form => 'terms') %>
+            <%= mag_button_to_remote ' Payment  ', :url => report_form_url(:form => 'payment') %>
+            <%= mag_button_to_remote ' Custom ', :url => report_form_url(:form => 'rep') %>
+            
+            <%= mag_button_to_remote ' Design  ', :url => report_form_url(:form => 'design') %>
+            <%= mag_button_to_remote 'CC Capture', :url => report_form_url(:form => 'capture') %>
+        </div>
+    
+    </div>
+    
+    <style>#quicksearch { height: 50px;}</style>
+    <%= render :partial => "admin/components/quicksearch"%>
+    
+    <div id="content" style="">
+        <div id="report_form" style="padding: 8px 0px 8px 4px;">Click on a report above to get started.</div>
+        <div id="report_list"></div>
+    </div>
+
+
+
+<%= render :partial => "admin/components/status" %>
+
+<script>
+	payments = []
+	function capturePayment(array) {
+		if (array.length == 0) { return false; }
+		payment_id = array.shift();
+		<%= remote_function(:url => report_capture_payment_url, :with => "'payment_id=' + payment_id",
+												:complete => "capturePayment(array);") %>
+	}
+	function forceCapturePayment(array) {
+		if (array.length == 0) { return false; }
+		payment_id = array.shift();
+		<%= remote_function(:url => report_capture_payment_url, :with => "'force=true&payment_id=' + payment_id",
+												:complete => "forceCapturePayment(array);") %>
+	}
+</script>

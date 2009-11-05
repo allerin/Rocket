@@ -1,0 +1,36 @@
+xml.hbox(:id => 'toolbar-paginator') { |hbox|
+  
+  hbox.toolbarbutton  :id => "previous-page", 
+                      :image => "/images/icons/book_previous.png", 
+                      :dir => 'reverse',
+                      :disabled => (true if @paginator.current.number == 1),
+                      :oncommand => remote_function(  :url => { :action => 'list_xul', 
+                                                                :page => (@paginator.current.number - 1 unless @paginator.current.number == 1) }, 
+                                                      :loading => "add_ajax_call();", 
+                                                      :complete => "remove_ajax_call();", 
+                                                      :with => "Form.serialize('toolbar')")
+                     
+  xml.vbox { |vbox|
+    vbox.spacer :flex => 1
+    vbox.hbox{ |pages| 
+      pages.label :value => "Page ", :style => "margin-right: 0px; margin-left: 0px;"
+      pages.hbox(:width => '32px', :align => 'center') { |hb|
+        hb.spacer :flex => 1
+        hb.label  :value => @paginator.current.number, :id => 'page_number', :style => "margin-right: 0px; margin-left: 0px;"
+        hb.label  :value => "/", :style => "margin-right: 0px; margin-left: 0px;"
+        hb.label  :value => @paginator.last.number, :id => 'total_pages', :style => "margin-right: 0px; margin-left: 0px;"
+        hb.spacer :flex => 1
+      }
+    }
+    vbox.spacer :flex => 1
+  }
+  
+  hbox.toolbarbutton  :id => "next-page", 
+                      :image => "/images/icons/book_next.png", 
+                      :disabled => (true if @paginator.current == @paginator.last),
+                      :oncommand => remote_function(  :url => { :action => 'list_xul', 
+                                                                :page => (@paginator.current.number + 1 unless @paginator.current.number == @paginator.last.number) }, 
+                                                      :loading => "add_ajax_call();", 
+                                                      :complete => "remove_ajax_call();",
+                                                      :with => "Form.serialize('toolbar')")  
+}

@@ -1,0 +1,19 @@
+<%=
+
+if @records.size == 1 and not @always_list
+	
+	@record = @records[0]
+	render_partial( 'detail' )
+
+else
+	
+	
+	render_partial( 'list' )
+
+end
+
+%>
+
+<% if @view == 'list' -%>
+<%= render(:partial => 'admin/components/paginator')%>
+<% end -%>

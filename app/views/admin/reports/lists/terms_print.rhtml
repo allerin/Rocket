@@ -1,0 +1,8 @@
+<h1 style="margin-left: 10px; font-size: 1.2em; margin-bottom: 4px; ">
+<%= @title %>
+</h1>
+<%= render :partial => "admin/reports/lists/terms" %>
+
+<% if params[:print] %>
+	<script>setTimeout('window.print()', 500)</script>
+<% end %>

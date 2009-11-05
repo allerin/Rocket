@@ -1,0 +1,40 @@
+<form id="run_form" name="run_form">
+<table style=>
+	<tr>
+		<td>
+			Batch:
+			<% order = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]} %>
+			<select  name="batch" id="batch">
+			<option></option>
+            <% for batches in order%>
+             
+            <option value="<%= batches[0]%>"><%= batches[0]%> (<%= batches[1]%>)</option>
+            <%end%>
+            </select>	</td>
+		<td style="padding-left: 12px;">
+			Run:
+			
+			<select name="run"  id="run">
+			<option ></option>
+			<%for i in 1..20%>
+            <option value="<%= i%>"><%= i%></option>
+            <%end%>
+            
+            </select>
+            	<a onclick="window.location='/admin/reports/run_export?batch=' + $('batch').value; return false;" href="#" class="button yellow"><span>ExportToRunBuilder</span></a> </td>
+		</td>
+		<td style="padding-left: 24px;">
+			<%= mag_button_to_function	"Print", "window.open('#{report_run_list_url}?print=true&batch=' + $('batch').value + '&run=' + $('run').value)",
+			 														:class => 'yellow'%>
+				</td>
+	</tr>
+</table>
+</form>
+<hr class="nice" style="margin-top: 0px; ">  
+
+	<script>
+	new Form.EventObserver($("run_form"), function() { <%= remote_function(	:url => report_run_list_url, 
+																																					:with => "Form.serialize('run_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_run_list_url, :with => "Form.serialize('run_form')") %>", 500)
+	</script>

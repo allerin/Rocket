@@ -1,0 +1,84 @@
+<!--
+Created by SUHAS - Sept 30, 2008
+Purpose - Used to add new Address of the Customer. This form will open ADMIN will click on the 'New' option from the
+          address drop-down
+-->
+
+<% address_update_action = "update_address_field" -%>
+
+<% form_remote_tag :url => new_customer_address_url(:customer_id => @record.id) do %>
+
+<table>
+
+<tr>
+<td class="label" width="12%">Label</td>
+<td width="45%">
+	<%= text_field 'address', 'label', :size => 20 %>
+</td>
+<td class="label" width="12%"></td>
+<td width="28%"></td>
+
+</tr>
+
+<td class="label">First Name</td>
+<td>
+	<%= text_field 'address', 'first_name', :size => 20 %>
+</td>
+<td class="label">Company</td>
+<td>
+	<%= text_field 'address', 'company', :size => 20 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Last Name</td>
+<td>
+	<%= text_field 'address', 'last_name', :size => 20 %>
+</td>
+<td class="label">Phone</td>
+<td>
+	<%= text_field 'address', 'phone', :size => 20 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Address 1</td>
+<td>
+	<%= text_field 'address', 'street_1', :size => 28 %>
+</td>
+<td class="label">State</td>
+<td>
+	<%= text_field 'address', 'state', :size => 2 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Address 2</td>
+<td>
+	<%= text_field 'address', 'street_2', :size => 28 %>
+</td>
+<td class="label">Zip</td>
+<td>
+	<%= text_field 'address', 'zip', :size => 5 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">City</td>
+<td>
+	<%= text_field 'address', 'city', :size => 20 %>
+</td>
+<td class="label">Country</td>
+<td>
+	<%= text_field 'address', 'country', :size => 20 %>
+</td>
+</tr>
+
+<tr>
+  <td class="label"></td>
+  <td><%= submit_tag 'Save Address' %></td>
+</tr>
+
+</table>
+
+<% end %>

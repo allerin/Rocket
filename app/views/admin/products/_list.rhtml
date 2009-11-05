@@ -1,0 +1,42 @@
+<div id="data" class="list">
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Height</td>
+		<td>Width</td>
+		<td>SKU</td>
+		<td>Code</td>
+		<td>Page</td>
+		<td class="linky">
+			<%= link_to	'Add Product', { :action => 'new' }, :id => 'addNewProduct'		%>
+		</td>
+	</tr>
+	
+<% for record in @records %> 
+<tr class="productIndex" id='product_<%= record.id %>' >
+	<td>
+		<%= link_to record.title, { :action => 'show', :view => 'detail', :id => record.id }, :id => "product_link_#{record.id}" %>
+	</td>
+	<td><%= record.height %>&nbsp;</td>
+	<td><%= record.width %>&nbsp;</td>
+	<td><%= record.sku %>&nbsp;</td>
+	<td><%= record.product_code %>&nbsp;</td>
+	<td><%= record.product_page.name if record.product_page %>&nbsp;</td>
+	<td class="linky"><%= link_to "Remove", { :action => 'remove', :id => record.id }, :id => "remove_link_#{record.id}" %></td>
+</tr>
+
+<% end %>
+</table>
+
+<% if @records.length == 0 %>
+
+   <div class="product-list">
+      <p>No Products Found</p>
+   </div>
+
+<% end %>
+</div>
+
+
+

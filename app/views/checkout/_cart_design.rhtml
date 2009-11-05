@@ -1,0 +1,98 @@
+<% view = params[:view] || params[:action] 
+	 design_index = cart_design.cart_index %>
+<table width="533" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr>
+		<td bgcolor="#999999" width="1" ><img src="/images/1px-spacer.gif" alt=""  width="1" border="0" /></td>
+		<td >
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="8">
+				<tr >
+					<td align="left" bgcolor="#999999" width="251" >
+						<div class="subhead-white">
+							<%= cart_design.custom_name or "Custom Design: #{cart_design.for_product.title if cart_design.for_product}" %>
+						</div>
+					</td>
+					<td align="right" bgcolor="#999999" width="244" >
+						<div class="white-nav">
+							<%= link_to "Remove this design #{image_tag('/images/close-btn.gif', :border => 0) }",
+													{ :view => view, :action => 'remove_product', :design_index => design_index },
+													:id => "remove_design_#{design_index}",
+													:onclick => 	"new Effect.Puff($(&quot;design_job_#{design_index}&quot;),{duration:0.5}); return false;"%>
+						</div>
+					</td>
+				</tr>
+				<tr >
+					<td rowspan="2" valign="top" bgcolor="#ececec" width="251" >
+						<strong>
+							<% if cart_design.reorder? %>
+								Reorder Job #<%= cart_design.job_number %>
+							<% else %>
+								<%= cart_design.custom_name %>
+							<% end %>
+						</strong>
+						
+						<p><img src="/images/diagram-palette.gif" alt=""  width="119" border="0" /></p>
+
+						<p>For Product:
+							<%= cart_design.for_product.title if cart_design.for_product %> <%= cart_design.for_product_id %>
+						</p>
+						
+						<%	options = cart_design.design_options
+								options.keys.sort{ |a,b| a.id <=> b.id }.each do | option | %>
+							<p><%= option.customer_label %>: <%= options[ option ].customer_label %></p>
+						<% end %>				
+
+						<% if cart_design.copy %> <p>Text: <%= cart_design.copy %></p> <% end %>
+
+						<% if cart_design.comments %> <p>Comments: <%= cart_design.comments %></p> <% end %>
+
+						<p>
+						<% if params[:action] == "review_cart" || params[:action] == "edit_cart" %>
+							<%= link_to image_tag('edit-item-btn.gif', :style => 'border-width: 0px;'),
+							 						{ :controller => 'checkout', :action => 'review_cart', :edit_design => design_index },
+													:id => "edit_design_#{design_index}",
+													:onclick => remote_function( :url => { :controller => 'checkout', :action => 'review_cart', :edit_design => design_index }) + "; return false;"
+							%>
+						<% else %>
+							<%= link_to 'Return To Cart To Edit This Item',
+							 						{ :view => 'review_cart', :action => 'review_cart', :edit_design => design_index },
+													:id => "edit_design_#{design_index}"
+							%>
+						<% end %>
+						</p>						
+					</td>
+					<td valign="top" bgcolor="#ececec" width="244" >
+						<% if params[:action] == "pay" %>
+							<% if cart_design.soft_options[:proof] == "true" and ( cart_design.soft_options[:proof_delivery] == "mail" or cart_design.soft_options[:proof_delivery] == "messenger" or cart_design.soft_options[:proof_delivery] == "overnight" ) %>
+								<% shipping_address =  cart_design.shipping_address || @current_customer.shipping_address  %>
+							<span class="subhead">Deliver Proof To:</span>
+								<p>
+									<%= shipping_address.first_name + " " + shipping_address.last_name %><br />
+									<%= shipping_address.street_1 %><br />
+									<%= ( shipping_address.street_2 + '<br />' ) if shipping_address.street_2 and not shipping_address.street_2.empty? %>
+									<%= shipping_address.city + ", " + shipping_address.state + " " + shipping_address.zip %><br />
+									<%= shipping_address.phone %>
+								</p>
+								<p>
+									<%= link_to 'Change Shipping Address',
+									 						{ :action => 'change_address', :edit_design => design_index }, :id => "change_shipping_design_#{design_index}" %>
+								</p>				
+							<% end %>
+						<% end %>
+					</td>
+				</tr>
+				<tr >
+					<td align="right" valign="bottom" bgcolor="#ececec" width="244" >
+						<%= render :partial => 'cart_design_totals', :locals => { :cart_design => cart_design } %>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" ><img src="/images/1px-spacer.gif" alt=""  width="1" border="0" /></td>
+	</tr>
+	<tr >
+		<td colspan="3" bgcolor="#999999" ><img src="/images/1px-spacer.gif" alt=""  width="1" border="0" /></td>
+	</tr>
+</table>

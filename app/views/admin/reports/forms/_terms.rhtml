@@ -1,0 +1,6 @@
+<div style="margin-top:-2px; margin-left: 8px; margin-bottom: 4px;"><%= mag_button_to_function	"Print List", "window.open('#{report_terms_list_url}?print=true&')",
+			 														:class => 'yellow'%></div>
+
+<script>	
+	setTimeout("<%= remote_function(	:url => report_terms_list_url) %>", 500)
+</script>

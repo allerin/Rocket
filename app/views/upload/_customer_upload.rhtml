@@ -1,0 +1,85 @@
+<%= stylesheet_link_tag 'ibox' %>
+<%= javascript_include_tag 'ibox' %>
+
+<iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
+
+<p>
+<img src="/images/title-upload.gif" alt="" height="33" width="350" border="0" />
+</p>
+	
+<% if params[:orders] %>	
+	<% if @orders.empty? %>
+		<!-- 
+		<p>We couldn't find any orders to match <%= h params[:orders] %></p>
+		-->
+		<%= @msg %>
+	<% else %>
+		<p>Please indicate how you will submit the files for each of the items in your order.</p>
+		<p><strong>IMPORTANT:</strong> The turnaround time that you selected for a given item in your order does not begin until we have successfully received the artwork for that item, it passes preflight, and if a proof was requested,  you have approved the job to print. Artwork must be received by 2PM PST (5PM EST) in order for it to be processed that business day.</p>
+
+		<% @orders.each do | order |%>
+			<div id='order2_<%= order.id %>'>
+				<%#= render :partial => 'customer_upload_order', :locals => { :order => order } %>
+        <span id="order11_<%= order.id %>" >
+            <%= link_to "<strong style='font-size:11pt;'>Upload Artwork</strong>", { :controller => "upload", :action => "aa", :id => order.id}, 
+                	   :rel => "ibox?type=3&height=280&width=350" %>
+        </span>
+			</div>
+		<% end %>
+	<% end %>
+
+	<% unless @other_orders.nil? or @other_orders.empty? %>
+		<% @other_orders.each do |order| %>
+		<div id='order_<%= order.id %>'></div>
+		<% end %>
+	
+		<div class="subhead">Older Orders</div>
+		<p>Files have already been uploaded for the following orders, but you can upload additional files by clicking the order number.</p> 
+		<table width="200" border="0" cellspacing="0" cellpadding="8" bgcolor="#ececec">
+			<tr>
+				<td bgcolor="#ececec"><div class="subhead"><strong>Order #</strong></div></td>
+				<td bgcolor="#ececec"><div class="subhead"><strong>Date</strong></div></td>
+
+			</tr>
+			<% @other_orders.each do |order| %>
+			<tr>
+				<td><%= link_to_remote order.id, :url => show_upload_url(:order_id => order.id) %></td>
+				<td><%= format_date order.invoice.created_at %></td>
+			</tr>
+			<% end %>
+		</table>
+	<% end %>
+
+<% else %>
+<%= render(:partial => 'order_form') %>
+												
+<% end %>
+
+
+<style type="text/css">
+.progress-bar {
+  width:300px;
+  height:12px;
+  border:solid 1px #999;
+  position:relative;
+}
+
+.progress-bar #status-bar {
+  display:block;
+  height:12px;
+  width:0;
+  background-color:#999;
+  border-right:solid 1px #999;
+  position:absolute;
+  top:0; left:0;
+}
+
+.progress-bar #status-text {
+  display:block;
+  position:absolute;
+  top:0; left:0;
+}
+</style>
+<!--
+<iframe id="upload" name="upload" src="about:blank" style="width: 10px; height: 10px;"></iframe>
+-->

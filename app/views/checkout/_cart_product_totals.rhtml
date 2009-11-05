@@ -1,0 +1,59 @@
+<table width="182" border="0" cellspacing="0" cellpadding="4">
+	<% if cart_product.discount > 0 %>
+	<tr>
+		<td align="left">Printing (Base):</td>
+		<td align="right">
+			<%=	number_to_currency( cart_product.base_price ) %>
+		</td>
+	</tr>	
+	<tr>
+		<td align="left">Discount:</td>
+		<td align="right">
+			-<%=	number_to_currency( cart_product.discount ) %>
+		</td>
+	</tr>
+	<% else %>
+	<tr>
+		<td align="left">Printing:</td>
+		<td align="right">
+			<%=	number_to_currency( cart_product.price ) %>
+		</td>
+	</tr>	
+	<% end %>
+	<% if cart_product.soft_options[:mailing] and cart_product.mailing_quantity > 0 %>
+	<tr>
+		<td align="left">Mail Services:</td>
+		<td align="right">
+			<%= number_to_currency  cart_product.mailing_price  %>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">Postage:</td>
+		<td align="right">
+			<%= number_to_currency  cart_product.postage_price  %>
+		</td>
+	</tr>
+	<% end %>
+	<% if @show_shipping and cart_product.shipping_price > 0 %>
+	<tr>
+		<td align="left">Shipping:</td>
+		<td align="right">
+			<%= number_to_currency  cart_product.shipping_price  %>
+		</td>
+	</tr>
+	<% end %>
+	<% if @show_tax and cart_product.tax > 0 %>
+	<tr>
+		<td align="left">Tax:</td>
+		<td align="right">
+			<%= number_to_currency  cart_product.tax  %>
+		</td>
+	</tr>
+	<% end %>
+	<tr>
+		<td align="left"><b>Item Total:</b></td>
+		<td align="right">
+			<b><%= number_to_currency cart_product.total_price %></b>
+		</td>
+	</tr>
+</table>

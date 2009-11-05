@@ -1,0 +1,71 @@
+<%= stylesheet_link_tag 'ibox' %>
+<%= javascript_include_tag 'ibox' %>
+
+<% form_tag( { :action => 'shipping_info' }, :name => 'shipping_info', :id => "shippingInfoForm" ) do %>
+<p><img src="/images/title-shipping.gif" alt="" height="33" width="350" border="0" /><br />
+	<img src="/images/checkout-graph2.gif" alt="" height="29" width="550" border="0" /></p>
+<p>Please confirm the shipping information for each item in your order:</p>
+
+<% status = false %>
+
+<% @cart.packages.each do |cart_package| %>
+  <% status = true %>
+	<div id="cart_package_<%= cart_package.cart_index %>">
+		<%= render :partial => 'shipping_package', :locals => { :cart_package => cart_package } %>
+	</div>
+<% end %>
+
+<% @cart.products.reverse.each do | cart_product | %>
+	<div id="cart_product_<%= cart_product.cart_index %>">	
+	   <% @order = @order_id[cart_product.cart_index] %>	   
+	   <%= render :partial => 'shipping_product', :locals => { :cart_product => cart_product } %>
+	</div>
+<% end %>
+
+<%	@cart.design_jobs.each do |  cart_design | %>
+	<div id="cart_design_<%= cart_design.cart_index %>">	
+		<%= render :partial => 'shipping_design', :locals => { :cart_design => cart_design } %>
+	</div>	
+<% end %>
+
+
+<%= observe_form 'shippingInfoForm', :function => remote_function(:url => { :action => 'shipping_info' }, :with => "Form.serialize('shippingInfoForm')") %>
+																	
+<%= observe_form "shippingInfoForm", :function => "$(\"spinny\").update(\"<img src='/images/status_loading.gif'/> \")" %>
+
+<table width="550" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td align="right">
+			<table width="190" border="0" cellspacing="0" cellpadding="0" align="right">
+				<tr height="1">
+					<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+				</tr>
+				<tr height="14">
+					<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+					<td height="14">
+						<%= render :partial => 'cart_totals' %>
+					</td>
+					<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+				</tr>
+				<tr height="1">
+					<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+		  <div id="proceed">
+		    <% unless status %>
+		      <div style="visibility:hidden">
+		    <% else %>
+		      <div>
+		    <% end %>
+          <input type="image" name="proceed" value="proceed" src="/images/proceed-btn.gif">
+        </div>
+      </div>
+		</td>
+	</tr>
+</table>
+
+<% end %>

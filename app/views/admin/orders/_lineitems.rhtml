@@ -1,0 +1,131 @@
+<table width="100%" class="job_details">
+	<thead>
+		<tr>
+			<th>Code</th>
+			<th>Product/Charge [<%= link_to_function 'Add Charge', "showNextCharge()" %>] 
+			[<%= link_to 'Add Design', create_order_url(:invoice_id => @record.invoice_id, :design => true, :order_id => @record.id) %>]</th>
+			<th>Quantity</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>		
+		<tr>
+			<td style="background-color: #DDFFBB;">
+			  <div id="product_sku12"></div>
+			  <!-- 'product_sku' field is there in 'orders' table --> 
+<% if false %>
+				<%= @record.reprint? ?	@record.product_sku : 
+                        secure_text_field( @record, :product_sku, "product_sku", :size => 6 ) %>
+<% end %>
+				<div class="auto_complete" id="product_sku_auto_complete"></div>
+			<script type="text/javascript">new Ajax.Autocompleter('product_sku', 'product_sku_auto_complete', '/admin/products/auto_complete_for_sku', {afterUpdateElement: function() { updateOrder(); }})</script>
+			</td>
+			
+			<td style="background-color: #FFFF66">
+				<span id="product_title">
+					<%#= @record.product_title %>
+    		<% new_options = "<option value='none' SELECTED>Additional Options</option>" %>
+    		<% new_options += options_for_select(Product.find(:all).collect { |po| [ po.title, po.id ] }) %>
+    		
+    		
+    		  <%= select_tag( "product_charge", new_options, 
+    		      :onchange => "#{remote_function(:url => {:controller => 'products', :action => 'find_product_sku'}, :with=>"'id=' + $('product_charge').value" )}" ) %>
+    		  
+				</span>
+			</td>
+			<td style="background-color: #DDFFBB;">
+				<%= secure_text_field( @record, :quantity, "quantity", :size => 6 ) %>
+			</td>
+			<td style="background-color: #DDFFBB;">
+				<span id="product_price" >
+					<%= number_to_currency @record.price %>
+				</span>
+			</td>
+		</tr>
+		<% if mail_option = options.find { |o| o.title == 'Mailing' } %>
+			<tr>
+				<td class="option_title">Mailing</td>
+				<td class="option_details">
+					Direct Mail Services
+				</td>
+				<td class="option_details">
+					<%= secure_text_field( @record, :mailing_quantity, "mailing_quantity", :size => 6 ) %>
+				</td>
+				<td class="option_details">
+					<%= number_to_currency @record.mailing_price %>
+				</td>
+			</tr>
+			<tr>
+				<td class="option_title">Postage</td>
+				<td class="option_details">
+					<%= product_options_select( @record.product, mail_option, @record.option_value_for(mail_option), true ) %>
+				</td>
+				<td class="option_details">&nbsp;</td>
+				<td class="option_details">
+					<%= number_to_currency @record.postage_price %>
+				</td>
+			</tr>
+		<% end %>
+		<% ['3 Hole Punch', 'Perforation', 'Folding', 'Proofing', 'Diecutting', 'Envelopes', 'Diecutting'].each do |title| %>
+			<% if option = options.find { |o| o.title == title } %>
+				<tr>
+					<td class="option_title"><%= option.title %></td>
+					<td class="option_details" style="padding-left: 4px;">
+						<%= product_options_select( @record.product, option, @record.option_value_for(option), true ) %>
+					</td>
+					<td class="option_details">&nbsp;</td>
+					<td class="option_details">
+						
+					</td>
+				</tr>
+			<% end %>
+		<% end %>
+		
+	<% @record.extra_charges.each_with_index do |charge, i| %>
+		<tr>
+				<td class="option_title"></td>
+				<td class="option_details" style="padding-left: 4px;">
+					<%= text_field_tag "charges[#{i}][name]", charge.name, :size => 24 %></td>
+				<td class="option_details">&nbsp;</td>
+				<td class="option_details"><%= text_field_tag "charges[#{i}][price]", charge.price, :size => 6 %></td>
+			</tr>
+	<% end %>
+	<% (@record.extra_charges.length..(@record.extra_charges.length + 10)).each do |i| %>
+		<tr id="new_charges[<%= i %>]" style='display:none;' class="new-extra-charges">
+    		<% new_options = "<option value='none' SELECTED>Additional Options</option>" %>
+    		<% new_options += options_for_select(ProductOption.find(:all).collect { |po| [ po.title, po.id ] }) %>
+    		<td class="option_title">&nbsp;</td>
+    		<td class="option_details" style="padding-left: 4px;">
+    		  <%= select_tag( "charges[#{i}][name]", new_options ) %></td>
+    		<td class="option_details">&nbsp;</td>
+			<td class="option_details"><%= text_field_tag "charges[#{i}][price]", '', :size => 6 %></td>
+		</tr>
+
+<% if false %>
+<!--  this is Commented
+		<tr id="new_charges[<%= i %>]" style='display:none;' class="new-extra-charges">
+			<td class="option_title">&nbsp;</td>
+			<td class="option_details" style="padding-left: 4px;"><%= text_field_tag "charges[#{i}][name]", '', :size => 24 %></td>
+			<td class="option_details">&nbsp;</td>
+			<td class="option_details"><%= text_field_tag "charges[#{i}][price]", '', :size => 6 %></td>
+		</tr>
+-->
+<% end %>
+
+	<% end %>
+	<% @record.design_orders.each do |design_order| %>
+			<tr>
+				<td class="option_title">Design</td>
+				<td class="option_details">
+				 	Job <%= link_to design_order.full_job_number, view_design_order_url(:id => design_order.id) %>
+					(Billed Separately)
+				</td>
+				<td class="option_details">
+				</td>
+				<td class="option_details">
+					<%= number_to_currency design_order.total %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

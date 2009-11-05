@@ -1,0 +1,86 @@
+<% states = { 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas', 'AA' => 'Armed Forces Americas', 'AE' => 'Armed Forces Europe', 'AP' => 'Armed Forces Pacific', 'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DC' => 'D.C.', 'DE' => 'Delaware', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas', 'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey', 'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'PR' => 'Puerto Rico', 'RI' => 'Rhode Island', 'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah', 'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin', 'WY' => 'Wyoming' }.invert.sort{ |a,b| a[0] <=> b[0] }
+%>
+
+<td valign="top" width="562" align="left">
+		<% form_tag( { :action => 'edit_address', :address_id => @address.id, :edit_item => params[:edit_item] }, :name => 'edit_address', :id => "editAddressForm" ) do %>
+	<p><img src="/images/prod-title-address-bk.gif" alt="" height="33" width="350" border="0" /><br />
+	</p>
+	<div class="subhead">
+		<% if @address == @current_customer.billing_address %>
+		<p>Please Update Your Billing Address</p>
+		<% else %>
+		<p>Please Update This Address</p>
+		<% end %>
+	</div>
+
+	<table class="small" width="415" border="0" cellspacing="0" cellpadding="4">
+		<tr>
+			<td align="right">Label:</td>
+			<td>
+				<%= text_field_tag "address[label]", @address.label, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">First Name:</td>
+			<td>
+				<%= text_field_tag "address[first_name]", @address.first_name, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Last Name:</td>
+			<td>
+				<%= text_field_tag "address[last_name]", @address.last_name, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Company:</td>
+			<td>
+				<%= text_field_tag "address[company]", @address.company, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Address Line 1:</td>
+			<td>
+				<%= text_field_tag "address[street_1]", @address.street_1, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Address Line 2:</td>
+			<td>
+				<%= text_field_tag "address[street_2]", @address.street_2, :size => 35 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">City:</td>
+			<td>
+				<%= text_field_tag "address[city]", @address.city, :size => 24 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">State:</td>
+			<td>
+				<select name="address[state]">
+					<%= options_for_select( states, @address.state ) %>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">ZIP:</td>
+			<td>
+				<%= text_field_tag "address[zip]", @address.zip, :size => 10 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Phone Number:</td>
+			<td>
+				<%= text_field_tag "address[phone]", @address.phone, :size => 24 %>
+			</td>
+		</tr>
+		<tr>
+			<td align="right"></td>
+			<td><input type="image" src="/images/save-changes-btn.gif" alt="" /></td>
+		</tr>
+	<p></p>
+	<div align="right"></div>
+	<% end %>
+</td>

@@ -1,0 +1,59 @@
+
+	<% i = 2 %>
+	<% @orders.each do |order| %>
+				<div class="job" id="order_<%= order.id %>">
+					<%= render :partial => 'admin/reports/lists/run_order', :locals => {:order => order } %>
+				</div>
+				
+				<% if i.modulo(7).zero? and not i.zero? %><div class="break"></div><% end %>
+			<% i += 1 %>
+	<% end %>
+	
+
+
+<style>
+    .run_table{font-size:0.9em;}
+    .product{width:13%;font-size: .7em;}
+    .product_name{width:32%;}
+    .name{width:10%;font-size: .8em;}
+    .name_value{width:30%;font-size: .8em;}
+    .qty{width:5%;text-align:right;}
+    .qty_value{width:10%;text-align:right;}
+	label.signbox { font-size: .8em; padding-bottom: 24px; padding-top: 4px; border-bottom: 2px solid black; width: 72px;}
+	label.sku { font-size: .9em; }
+	label.product_name { font-size: .8em;}
+	label.job_number { font-size: 0.9em; font-weight: bold; width: 72px;}
+	label.prepress_comments, label.press_comments { font-size: .7em; font-weight: bold;}
+	.prepress_comments_container { border: 1px solid black; width: 200px;   float:left;}
+	.new_press_comment{}
+	.bindery{float:right;}
+	.press_comments_container { border: 1px solid black; width: 252px;}
+	label.quantity_label { padding-top: 1px; font-size: .9em; width: 40px;}
+	label.quantity { margin-left: 4px; font-size: 1.0em; width: 40px;}
+	label.batch { width: 60px; text-align: right; font-size: .9em; font-weight: bold;}
+	label.onRun { font-size: .7em; font-weight: bold;}
+	label.proof { font-size: 12px; font-weight: bold; background: yellow; padding-top: 4px;}
+	.comments_container .comments { font-size: 10px; } 
+	.comments_container { font-size: 10px; }
+	.comments_container label { font-size: 10px;}
+	.qty_value{font-size:0.9em;}
+	label.amt{font-size:0.6em; font-weight:bold;}
+	label.amt_due{color:red;font-size:0.6em; font-weight:bold;}
+	label.shipping{font-size:0.6em; font-weight:bold;}
+	label.shipping_method{font-size:0.6em; font-weight:bold;}
+	.image_placeholder { width: 80px; height: 60px; border: 1px dotted black;}
+	label#sm{font-size:0.6em;}
+	label#med{font-size:0.6em;}
+	label#lg{font-size:0.6em;}
+	label#poster{font-size:0.6em;}
+	label.box_suggestions { font-size: 0.9em; }
+ 	label.box_suggestions .box_size { padding-left: 0px; letter-spacing: -1.0px; font-size: 0.8em;}
+	
+	label.run { font-size: .7em; }
+	
+	.address, .name_company  { text-align: left !important;}
+	.phone_numbers { width: 100%; text-align: right; font-size: .9em;}
+	.job br { clear: both;}
+	.job { border-bottom: 1px solid black; width: 680px; margin-left: 4px;}
+	.break { page-break-after: always;}
+</style>

@@ -1,0 +1,4 @@
+#!/usr/bin/ruby
+
+name = File.expand_path(File.dirname(__FILE__) + "/../config/nomad_lighty.config")
+exec "lighttpd -f #{name}"

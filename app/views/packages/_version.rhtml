@@ -1,0 +1,37 @@
+<table width="550" border="1" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="6">
+				<tr height="19">
+					<td colspan="2" align="left" bgcolor="#999999" height="19">
+						<div class="subhead-white">
+						<%= item.title %> <%= "- " + version_name unless (version_name.nil? or version_name.empty?) %> 
+						</div>
+						</td>
+					</tr>
+					<tr height="25">
+						<td width="25%" height="25">
+							<div align="left"></div>
+						</td>
+						<td width="40%" height="25">
+							<%= image_tag item.product.cart_image %>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" valign="top" width="25%">Name</td>
+						<td width="40%"><input type="text" name="<%= "items[#{item.id}][versions][#{version}][name]"%>" value="<%= version_name %>" size="33" />
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td bgcolor="#999999" width="1" height="14"><img src="images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		</tr>
+		<tr height="1">
+			<td colspan="3" bgcolor="#999999" height="1"><img src="images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		</tr>
+	</table>
+	<br />

@@ -1,0 +1,59 @@
+body { 
+	color: black; 
+	font-size: 12px; 
+	font-family: arial, helvetica, geneva; 
+	background-color: white; 
+	background-image: url('/images/lines.gif'); 
+}
+p {}
+td {}
+a:link { color: #e05000 }
+a:visited { color: #e05000; }
+a:hover { }
+a:active { }
+.white-nav { color: white; font-size: 11px; padding-right: 12px; padding-left: 12px; }
+.white-nav a:link { color: white; text-decoration: none; }
+.white-nav a:visited { color: white; text-decoration: none; }
+.white-nav a:hover { color: white; text-decoration: underline; }
+.left-nav { color: black; font-size: 12px; line-height: 18px; }
+.left-nav a:link { color: black; text-decoration: none; }
+.left-nav a:visited { color: black; text-decoration: none; }
+.left-nav a:hover { color: black; text-decoration: underline; }
+.footer-links { font-size: 10px; }
+.small { font-size: 11px; }
+.small-grey { color: #7b7c7d; font-size: 11px; }
+.subhead { font-size: 13px; font-weight: bold; }
+.subhead-white { color: white; font-size: 13px; font-weight: bold; }
+.head { font-size: 15px; font-weight: bold; }
+.tiny { font-size: 9px; }
+h1 { color: #666; font-size: 12px; font-weight: normal; }
+ul { line-height: 18px; list-style-type: square; margin: 1em 0 1em 30px; }
+.subhead-orange { color: #e05000; font-size: 13px; font-weight: bold; }
+
+a img { border-width: 0px;}
+
+td#subtotal {
+	height: 4em;
+}
+img#spinner {
+	padding: 0px 8px 0px 4px;
+}
+
+.error {
+	color: red;
+}
+
+label.subtotalLabel {
+	position: relative;
+	left: 0px;
+	text-align: right;
+	width: 120px;
+	padding: 0px 12px 0px 0px;
+}
+.subtotalValue {
+	text-align: left;
+	width: 120px;
+}
+
+div.tooltip_container { width:18px; height:18px; display:block; position:relative; }
+span.tooltip { background-color:#fcecc6; width:200px; position:absolute; padding:8px; border:1px solid #f16624; right:25px; top:5px; }

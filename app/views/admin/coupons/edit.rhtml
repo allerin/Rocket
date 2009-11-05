@@ -1,0 +1,15 @@
+<div id="subnav" style="width:100%">
+<ul>
+	<li>
+		<%= link_to	'Back To List', admin_list_coupons_url, :id => 'addNewCoupon'		%>
+	</li>
+	<li>
+		<%= link_to	'Add Coupon', admin_new_coupon_url, :id => 'addNewCoupon'		%>
+	</li>
+</ul>
+</div>
+<div id="data">
+<div id="package" class="panel left fullwidth">
+<%= render :partial => 'edit' %>
+</div>
+</div>

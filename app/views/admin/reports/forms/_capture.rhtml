@@ -1,0 +1,55 @@
+<form id="capture_form" name="capture_form">
+<table style="margin-bottom: -8px" cellpadding="0">
+	<tr>
+		<td class="formLabel">Batch</td>
+		<td>
+			<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]}.insert(0,['']) %>
+			<%= select_tag	'batch', 
+											options_for_select(batches.collect {|b| 
+												["#{b.first} #{('(' + b.last + ')') if b.last and not b.last.empty?}", b.first] }, params[:batch])  %>
+		</td>
+		<td class="formLabel" style="padding-left: 6px;">
+			Dates
+		</td>
+		<td class="formLabel">
+			<%= text_field_tag 'start_date', nil, :size => 8 %> -
+		</td>
+		<td>
+			<%= text_field_tag 'end_date', nil, :size => 8 %>
+		</td>
+		<td class="formLabel"><span style="margin-left: 6px;">Show Captured</span></td>
+		<td><%= check_box_tag "captured", '1', params[:captured] %></td>
+
+		<td style="padding-left: 20px;">
+			<%= mag_button_to_function	"Capture", 
+																	"	payments.clear();
+																		$$('input.captured').each(function(checkbox) {
+																			if(checkbox.checked) { payments.push(checkbox.id) }
+																		});
+																		capturePayment(payments);
+																		", 
+																	:class => 'yellow', :style => "" %>		
+		</td>
+		<td>
+			<%= mag_button_to_function	"Force", 
+																	"	payments.clear();
+																		$$('input.captured').each(function(checkbox) {
+																			if(checkbox.checked) { payments.push(checkbox.id) }
+																		});
+																		forceCapturePayment(payments);
+																		", 
+																	:class => 'yellow', :style => "" %>
+		</td>
+	</tr>
+</table>
+</form>
+	<script>
+	new Form.EventObserver($("capture_form"), function() { <%= remote_function(:url => report_capture_list_url, 
+																																					:with => "Form.serialize('capture_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_capture_list_url, :with => "Form.serialize('capture_form')") %>", 500)
+	</script>
+	
+	<style>
+	td.formLabel { text-align: right; font-size: 12px; font-weight: bold;}
+	</style>

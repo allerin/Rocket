@@ -1,0 +1,45 @@
+<div class="title"> <%= @package.title or "New Package" %>	</div>
+<div class="content">
+<% form_remote_tag(:url => admin_save_package_url) do %>
+<input type="text" style="display: none;" name="package_id" value="<%= @package.id %>">
+<div id="packageInfo">
+	<div class="column">
+		<label for="package[title]" class="packageLabel">Name</label>
+		<%= secure_text_field( @package, :title, "package[title]", :size => 20 ) %>
+		<br class="clear">
+	
+		<label for="package[title_image]" class="packageLabel">Title Image</label>
+		<%= secure_text_field( @package, :title_image, "package[title_image]", :size => 20 ) %>
+		<br class="clear">
+		
+		<label for="package[shortname]" class="packageLabel">Short Name</label>
+		<%= secure_text_field( @package, :shortname, "package[shortname]", :size => 20 ) %>
+		<br class="clear">
+		
+		<label for="package[subtitle]" class="packageLabel">Subtitle</label>
+		<%= secure_text_field( @package, :subtitle, "package[subtitle]", :size => 30 ) %>
+		<br class="clear">
+		
+		<h3>Package Options</h3>
+		<div id="package_option_values">
+		<%= render :partial => 'package_option_values' %>
+		</div>
+
+	</div>
+	
+	
+	<div class="column right-column">
+		<h3>Products <%= link_to_remote 'Add Product', :url => add_product_to_package_url(:package_id => (@package.id or '')) %></h3>
+		<div id="package_items">
+		<%= render :partial => 'package_items' %>
+		</div>
+	</div>
+	<br class="clear">
+	
+</div>
+
+<br class="clear">
+<input type="submit" value="Save" id="save_package">
+<br class="clear">
+<% end %>
+</div>

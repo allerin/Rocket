@@ -1,0 +1,34 @@
+<% options = DesignOption.find :all, :conditions => "label != 'copy' AND label != 'comments'"  %>
+	
+<% length = options.length.odd? ? options.length.div(2) + 1 :  options.length.div(2) %>
+<% columns = [ options.first(length), options[length..-1] ] %>
+
+<% columns.each do | col_options | %>
+<div style="float: <%= cycle('left', 'right') %>; width: 49%; margin-top: 8px;">
+<table class="productsTable" width="100%">
+	<thead>
+		<tr>
+			<th>Option</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<% col_options.each do | option | %>
+		<tr>
+			<td>
+				<%= option.customer_label %>:
+			</td>
+			<td>
+				<% value = @record.option_value_for(option) or (@record.parent.option_value_for(option) if @record.parent) %>
+				<%= design_options_select( option.label.to_sym , (value.value_label rescue '') ) %>
+				<script>
+					$('<%= option.label.downcase %>').addEventListener('change', function() { <%= remote_function(:url => {:action => 'change_design'}, :with => "Form.serialize('design_form')") %> }, false)
+				</script>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+</div>
+<% end %>

@@ -1,0 +1,67 @@
+<!!! PRODUCT INFO CELL>
+<html>
+
+<td valign="top" width="350">
+	<table width="64" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td>
+
+				<div align="left">
+					<%= image_tag( "prod-title-" + @product_page.name + ".gif" ) %> 
+				</div> 
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table width="99%" border="0" cellspacing="0" cellpadding="10">
+					<tr>
+						<td>
+							<div align="left">
+								<%= @product_page.description_html %>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div align="left">
+					<img src="/images/features-head.gif" alt="" height="25" width="350" border="0" />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table width="99%" border="0" cellspacing="0" cellpadding="10">
+					<tr>
+						<td>
+							<div align="left">
+								<%= @product_page.features_html %>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</td>
+		
+		
+	
+		<!! OPTIONS CELL >
+		
+<td valign="top" width="201">
+	<div id="productForm">
+	
+	<%= render :partial => "product_form" %>
+	
+  </div>
+	
+</td>
+	
+
+
+
+</html>
+

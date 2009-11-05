@@ -1,0 +1,39 @@
+<div id="subnav">
+<%=	link_to	'back to list', list_orders_url(), :id => 'backToList' %>
+<% if @previous_record %>
+|
+<%=	link_to	'previous job', show_order_url(@previous_record.id)  %>
+<% end %>
+<% if @next_record %>
+|
+<%=	link_to	'next job', show_order_url(@next_record.id)  %>
+<% end %>
+
+| <%= link_to "Invoice", 
+						show_invoices_url(:value => @record.invoice_id, :view => 'detail', :key => 'invoices.id'),
+ 						:id => 'viewInvoice' %>
+						
+						
+| <%= link_to "Customer", 
+						show_customers_url(:id => @record.invoice.customer_id, :view => 'detail'),
+						:id => 'viewCustomer' %>
+
+| <%= link_to "Reorder", 
+						reorder_url(:id => @record.id),
+						:id => 'reorder' %>
+	
+| <%= link_to "Reprint", 
+						reprint_url(:id => @record.id),
+						:id => 'reprint' %>
+
+</div>
+
+<%= render :partial => "admin/components/quicksearch"%>
+
+
+<div id="content">
+<%= render :partial => "detail" %>
+</div>
+
+<%= render :partial => "admin/components/status" %>
+

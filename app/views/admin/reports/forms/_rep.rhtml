@@ -1,0 +1,41 @@
+<form id="rep_form" name="rep_form">
+<table style="margin-bottom: -8px">
+	<tr>
+		<td class="formLabel">
+			Rep
+		</td>
+		<td>
+			<%= select_tag 'sales_rep', options_for_select(Customer.account_reps)  %>
+		</td>
+		<td class="formLabel" style="padding-left: 12px;">
+			Dates
+		</td>
+		<td class="formLabel">
+			<%= text_field_tag 'start_date', nil, :size => 8 %> -
+		</td>
+		<td>
+			<%= text_field_tag 'end_date', nil, :size => 8 %>
+		</td>
+	</tr>
+	<tr>
+		<td class="formLabel">Company</td>
+		<td>
+		<%= text_field_tag 'company', nil, :size => 12 %>
+		</td>
+		<td class="formLabel">Name</td>
+		<td colspan="2">
+		<%= text_field_tag 'name', nil, :size => 12 %>
+		</td>
+	</tr>
+</table>
+</form>
+	<script>
+	new Form.EventObserver($("rep_form"), function() { <%= remote_function(:url => report_rep_list_url, 
+																																					:with => "Form.serialize('rep_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_rep_list_url, :with => "Form.serialize('rep_form')") %>", 500)
+	</script>
+	
+	<style>
+	td.formLabel { text-align: right; font-size: 12px; font-weight: bold;}
+	</style>

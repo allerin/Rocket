@@ -1,0 +1,101 @@
+xml.vbox(:id => "content") { |content|
+  content.label :value => "Rocket Postcards: Customers", :class => 'header'
+  
+  content.spacer :height => 4
+  
+  content << render( :partial => 'detail_toolbar', :locals => {  }  )
+  
+  content.spacer :height => "4px"
+  
+  content.vbox { |details|
+    details.vbox { |vb|
+      vb.spacer :height => "8px"
+      
+      vb.label :class => "header", :value => "Customer #{@customer.id} - #{@customer.first_name} #{@customer.last_name}"
+      
+      vb.grid { |grid| 
+        grid.columns { |c|
+          c.column
+          c.column
+          c.column 
+          c.column }
+        
+        grid.rows { |r|
+          r.row(:align => 'center') { |row| 
+            row.label :value => "First Name"
+            row.textbox :size => 16, :value => @customer.first_name
+            row.label :value => "Email"
+            row.textbox :size => 24, :value => @customer.email }
+          r.row(:align => 'center') { |row|
+            row.label :value => "Last Name"
+            row.textbox :size => 16, :value => @customer.last_name
+            row.label :value => "Phone"
+            row.textbox :size => 16, :value => @customer.phone }
+          r.row(:align => 'center') { |row|
+            row.label :value => "Password"
+            row.textbox :size => 16
+            row.label :value => "Reseller ID"
+            row.textbox :size => 12, :value => @customer.reseller_id }  
+        }
+      } #grid
+      
+      vb.spacer :height => "16px"
+     
+      vb.tabbox(:height => "200px") { |tb|
+        tb.tabs { |tabs| 
+          tabs.tab :label => "Invoices"
+          tabs.tab :label => "Orders"
+          tabs.tab :label => "Payments"
+          tabs.tab :label => "Addresses"
+          tabs.tab :label => "Notes"
+          }
+        tb.tabpanels { |panels| 
+          panels.tabpanel(:id => 'invoices-panel') { |panel|
+            panel.tree(:hidecolumnpicker => true, :width => "720px", :enableColumnDrag => true, :height => "200px") { |tree| 
+              tree.treecols() { |tc| 
+                tc.treecol :label => "ID", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Order Date", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Printing", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Design", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Mailing", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Postage", :flex => 1
+                tc.splitter :class => "tree-splitter"
+                tc.treecol :label => "Total", :flex => 1 }
+            
+              tree.treechildren { |treechildren| 
+                @customer.invoices.each do | invoice |
+                  treechildren.treeitem { |ti| 
+                    ti.treerow(:width => "600px") { |tr| 
+                      tr.treecell :label => invoice.id
+                      tr.treecell :label => invoice.created_at.to_formatted_s( :short )
+                      tr.treecell :label => number_to_currency(invoice.printing_total)
+                      tr.treecell :label => number_to_currency(invoice.design_total || 0)
+                      tr.treecell :label => number_to_currency(invoice.mailing_total || 0)
+                      tr.treecell :label => number_to_currency(invoice.postage_total || 0)
+                      tr.treecell :label => number_to_currency(invoice.total) }
+                  }
+                end
+              }
+            } #tree
+          } #invoices
+            
+          panels.tabpanel
+          panels.tabpanel
+          panels.tabpanel
+          panels.tabpanel
+        }
+      
+      }
+      
+      
+    }
+    
+    
+  }
+
+}

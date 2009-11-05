@@ -1,0 +1,41 @@
+<span style="padding-left: 4px; font-size: 14px; font-weight: bold;">Specifications</span>
+<table width="100%">
+	<tr>
+	<% ['Ink', 'Coating' ].each do |title| %>
+	<td class="label"><%= title %></td>
+	<td>
+		<% if option = options.find { |o| o.title == title } %>
+			<%= product_options_select( @record.product, option, @record.option_value_for(option), false, "width: 100px;" ) %>
+		<% end %>
+	</td>
+	<% end %>
+	<td class="label">Submit</td>
+	<td><%= secure_select(@record, :submit_method_id, 'submit_method_id', (SubmitMethod.find(:all).collect { |m| [m.name, m.id.to_s] } << ['None',nil]), :style => "width: 84px;") %></td>
+	<td class="label">Date Ordered:</td>
+	<td><%= @record.created_at.strftime("%m/%d/%y") %>
+	
+	</tr>
+	<tr>
+	<% ['Paper', 'Turnaround'].each do |title| %>
+	<td class="label"><%= title %></td>
+	<td>
+		<% if option = options.find { |o| o.title.downcase == title.downcase } %>
+			<%= product_options_select( @record.product, option, @record.option_value_for(option), false, "width: 100px;" ) %>
+		<% end %>
+	</td>
+	<% end %>
+	<td class="label">Time Ordered:</td>
+	<td><%= @record.created_at.strftime("%I:%M %p") %>
+	</tr>
+	<tr style="height: 32px;">
+		<td class="label">Status</td>
+		<td align="left">
+			<%= secure_select( @record, 'status', 'order[status]', Order.statuses.collect { |s| [s,s] }, :style => "width:100px; color: white; background-color: red;" ) %></td>
+		<td colspan="4">
+			<input type="button" value="Passed Preflight" style="margin-right: 4px;" onclick="$('order[status]').value = 'Passed Preflight'; updateOrder();">
+			<input type="button" value="Proof OUT" style="margin-right: 4px;" onclick="$('order[status]').value = 'Proof Out'; updateOrder();">
+			<input type="button" value="Name Folder" onclick = "<%= remote_function(:url => create_folder_url(:id => @record.id))%>">
+		</td>
+	</tr>
+	
+</table>

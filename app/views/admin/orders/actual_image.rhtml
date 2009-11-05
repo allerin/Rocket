@@ -1,0 +1,11 @@
+<!--
+Added by SUHAS to display the actual image once click on thumbnail (Back-End functionality)
+Date - Sept 26, 2008
+//-->
+
+
+<% @picture = Picture.find(params[:id]) %>
+
+<tr>   
+  <td><%= image_tag(@picture.public_filename()) %></td>
+</tr>

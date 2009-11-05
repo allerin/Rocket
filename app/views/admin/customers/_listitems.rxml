@@ -1,0 +1,32 @@
+xml.listbox(:id => "records", :rows => 30, :enableColumnDrag => true ){ |lb|
+
+  lb.listcols { |cols| 
+    cols.column :id => "first-name", :flex => 1
+    cols.column :id => "last-name", :flex => 1
+    cols.column :id => "company", :flex => 1
+    cols.column :id => "email", :flex => 1
+    cols.column :id => "phone", :flex => 1 }
+
+  lb.listhead { |head|
+    head.listheader :label => "First"
+    head.listheader :label => "Last"
+    head.listheader :label => "Company"
+    head.listheader :label => "Email"
+    head.listheader :label => "Phone" }
+  
+  records.each do | record |
+    
+    lb.listitem(:id => record.id) { |li| 
+      li.listcell :label => record.first_name
+      li.listcell :label => record.last_name
+      li.listcell :label => record.company
+      li.listcell :label => record.email
+      li.listcell :label => record.phone }
+
+  end
+}
+
+
+
+
+

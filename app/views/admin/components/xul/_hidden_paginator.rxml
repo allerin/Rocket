@@ -1,0 +1,1 @@
+xml.textbox :id => 'page', :value => @page, :hidden => true

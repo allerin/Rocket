@@ -1,0 +1,44 @@
+<td>
+<p>
+<img src="/images/title-upload.gif" alt="" height="33" width="350" border="0" />
+</p>
+	
+<% unless @orders.empty? %>
+	<p><strong>IMPORTANT:</strong> The turnaround time that you selected for a given item in your order does not begin until we have successfully received the artwork for that item, it passes preflight, and if a proof was requested,  you have approved the job to print. Artwork must be received by 2PM PST (5PM EST) in order for it to be processed that business day.</p>
+
+	<% @orders.each do | order |%>
+		<div id='order_<%= order.id %>'>
+			<%= render :partial => 'designer_upload_order', :locals => { :order => order } %>
+		</div>
+	<% end %>
+<% end %>
+
+
+<style type="text/css">
+.progress-bar {
+  width:100%;
+  height:12px;
+  border:solid 1px #999;
+  position:relative;
+}
+
+.progress-bar #status-bar {
+  display:block;
+  height:12px;
+  width:0;
+  background-color:#999;
+  border-right:solid 1px #999;
+  position:absolute;
+  top:0; left:0;
+}
+
+.progress-bar #status-text {
+  display:block;
+  position:absolute;
+  top:0; left:0;
+}
+</style>
+
+<iframe id="upload" name="upload" src="about:blank"></iframe>
+
+</td>

@@ -1,0 +1,76 @@
+                <table width="100%" class="run_table">
+					<tr>
+					    <td valign="top" width="14%">
+					        <label class="job_number"><%= link_to order.full_job_number, show_order_url(:id => order.id), :id => "#{order.id}"	%></label>
+							<label class="signbox">Proof</label><br/>
+							<label class="signbox">Paperwork</label>
+						</td>
+						<td valign="top" width="10%">
+						    <label class="sku" align="left"><%= order.product_sku %></label>
+						    <img src="admin/reports/show_me/<%= order.id %>" alt="1" width="60px" height="60px" border="1" align="left"/>
+						
+						</td>
+						<td valign="top" width="61%">
+							
+							<label class="product">01-SSP</label>
+							<label class="product_name"><%= order.product_title %></label>
+							<label class="name"><b>Name:</b></label> 
+							<label class="name_value"><%= order.invoice.customer.last_name %></label>
+							<label class="qty"><b>Qty</b></label>
+							<label class="qty_value"><b><%= order.quantity %></b></label>
+							
+							<div class="prepress_comments_container comments_container">
+							<label class="prepress_comments">Prepress Comments</label><br/>
+							<div class="job_column">
+                <div class="prepress_comments" style="overflow:scroll; height:80px;">
+ 	              <%= order.prepress_comments.collect { |c| "<strong> <br/> " + 
+				    c.user.first_name + 
+				    c.created_at.strftime(" (%m/%d/%y %H:%M)</strong> ") +
+				    c.comment }.join(' ') %>
+				  <br/>
+	       </div>
+	       [<%= link_to_function 'Add', "$('new_press_comment_container_#{order.id}').style.display='block';" %>]
+	       <div class="new_press_comment" id="new_press_comment_container_<%= order.id %>" style="display:none;">
+		      <%= form_remote_tag(:url => report_add_comment_url(:kind => 'PrePress', :order_id => order.id, :batch => params[:batch], :run => params[:run], :view => "run_order")).gsub('amp;','') %> 
+			  <%= text_field_tag "new_press_comment_#{order.id}", nil, :size => 20, :style => "float: left; margin-top:10px;" %><br/><br/>
+			  <input style="float:left;border:none;" src="images/save.gif" type='image' value='save'/>
+			 <a style="font-size:13px; color:#666; padding-left:4px;" href="javascript:void(0);" onclick="javascript:Effect.toggle('new_press_comment_container_<%= order.id %>', 'blind');">Cancel</a>
+		     </form>
+	       </div>
+            </div>
+							
+							</div>
+							<div class="bindery">
+							<label class="prepress_comments">Press Comments</label><span style="font-size: 12px;">&nbsp;[<%= link_to_function 'Save', remote_function(:url => update_press_notes_url(:id => order.id), :with => "'press_notes=' + $('order_#{order.id}_press_notes').value") %>]</span><br/>
+							<div class="new_press_comment" id="new_press_comment_container_<%= order.id %>" style="display:none;">
+								<%= form_remote_tag(:url => report_add_comment_url(:kind => 'Press', :order_id => order.id, :batch => params[:batch], :run => params[:run], :view => "run_order")).gsub('amp;','') %> 
+								<%= text_field_tag "new_press_comment_#{order.id}", nil, :size => 20, :style => "float: left;" %><br/>
+								</form>
+							</div>
+							<span class="comments">
+							<%= order.press_comments.collect { |c| "<strong>" + 
+								c.user.initials + 
+								c.created_at.strftime(" (%m/%d/%y %H:%M)</strong> ") +
+								 c.comment }.join(' ') %>
+							</span>
+							<textarea style="scroll:auto;" onchange="<%= remote_function(:url => update_press_notes_url(:id => order.id), :with => "'press_notes=' + $('order_#{order.id}_press_notes').value")%>" id="<%= "order_#{order.id}_press_notes" %>" name="<%= "order_#{order.id}_press_notes" %>"><%= order.press_notes %></textarea>
+							</div><br/><br/>
+							<label id="sm">SM</label> <input type="text" size="1" id="s" name="s" />
+							<label id="med">MED</label> <input type="text" size="1" id="m" name="m" />
+							<label id="lg">LG</label> <input type="text" size="1" id="l" name="l" />
+							<label id="poster">Poster</label> <input type="text" size="1" id="p" name="p" />
+							<label class="amt">Amt Due:</label>
+							<label class="amt_due"><%= order.amount_due %></label>
+							<label class="shipping">Shipping Method:</label>
+							<label class="shipping_method">PICK UP<!--<%= order.shipping_method.name if order.shipping_method %>--></label>
+						</td>
+						<td width="1%"></td>
+						<td valign="top" width="14%">
+						<br/>
+							<label class="onRun">On Run:</label><br/>
+							<label class="run">A:</label> <%= select_tag("order_#{order.id}_run_a", options_for_select((1..20).to_a.insert(0,nil), order.run_a.to_i), :onchange => remote_function(:url => report_change_run_url, :with => "'side=a&order_id=#{order.id}&run=' + $('order_#{order.id}_run_a').value")) %>
+							<br/>
+							<label class="run">B:</label> <%= select_tag("order_#{order.id}_run_b", options_for_select((1..20).to_a.insert(0,nil), order.run_b.to_i), :onchange => remote_function(:url => report_change_run_url, :with => "'side=b&order_id=#{order.id}&run=' + $('order_#{order.id}_run_b').value")) %>
+						</td>
+					</tr>
+				</table>			

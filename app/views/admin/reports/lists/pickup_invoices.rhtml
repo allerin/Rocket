@@ -1,0 +1,21 @@
+<html>
+<head>
+<%= stylesheet_link_tag 'rocket' %>
+
+<style>
+	p { margin-bottom: 0px; padding-bottom: 0px; margin-top: 6px;}
+</style>
+</head>
+
+<body style="background: white;">
+	<% @orders.each do |order| %>
+		<%= render(:partial => 'admin/reports/lists/invoice_print', :locals => { :order => order, :invoice => order.invoice, :customer => order.invoice.customer})%>
+	<% end %>
+
+<% if params[:print] %>
+	<script>setTimeout('window.print()', 500)</script>
+<% end %>
+	
+</body>
+
+</html>

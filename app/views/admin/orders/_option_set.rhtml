@@ -1,0 +1,29 @@
+<% options = @record.product.product_options %>
+
+<% length = options.length.odd? ? options.length.div(2) + 1 :  options.length.div(2) %>
+<% columns = [ options.first(length), options[length..-1] ] %>
+
+<table class="productsTable" id="firstOptions" width="100%">
+<thead>
+	<tr>
+		<th>Option</th>
+		<th>Value</th>
+	</tr>
+</thead>
+<tbody>
+	<% columns[i].each do | option | %>
+	<tr>
+		<td>
+			<%= option.title %>:
+		</td>
+		<td>
+			<% if @record.reprint? %>
+				<%= @record.option_value_for(option).label rescue '' %>
+			<% else %>
+				<%= product_options_select( @record.product, option, @record.option_value_for(option), false ) %>
+			<% end %>
+		</td>
+	</tr>
+	<% end %>
+</tbody>
+</table>

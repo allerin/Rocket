@@ -1,0 +1,72 @@
+	<table class="status">
+        <tr>
+            <th style="width:15%;">Rocket #</th>
+            <th style="width:10%;">Front Side</th>
+            <th style="width:20%;">Product</th>
+            <th style="width:35%;">PrePress Comments</th>
+            <th style="width:20%;">Run   Batch Number</th>
+        </tr>
+        <tr>
+            <td colspan="5">
+        	<% i = 1 %>
+        	<% @orders.each do |order| %>
+        
+        		<div class="order" style="height:120px; padding:6px 0;" id="order_<%= order.id %>">
+        		
+        			<%= render :partial => "admin/reports/lists/status_order", :locals => { :order => order } %>
+        		
+        		</div>
+        		
+        		<% if i.modulo(11).zero? and not i.zero? %><div class="break"></div><% end %>
+        	
+        			<% i += 1 %>
+        	<% end %>
+	       </td>
+	   </tr>
+	 </table>
+
+<style>
+    .status{ font-size: 10px; text-align: left;}
+    .status td{ font-size: 10px; text-align: left;}
+	.job_column { height: 72px; float: left; margin: 2px 4px 0px 4px;}
+	.job_column br { clear: both;}
+	
+	.job_image { width: 60px; height: 60px; }
+	.image_placeholder { border: 1px dotted black; height: 60px;} 
+	
+	.prepress_comments { font-size: 10px; width: 180px;}
+	.runs { height: 48px; float: left;}
+	
+	
+	label.job_number { font-size: 10px; font-weight: bold; clear: both;}
+	label.sku { font-size: 12px; width: 24px;}
+	label.product_name { font-size: 12px;  height: 10px; letter-spacing: -1px;}
+	label.height { font-size: 12px; width: 70px;}
+	label.width { font-size: 12px;}
+	label.last_name { font-size: 12px; width: 70px;}
+	label.first_name { font-size: 12px;}
+	label.email { font-size: 10px;}
+	label.paid_label { font-size: 10px; font-weight:bold;float:right;}
+	label.paid { font-size: 10px; font-weight:bold;}
+	
+	label.run {font-size: 10px; font-weight: bold; width: 14px; text-align: right; padding-top: 3px;}
+	label.batch { font-size: 14px; font-weight: bold;}
+	label.proof { font-size: 12px; font-weight: bold; background: yellow; padding-top: 4px;}
+	
+	.job br { clear: both;}
+	.job { border-bottom: 1px solid black; width: 680px; margin-left: 4px; height: 74px;}
+	.break { page-break-after: always;}
+	
+	.order { border-bottom: 1px solid black; height: 80px; width: 700px;}
+	
+	
+</style>
+
+<style media="screen">
+	.print_only { display: none;}
+</style>
+<style media="print">
+	label.status_print { margin-top: 6px;}
+	.screen_only { display: none;}
+	label.run_print { width: 32px;}
+</style>

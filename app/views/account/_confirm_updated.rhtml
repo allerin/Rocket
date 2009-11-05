@@ -1,0 +1,51 @@
+<h3>Before proceeding, please review your account information and verify that it is correct. You will only have to do this once.</h3>
+
+<table width="450" border="0" cellspacing="0" cellpadding="2">
+		<tr>
+			<td>
+				<p><strong>Name:</strong> <%= @current_customer.name %></p>
+				<p><strong>Email Address:</strong> <%= @current_customer.email %></p>
+				<p><strong>Company:</strong> <%= @current_customer.company %></p>
+				<p><strong>Reseller ID:</strong> <%= @current_customer.reseller_id %></p>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top" width="50%">
+				<div class="subhead">Billing Address:</div>
+
+				<p>
+					<%= @current_customer.billing_address.label %>
+				</p>
+				<p>
+					<%= @current_customer.billing_address.name %><br />
+					<%= (@current_customer.billing_address.company + "<br />") if @current_customer.billing_address.company and not @current_customer.billing_address.company.empty? %>
+					<%= @current_customer.billing_address.street_1 %>
+					<%= (@current_customer.billing_address.street_2 + "<br />") if @current_customer.billing_address.street_2 and not @current_customer.billing_address.street_2.empty? %>
+					<%= @current_customer.billing_address.city %>, <%= @current_customer.billing_address.state %> <%= @current_customer.billing_address.zip %></p>
+				<p>
+					Phone: <%= @current_customer.billing_address.phone %><br />
+					<%= ("Fax: " + @current_customer.fax ) if @current_customer.fax and not @current_customer.fax.empty? %></p>
+
+			</td>
+			<td valign="top">
+				<div class="subhead">
+					Default Shipping Address:</div>
+					<p>
+						<%= @current_customer.shipping_address.name %><br />
+						<%= (@current_customer.shipping_address.company + "<br />") if @current_customer.shipping_address.company and not @current_customer.shipping_address.company.empty? %>
+						<%= @current_customer.shipping_address.street_1 %><br />
+						<%= (@current_customer.shipping_address.street_2 + "<br />") if @current_customer.shipping_address.street_2 and not @current_customer.shipping_address.street_2.empty? %>
+						<%= @current_customer.shipping_address.city %>, <%= @current_customer.shipping_address.state %> <%= @current_customer.shipping_address.zip %></p>
+					<p>
+						Phone: <%= @current_customer.shipping_address.phone %><br />
+					</p>
+			</td>
+		</tr>
+
+	</table>
+	
+	<h3>Is the above information correct?</h3>
+	<h4><%= link_to 'Yes, it is.', (params[:return_to] || review_cart_url) %></h4>
+	<h4><%= link_to "No. Let's fix it.", profile_url %></h4>

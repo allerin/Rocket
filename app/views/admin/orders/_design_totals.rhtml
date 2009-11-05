@@ -1,0 +1,38 @@
+<div class="moneyColumn" style="width: 200px;">
+
+</div>
+	
+<div class="moneyColumn" style="float: right;">
+	<div style="display:none;">
+	<label for="subtotalPrice" class="billingFieldLabel">Design Price</label>
+	<span id="subtotalPrice" class="addressFieldValue">
+		<%= number_to_currency @record.price %>
+	</span>	
+	</div>
+	
+	<label for="orderTotal" class="billingFieldLabel">Design Total</label>
+	<span id="orderTotal" class="addressFieldValue">
+		<%= number_to_currency @record.total %>
+	</span>
+	<br class="clear"/>
+	
+		
+</div>
+
+<div class="moneyColumn" style="float: right; display: none;">
+	
+	<label for="taxSubtotal" class="billingFieldLabel">Tax</label>
+	<span id="taxSubtotal" class="addressFieldValue">
+		<%= number_to_currency @record.tax %>
+	</span>
+	<br class="clear"/>
+	
+	<label for="shipSubtotal" class="billingFieldLabel">Shipping</label>
+	<span id="shipSubtotal" class="addressFieldValue">
+		<%= number_to_currency @record.shipping_price %>
+	</span>
+	<br class="clear"/>
+	
+	
+	
+</div>

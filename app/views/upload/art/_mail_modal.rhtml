@@ -1,0 +1,17 @@
+<p>Please mail your artwork on CD or DVD to:</p>
+<p><strong>Rocket Postcards</strong></p>
+
+<p>363 Clementina
+	San Francisco, CA 94103</p>
+<p>Be sure to indicate the rocket item number on the disc or within the artwork.</p>
+
+
+<% form_for(:picture, :url => { :action => 'drop_mail_artwork' },
+            :html => { :target => "upload_frame" } ) do %>
+
+    <%= hidden_field_tag 'order_id', order.id %>
+<div id="shipping_info" align="right">
+<input type="image" name="proceed" value="proceed" src="/images/proceed-btn.gif">
+</div>
+
+<% end %>

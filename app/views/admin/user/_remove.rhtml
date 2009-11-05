@@ -1,0 +1,14 @@
+	<div class="userInfo">
+		<%= record.full_name %><br>
+		<%= record.screen_name %><br>
+		<%= record.email %>
+	</div>
+	<div class="areYouForReal">
+		Remove <%= record.screen_name %>?<p>
+		This action cannot be undone.<p>
+		
+			<input class="userDialog" type="button" value="Keep" onclick="new Effect.Puff( 'removeUser_<%= record.id %>', {duration:0.6})"> 
+			<input class="userDialog" type="button" value="Remove" onclick="new Effect.Puff( 'removeUser_<%= record.id %>', {duration:0.6}); new Ajax.Updater('application', '/users/destroy/<%= record.id %>', {asynchronous:true, evalScripts:true, onComplete:function(request){$('status').innerHTML = '&lt;img alt=&quot;Done&quot; height=&quot;12&quot; src=&quot;/images/done.gif&quot; width=&quot;12&quot; /&gt;  Done'}, onLoading:function(request){$('status').innerHTML = '&lt;img alt=&quot;Spin&quot; height=&quot;12&quot; src=&quot;/images/spin.gif&quot; width=&quot;12&quot; /&gt; Loading'}}); return false;"  >
+			
+	
+	</div>

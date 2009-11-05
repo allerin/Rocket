@@ -1,0 +1,80 @@
+<td valign="top" width="350">
+	<table width="548" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><img src="/images/design-title-main.gif" alt="" height="33" width="350" border="0" /></td>
+		</tr>
+		<tr>
+			<td>
+				<% form_tag( { :action => 'design_reorder' }, :name => 'designReorderForm', :id => "designReorderForm" ) do %>
+					<div align="left">
+						<table width="530" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td colspan="3"><img src="/images/design-orderform-tab-pt2.gif" alt="" height="30" width="530" border="0" /></td>
+							</tr>
+							<tr>
+								<td width="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+								<td>
+									<table width="505" border="0" cellspacing="2" cellpadding="8">
+										<tr>
+											<td colspan="2"><span class="subhead">DESIGN REORDER - NO CHANGES</span>
+												
+												<% if flash[:error] %>
+												<div class="error">
+													<p> <%= flash[:error ] %> </p>
+												</div>
+												<% end %>
+
+												<p>Please enter the Rocket job number of your previous design:</p>
+											</td>
+										</tr>
+										<tr>
+											<td width="34%">Rocket Job Number: </td>
+											<td><input type="text" name="job_number" size="24" value="<%= params[:job_number] %>"/></td>
+										</tr>
+										<tr>
+
+											<td width="34%">Confirm Rocket Job Number: </td>
+											<td><input type="text" name="confirm_job_number" size="24" /></td>
+										</tr>
+										<tr>
+											<td>This Layout Is For:</td>
+											<td>
+												<% if @cart.products.empty? %>
+													<select name="for_product_id" id="for_product_id">
+														<% Product.find(:all, :order => 'product_page_id', :conditions => "disabled IS NULL or disabled=0" ).each do |product| %>
+															<option value="<%= product.id %>" <%= selected_string( product.id.to_s == params[:for_product_id] ) %> ><%= product.title %></option>
+														<% end %>
+													</select>
+												<% else %>
+													<select name="for_cart_item" id="for_cart_item">
+													<% @cart.products.each do | cart_product | %>
+														<option value="<%= cart_product.cart_index %>" <%= selected_string( cart_product == @cart_design.for_cart_item ) %> >
+															<%= cart_product.custom_name or cart_product.product.title %>
+														</option>
+													<% end %>
+													</select>
+												<% end %>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">Comments or special instructions:
+												<p><textarea name="comments" rows="8" cols="60" wrap="physical"><%= params[:comments] %></textarea></p>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2"><input type="image" src="/images/add-to-cart-btn.gif" alt="" /></td>
+										</tr>
+									</table>
+								</td>
+								<td width="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+							</tr>
+							<tr height="1">
+								<td colspan="3" height="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+							</tr>
+						</table>
+					</div>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+</td>

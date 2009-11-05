@@ -1,0 +1,233 @@
+<!-- 
+Modified by SUHAS 
+Date - Nov 1, 2008
+-->
+<script type="text/javascript">
+<!--
+    function disableCreditPayment(){
+      document.getElementById('credit_type').disabled=true;
+      document.getElementById('credit_cardholder').disabled=true;
+      document.getElementById('credit_number').disabled=true;
+      document.getElementById('credit_month').disabled=true;
+      document.getElementById('credit_year').disabled=true;
+      document.getElementById('credit_civ').disabled=true;
+      
+      document.getElementById('check_name').disabled=false;
+      document.getElementById('check_number').disabled=false;
+    }
+    
+    function disableChequePayment(){
+      document.getElementById('credit_type').disabled=false;
+      document.getElementById('credit_cardholder').disabled=false;
+      document.getElementById('credit_number').disabled=false;
+      document.getElementById('credit_month').disabled=false;
+      document.getElementById('credit_year').disabled=false;
+      document.getElementById('credit_civ').disabled=false;
+      
+      document.getElementById('check_name').disabled=true;
+      document.getElementById('check_number').disabled=true;
+    }
+//-->
+</script>
+
+<body onload="disableChequePayment();">
+
+  <p><img src="/images/title-review-order.gif" alt="" height="33" width="350" border="0" /><br />
+	   <img src="/images/checkout-graph3.gif" alt="" height="29" width="550" border="0" /></p>
+  <p>Please confirm the folowing information about your order is correct before proceeding:</p>
+
+  <% @cart.packages.each do | cart_package |  %>
+		<div id="cart_package_<%= cart_package.cart_index %>">		
+			<%= render :partial => 'cart_package', :locals => { :cart_package => cart_package } %>
+		</div><br /><br />
+	<% end %>
+
+	<% @cart.products.reverse.each do | cart_product | %>
+		<div id="cart_product_<%= cart_product.cart_index %>">
+			<%= render :partial => 'cart_product', :locals => { :cart_product => cart_product } %>
+		</div><br /><br />
+	<% end %>
+
+	<% @cart.design_jobs.each do | cart_design |  %>
+		<div id="design_job_<%= cart_design.cart_index %>">		
+			<%= render :partial => 'cart_design', :locals => { :cart_design => cart_design } %>
+		</div><br /><br />
+	<% end %>
+
+	<table width="550" border="0" cellspacing="0" cellpadding="0">
+		<tr><td align="right">
+				<div align="right" id="cart_totals">
+					<%= render :partial => 'cart_totals' %>
+				</div>
+				</td>
+		</tr>
+		<tr><td align="right"><br /><br /></td></tr>
+	</table>
+
+	<a name="promoCode">
+		<table class="small" width="550" border="0" cellspacing="0" cellpadding="4">
+			<tr><td colspan="2" align="right" valign="top"><hr /></td></tr>
+			<tr><td colspan="2" bgcolor="#ececec">
+						<div class="subhead" align="center">
+						<b>Promo Code (Optional):</b></div>
+					</td>
+			</tr>
+			<tr><td align="right" valign="top" width="100"></td>
+					<td valign="top">
+						<strong>CODE:</strong> 
+						<input type="text" id="coupon_code" name="coupon_code" size="12" value="<%= params[:coupon_code] %>" />
+						<span id="coupon_status_container"></span>
+						<script>
+							new Form.Element.DelayedObserver('coupon_code', 1, function(element, value) { <%= remote_function(:url => apply_coupon_url, :with => "'code=' + value")%> })
+						</script>
+			
+						<% build_observer('Form.Element.DelayedObserver', 'coupon_code', :function => "alert('yayo')") %>	
+						<br />
+						<div class="tiny error" id="coupon_message"></div>
+						<div class="tiny">
+							<p>If you have a promo/coupon code, enter it here. After you've entered the code, the above totals will be instantly adjusted to reflect the discount.</p>
+						</div>
+					</td>		
+			</tr>
+			<tr><td colspan="2" align="right" valign="top"><hr /></td></tr>
+		</table>
+
+<% form_tag( { :action => 'pay', :anchor => 'paymentDetails' }, :name => 'payForm', :id => "payForm", :onsubmit => '$("spinny").update("<img src=\'/images/status_loading.gif\'\>")' ) do %>	
+
+<a name="paymentDetails">
+<table class="small" width="550" border="0" cellspacing="0" cellpadding="4">
+
+	<tr>
+		<td colspan="2" bgcolor="#ececec">
+			<div class="subhead" align="center">
+				<b>Please choose a payment method:</b></div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center">
+			<hr /><br>
+			<% if  flash[:payment_message] %>
+				<div class="error" align="left" style="width: 360px; font-size: 1.2em;">
+				There was a problem processing your payment:
+				<strong><%=  flash[:payment_message] %></strong>
+				</div>
+			<% end %>
+		</td>
+	</tr>
+	<% if @current_customer.terms_credit and @current_customer.terms_credit > 0 %>
+	<tr>
+		<td align="right" width="166">
+			<strong>ACCOUNT </strong>
+			<input type="radio" name="payment_method" value="terms" <%= checked_string( params[:payment_method] == 'terms' ) %>/>
+		</td>
+		<td>Apply this payment to my Rocket account # <%= @current_customer.id %></td>
+	</tr>
+	<tr><td colspan="2" align="right"><hr /></td></tr>
+	<% end %>
+	<tr>
+
+		<td align="right" width="166">
+			<strong>CREDIT CARD </strong>
+			<input type="radio" name="payment_method" onclick="disableChequePayment();" value="credit" <%= checked_string( params[:payment_method].nil? || params[:payment_method] == 'credit' ) %>/>
+		</td>
+		<td>Apply this payment to the following credit card:</td>
+	</tr>
+	<tr>
+		<td colspan="2"></td>
+	</tr>
+	<tr>
+		<td align="right" width="166">Card Type:</td>
+		<td>
+			<input type="radio" name="credit_type" id="credit_type" value="visa" <%= checked_string( params[:credit_type].nil? || params[:credit_type] == 'visa' ) %>/> Visa 
+			<input type="radio" name="credit_type" id="credit_type" value="mastercard" <%= checked_string( params[:credit_type] == 'mastercard' ) %>/> Mastercard 
+			<input type="radio" name="credit_type" id="credit_type" value="amex" <%= checked_string( params[:credit_type] == 'amex' ) %>/> American Express 
+			<input type="radio" name="credit_type" id="credit_type" value="discover" <%= checked_string( params[:credit_type] == 'discover' ) %>/> Discover
+		</td>
+	</tr>
+	<tr>
+		<td align="right" width="166"><span class="small_copy">Cardholder's Name:</span></td>
+		<td><input type="text" name="credit_cardholder" id="credit_cardholder" size="24" value="<%= params[:credit_cardholder] %>"/></td>
+	</tr>
+	<tr>
+		<td align="right" width="166"><span class="small_copy">Card Number:</span></td>
+		<td><input type="text" name="credit_number" id="credit_number" size="36" value="<%= params[:credit_number] %>" onblur="$('credit_number').value = $('credit_number').value.replace(/-/g,'').replace(/ /g,'')"/></td>
+	</tr>
+	<tr>
+		<td align="right" width="166"><span class="small_copy">Expiration Date:</span></td>
+		<td><span class="small_copy">
+			Month	<%= select_month 'credit_month', params[:credit_month] %>
+			Year	<%= select_year 'credit_year', params[:credit_year] %> 
+		</span></td>
+	</tr>
+	<tr>
+		<td align="right" width="166"><span class="small_copy">CIV Code:</span></td>
+		<td>
+			<div class="tiny">
+				<input type="text" name="credit_civ" id="credit_civ" size="4" value="<%= params[:credit_civ] %>"/> <%= link_to("What is a CIV code?", { :action => "cid" }, :popup => ['cid', 'width=400,height=600,location=0,statusbar=0,menubar=0,']) %>
+			</div>
+		</td>
+	</tr>
+	<tr><td colspan="2" align="right"><hr /></td></tr>
+	<tr>
+		<td colspan="2" align="center">
+			<hr /><br>
+			<% if  flash[:check_message] %>
+				<div class="error" align="left" style="width: 360px; font-size: 1.2em;">
+				There was a problem processing your payment:
+				<strong><%=  flash[:check_message] %></strong>
+				</div>
+			<% end %>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top" width="166">
+			<strong>PAY BY CHECK </strong>
+			<input type="radio" name="payment_method" onclick="disableCreditPayment();" value="check" <%= checked_string( params[:payment_method] == 'check' ) %>/>
+		</td>
+		<td>Name: <input type="text" name="check_name" id="check_name" size="29" value="<%= params[:check_name] %>" /><br />
+			Check # <input type="text" name="check_number" id="check_number" size="12" value="<%= params[:check_number] %>"/>
+			<div class="tiny">
+				<p>Your order will not be printed until a check has been received and processed. Please mail check to Rocket Postcards, 363 Clementina, San Francisco CA 94103</p>
+
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="right" valign="top">
+			<hr />
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top" width="166"></td>
+		<td>
+			<div class="subhead">
+				<b>ORDER TOTAL: <span id="order_total_value"><%= number_to_currency @cart.total %></span></b></div>
+			<p><span class="small_copy">Each item in your order will be charged to your card separately.</span></p>
+		</td>
+	</tr>
+	<tr>
+
+		<td align="right" valign="center" width="166">
+			<div id="spinny"></div>
+		</td>
+		<td>
+			<input type="image" src="/images/submit-payment-btn.gif" alt=""/>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top" width="166"></td>
+		<td><span class="small_copy">Please do not press the submit button more than once, or use the Back button on your browser. Processing may take up to a few minutes.</span></td>
+	</tr>
+</table>
+</a>
+<% end %>
+
+<div align="right">
+	</div>
+
+<div id="preload" style="display: none;">
+	<%= image_tag "status_loading.gif", :style => "display: none;" %>
+</div>
+
+
+</body>

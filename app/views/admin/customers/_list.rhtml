@@ -1,0 +1,36 @@
+<%
+loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'"
+complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'"
+%>
+<div id="data" class="list">
+<%=
+
+columns = [ { :label => 'First',
+			  :field => 'first_name', 
+			  :format => nil },
+			{ :label => 'Last',
+			  :field => 'last_name', 
+			  :format => nil },
+			{ :label => 'Company',
+			  :field => 'company', 
+			  :format => nil },
+			{ :label => 'Email',
+			  :field => 'email', 
+			  :format => nil },
+			{ :label => 'Phone',
+			  :field => 'phone', 
+			  :format => nil }
+			]
+
+record_table columns, @records, @pages, "application", {:view => 'detail'}, loading, complete
+
+%></table>
+ 
+<% if @records.length == 0 %>
+
+   <div class="customer-list">
+      <p>No Customers Found</p>
+   </div>
+
+<% end %>
+</div>

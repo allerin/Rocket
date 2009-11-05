@@ -1,0 +1,65 @@
+
+<table width="215" border="0" cellspacing="0" cellpadding="0" align="right">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<div align="right">
+				<table width="215" border="0" cellspacing="0" cellpadding="6" align="right" bgcolor="#ececec">
+					<tr>
+						<td align="left"><b>Order Subtotals:</b></td>
+						<td align="right"></td>
+					</tr>
+					
+					<% if @cart.print_total > 0 %>
+					<tr>
+						<td align="left">Printing:</td>
+						<td align="right"><%= number_to_currency @cart.print_total %></td>
+					</tr>
+					<% end %>
+					
+					<% if @cart.mailing_total > 0 %>
+					<tr>
+						<td align="left">Mail Services:</td>
+						<td align="right"><%= number_to_currency @cart.mailing_total %></td>
+					</tr>
+					<tr>
+						<td align="left">Postage:</td>
+						<td align="right"><%= number_to_currency @cart.postage_total %></td>
+					</tr>
+					<% end %>
+					
+					<% if @cart.design_total > 0 %>
+					<tr>
+						<td align="left">Design Services:</td>
+						<td align="right"><%= number_to_currency @cart.design_total %></td>
+					</tr>
+					<% end %>
+					
+					<% if @show_shipping and @cart.shipping_total > 0 %>
+					<tr>
+						<td align="left">Shipping:</td>
+						<td align="right"><%= number_to_currency @cart.shipping_total %></td>
+					</tr>					
+					<% end %>
+					<% if @show_tax and @cart.tax_total > 0 %>
+					<tr>
+						<td align="left">Tax:</td>
+						<td align="right"><%= number_to_currency @cart.tax_total %></td>
+					</tr>					
+					<% end %>
+					<tr>
+						<td align="left" bgcolor="#f9de5d"><b>Order Total:</b></td>
+						<td align="right" bgcolor="#f9de5d"><b><%= number_to_currency @cart.total %></b></td>
+					</tr>
+				</table>
+			</div>
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>

@@ -1,0 +1,152 @@
+<% customer_update_action = "update_customer_field" %>
+<style>
+td.label {color: #777; padding-right: 4px;}
+</style>
+
+<div id="data">
+<div id="customer" class="panel left fullwidth">
+<div class="title">Customer
+	[ <%= link_to "View Invoices",
+								show_invoices_url(:view => 'list', :key => 'invoices.customer_id', :value => @record.id),
+								#{ :controller => 'invoices', :action => 'show', :view => 'list', :key => 'customer_id', :value => @record.id },
+								:id => 'viewInvoices' %> ]
+	 
+	[ <%= link_to	"View Jobs", 
+								list_orders_url('search[id]' => @record.id),
+								#{ :controller => 'orders', :action => 'show', :view => 'list', :key => "customer_id", :value => @record.id },
+								:id => 'viewOrders'	%> ]
+
+</div>
+<div class="content">
+<form id="customer_form" name="customer_form">
+
+<table width="100%">
+<tr>
+<td class="label" width="15%">First Name</td>
+<td width="35%">
+	<%= secure_text_field(@record, 'first_name', "record[#{@record.id}][first_name]", :size => 24) %>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</td>
+<td class="label" width="15%">Email</td>
+<td width="35%">
+	<%= secure_text_field(@record, 'email', "record[#{@record.id}][email]", :size => 32) %>
+</td>
+</tr>
+<tr>
+<td class="label">Last Name</td>
+<td>
+	<%= secure_text_field(@record, 'last_name', "record[#{@record.id}][last_name]", :size => 24) %>
+</td>
+<td class="label">Phone</td>
+<td>
+	<%= secure_text_field(@record, 'phone', "record[#{@record.id}][phone]", :size => 20) %>
+</td>
+</tr>
+<tr>
+<td class="label">Password</td>
+<td>
+	<%= secure_text_field(@record, 'password_clear', "record[#{@record.id}][password_clear]", :size => 20) %>
+
+</td>
+<td class="label">Reseller ID</td>
+<td>
+	<%= secure_text_field(@record, 'reseller_id', "record[#{@record.id}][reseller_id]", :size => 10) %>
+</td>
+</tr>
+<tr>
+	<td class="label">Terms Credit</td>
+	<td valign="center">
+	<%= secure_text_field(@record, 'terms_credit', "record[#{@record.id}][terms_credit]", :size => 8) %>
+	
+		&nbsp;
+		Remaining: 
+		<%= number_to_currency(@record.remaining_credit) %>
+	</td>
+	<td class="label">RID On File</td>
+	<td>
+	<%= secure_check_box( @record, 'reseller_on_file', "record[#{@record.id}][reseller_on_file]", @record.reseller_on_file, :style => "margin-top: 1px;") %>
+	</td>
+	
+</tr>
+<tr>
+	<td class="label">Account Rep</td>
+	<td>
+		<%= secure_select (	@record, 
+												'account_rep',
+												"record[#{@record.id}][account_rep]",
+												account_reps,
+												:onchange => "if (this.value == 'Other') {$('new-rep-div').style.display='block'; new_rep = $('new_rep'); new_rep.id=this.id; new_rep.name=this.name;  this.parentNode.removeChild(this); } else " + 
+																			remote_function(:url => update_customer_field_url(:customer_id => @record.id), 
+																											:with => "Form.Element.serialize(this)") ) %>
+	<div id="new-rep-div" style="display: none;">
+		<%= text_field_tag "new_rep", '', :onchange => remote_function(:url => update_customer_field_url(:customer_id => @record.id), 
+																											:with => "Form.Element.serialize(this)")  %>
+	</div>
+	</td>
+		<td class="label">Biz Type</td>
+<td>
+	<%= secure_select(  @record, 
+	                		'kind', 
+	                		"record[#{@record.id}][kind]", 
+	                		[	'Artist/Gallery', 'Personal', 'Small Business', 'Corporate', 
+												'Event', 'Club', 'Theater/Performance', 'Media', 'Other'], 
+											:onchange => remote_function(:url => update_customer_field_url(:customer_id => @record.id), :with => "Form.Element.serialize(this)") ) %>
+</td>
+</tr>
+<tr>
+	<td class="label">Issues</td>
+	<td>
+		<%= secure_select(@record, :issues, "record[#{@record.id}][issues]", (Customer.issues.insert(0,nil)<<('Other')).uniq, :onchange => "if ($('record[#{@record.id}][issues]').value=='Other') { $('record[#{@record.id}][issues]').parentNode.removeChild($('record[#{@record.id}][issues]')); $('other_issues').id='record[#{@record.id}][issues]'; $('record[#{@record.id}][issues]').name='record[#{@record.id}][issues]'; $('record[#{@record.id}][issues]').style.display='block'; $('record[#{@record.id}][issues]').focus(); }") %>
+		<%= text_field_tag 'other_issues', nil, :size => 12, :style => "display: none;"%>
+	</td>
+</tr>
+
+</table>
+
+</form>
+
+
+</div>
+
+</div>
+
+
+<!-- <form id="address_form" name="address_form"> -->
+  <%# @address = Address.find(:first, :conditions => ["customer_id =?", @record.id] )%>
+  <% @address = @record.billing_address %>
+
+  <div id="address" class="panel left fullwidth">
+    <div id="address_option" class="title">Address: 
+      <% new_options = options_for_select(@record.addresses.collect { | ad | [ ad.label, ad.id ] } + [['New', 'new']]) %>
+      <%= select_tag( "record[#{@record.id}][billing_address_id]", new_options, 
+      :onchange => "#{remote_function(:url => update_customer_address_url(:customer_id => @record.id), :with=>"'id=' + $('record[#{@record.id}][billing_address_id]').value" )}" ) %>
+    </div>
+
+    <div class="content" id="address_selected">
+      <%= render :partial=>"address" -%>
+    </div>  
+  </div>
+  
+<!--</form>-->
+
+<div class="panel left fullwidth">
+  <!-- Show NEW ADDRESS form in following 'div' -->
+  <div id="new_address_selected" class="content" >
+  </div>
+</div>
+
+<div id="comments" class="panel left fullwidth">
+	<div class="title">Notes
+	<span style="padding-left: 12px">[<%= link_to_function 'Add', "$('new_comment_row').style.display='table-row'" %>]</span>	
+	</div>
+	<div class="content comments-148">
+		<%= render :partial => 'comments' %>
+	</div>
+</div>
+
+</div>
+
+
+<script>
+new Form.EventObserver($("customer_form"), function() { <%= remote_function(:url => update_customer_field_url(:customer_id => @record.id), :with => "Form.serialize('customer_form')") %> }); 
+</script>

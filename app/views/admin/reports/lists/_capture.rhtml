@@ -1,0 +1,97 @@
+<table class=" payment_report" cellspacing="2">
+	<thead>
+		<tr>
+			<th width="32">
+				<script>already_checked = false</script>
+				<%= link_to_function 'Cap', "if(already_checked) {checked = false; already_checked = false;} else {checked = true; already_checked = true}; $$('input.captured').each(function(input) { input.checked = checked; })" %></th>
+			<th>Job</th>
+			<th>Batch</th>
+			<th>Status</th>
+			<th>Name</th>
+			<th>Company</th>
+			<th>Acct</th>
+			<th>Exp</th>
+			<th>Ref</th>
+			<th class="numeric">Paid</th>
+			<th class="numeric">Due</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% if @orders.empty? %>
+		<tr class="payment_report">
+			<td colspan="10" style="padding-top: 4px; padding-bottom: 12px;">
+				No matching jobs were found, or you have not specified any search criteria. 
+			</td>
+		</tr>
+	<% else %>
+		<% if @orders.length >= 100 %>
+		<tr>
+			<td colspan="10">
+			 	<div style="font-size: 12px; border-bottom: 1px solid black; margin-bottom: 4px;">Only the first 100 orders are shown below (your query matched more). Narrow your search parameters in order to see additional orders.</div>
+			</td>
+		</tr>
+		<% end %>
+		<% i = 1 %>
+		<% @orders.each do |order| %>
+			<tr class="payment_report">
+				<td>
+					<%= check_box_tag order.payment.id, "1", (true if order.payment.captured), :class => "captured" %>
+				</td>
+				<td><%= link_to order.full_job_number, show_order_url(:id => order.id) %></td>
+				<td><%= order.batch %></td>
+				<td width="64"><div style="max-width: 60px; margin-right: 4px; overflow: hidden; white-space: nowrap;"><%= order.status %></div></td>
+				<td width="94"><div style="max-width: 90px; overflow: hidden; margin-right: 4px; white-space: nowrap;"><%= order.invoice.customer.name %></div></td>
+				<td width="94"><div style="max-width: 90px; overflow: hidden; margin-right: 4px; white-space: nowrap;"><%= order.invoice.customer.company %></div></td>
+				<td><%= order.payment.number if order.payment %></td>
+				<td><%= format_cc_exp(order.payment.exp_month, order.payment.exp_year) if order.payment  and order.payment.kind_of?(CreditPayment) %></td>
+				<td><%= order.payment.pnref if order.payment %></td>
+				<td class="numeric">
+					<div id="order_<%= order.id %>_amount_paid"><%= number_to_currency(order.amount_paid, :unit => '') %></div>
+				</td>
+				<td class="numeric">
+					<div id="order_<%= order.id %>_amount_due"><%= number_to_currency(order.amount_due, :unit => '') %></div>
+				</td>
+			</tr>	
+			<% if params[:print] and i.modulo(44).zero? and not i.zero? %>
+	</table><br/>
+	<table class=" payment_report" cellspacing="2">
+			<thead>
+			<tr>
+				<th>Job</th>
+				<th>Method</th>
+				<th>Resale</th>
+				<th>Account</th>
+				<th>Exp</th>
+				<th class="numeric">Total</th>
+				<th class="numeric">Amt Paid</th>
+				<th class="numeric">Amt Due</th>
+				<th>Paid Date</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<% end %>
+			<% i += 1 %>
+		<% end %>
+		<tr class="payment_report grand_total">
+			<td colspan="9" align="right">Totals</td>
+			<td colspan="4" align="right"><strong>&nbsp;</strong></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+
+<style>
+	table.payment_report { width: 680px; margin-left: 8px; margin-top: -8px; page-break-after: always;}
+	tr.payment_report td { font-size: 12px; }
+	tr.payment_report td.numeric { text-align: right; }
+	th.numeric { text-align: right;}
+	tr.grand_total td { height: 28px; border-top: 2px solid black; }
+	td.grand_total_label { padding-right: 4px; font-size: 12px !important; font-weight: bold; text-align: right; }
+	
+	table.payment_report thead tr {
+	background-color: black;
+	color: white;
+	font-size: .8em;
+	text-align: left;
+}
+</style>

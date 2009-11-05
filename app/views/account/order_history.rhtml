@@ -1,0 +1,34 @@
+<td valign="top" width="562">
+	<p><img src="/images/title-order-history.gif" alt="" height="33" width="350" border="0" /><br />
+	</p>
+	<table class="white-nav" width="402" border="0" cellspacing="0" cellpadding="8" bgcolor="#9c9ea0">
+		<tr>
+			<td align="left" width="28%"><u><%= link_to 'My Profile', :controller => 'account', :action => 'profile' %></u></td>
+			<td align="left" width="33%"><u><%= link_to 'Job Status', :controller => 'account', :action => 'job_status' %></u></td>
+			<td align="left" width="33%"><u><%= link_to 'Order History', :controller => 'account', :action => 'order_history' %></u></td>
+		</tr>
+	</table>
+	<table width="535" border="0" cellspacing="0" cellpadding="8">
+		<tr>
+			<td valign="top" width="50%">
+				<div class="subhead">
+					</div>
+
+				<table width="450" border="0" cellspacing="0" cellpadding="8" bgcolor="#ececec">
+					<tr>
+						<td width="25%"><strong>Rocket Invoice #</strong></td>
+						<td width="71%"></td>
+					</tr>
+					<% @current_customer.invoices.reverse.each do |invoice| %>
+					<tr>
+						<td width="25%"><%= link_to invoice.id, :controller => 'checkout', :action => 'payment_summary', :invoice_id => invoice.id %></td>
+						<td width="71%"><%= format_date invoice.created_at %></td>
+					</tr>
+					<% end %>
+				</table>
+
+			</td>
+		</tr>
+	</table>
+	<div align="right"></div>
+</td>

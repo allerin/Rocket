@@ -1,0 +1,32 @@
+<div id="data" class="list">
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td class="linky">
+			<%= link_to	'Add Package', { :action => 'edit' }, :id => 'addNewPackage'		%>
+		</td>
+	</tr>
+	
+<% for package in @packages %> 
+<tr class="productIndex" id='package_<%= package.id %>' >
+	<td>
+		<%= link_to package.title, { :action => 'edit', :package_id => package.id }, :id => "product_link_#{package.id}" %>
+	</td>
+	<td class="linky"><% link_to "Remove", admin_remove_package_url(:package_id => package.id), :id => "remove_link_#{package.id}" %></td>
+</tr>
+
+<% end %>
+</table>
+
+<% if @packages.length == 0 %>
+
+   <div class="product-list">
+      <p>No Packages Found</p>
+   </div>
+
+<% end %>
+</div>
+
+
+

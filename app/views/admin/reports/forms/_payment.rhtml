@@ -1,0 +1,25 @@
+<form id="payment_form" name="payment_form">
+<table style="margin-bottom: -8px">
+	<tr>
+		<td class="formLabel">Batch</td>
+		<td>
+			<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]}.insert(0,['']) %>
+			<%= select_tag	'batch', 
+											options_for_select(batches.collect {|b| 
+												["#{b.first} #{('(' + b.last + ')') if b.last and not b.last.empty?}", b.first] }, params[:batch])  %>
+		</td>
+	
+		
+	</tr>
+</table>
+</form>
+	<script>
+	new Form.EventObserver($("payment_form"), function() { <%= remote_function(:url => report_payment_list_url, 
+																																					:with => "Form.serialize('payment_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_payment_list_url, :with => "Form.serialize('payment_form')") %>", 500)
+	</script>
+	
+	<style>
+	td.formLabel { text-align: right; font-size: 12px; font-weight: bold;}
+	</style>

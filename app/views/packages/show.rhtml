@@ -1,0 +1,24 @@
+<td valign="top" width="370">
+	<table width="538" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td width="80%">
+				<div align="left">
+					<%= image_tag @package.package.title_image %>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td width="80%">
+						<h1 align="left"><%= @package.package.subtitle %></h1>
+						<p align="left">Here is what your kit will include. You can change quantities and product options in order to customize the kit to suit your needs. Then add the entire kit to your shopping cart:</p>
+				</td>
+			</tr>
+			<tr>
+				<td width="80%">
+					<div id="package_items" align="left">
+						 <%= render :partial => 'items' %>
+					</div>
+				</td>
+			</tr>
+	</table>
+</td>

@@ -1,0 +1,27 @@
+
+
+<% form_tag( add_package_url(:package_id => @package.package.id), :id => 'packages_form' ) do %>
+
+<% @package.package_items.each do |item| %>
+	<%= render :partial => 'item', :locals => {:item => item} %> 
+<% end %>
+
+<div align="right">
+<table width="359" border="0" cellspacing="2" cellpadding="0">
+	<% @package.package.product_options.each do | option | %>
+	<tr>
+		<td>
+			<div class="small" align="right">
+				<%= option.title %>
+					<%= package_options_select( "package_options[#{option.id}]", @package.package, option, @package.option_values[option].label )%>
+			</div>
+		</td>
+	</tr>
+	<% end %>
+</table>
+<p></p>
+<p><span class="subhead">Kit Total: <%= number_to_currency(@package.price) %></span></p>
+<p><input type="image" src="/images/add-kit-btn.gif" alt="" /></p>
+</div>
+
+<% end %>

@@ -1,0 +1,8 @@
+Make sure to install the following items:
+
+-RMagick gem
+-Mongrel Upload Progress gem
+
+And if you want the upload progress to work, make sure to start mongrel using the upload progress script at config/mongrel_upload_progress.conf
+
+i.e. mongrel_rails start -p 4000 -S config/mongrel_upload_progress.conf

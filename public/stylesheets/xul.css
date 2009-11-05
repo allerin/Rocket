@@ -1,0 +1,15 @@
+
+vbox#main { max-width: 760px;
+						margin-left: 6px; margin-top: 4px;
+						padding-left: 3px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px;
+					} 
+groupbox#content { min-width: 740px; } 
+
+
+listbox#records{  }
+vbox#details{ }
+
+#toolbar { margin-left: 4px; margin-right: 4px; margin-bottom: 0px; }
+
+
+label.header { font-size: 1.4em;}

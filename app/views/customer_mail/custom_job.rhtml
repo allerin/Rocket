@@ -1,0 +1,6 @@
+<% ['email', 'name', 'organization', 'title', 'address1', 'address2', 'city', 
+		'state', 'zip', 'phone', 'job_type', 'quantity1', 'quantity2', 'quantity3', 
+		'flat_size', 'finished_size', 'paper_stock', 'paper_finish', 'paper_weight', 
+		'ink_side_1', 'ink_side_2', 'artwork'].each do |field| %>
+<%= field.gsub('_', ' ').capitalize %>: <%= @params[field] %>
+<% end %>

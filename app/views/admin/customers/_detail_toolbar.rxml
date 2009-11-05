@@ -1,0 +1,36 @@
+xml.toolbar( :id => "detail-toolbar", :grippyhidden => true ) { |toolbar|
+ 
+  toolbar.toolbarbutton :id => "add-customer", :image => "/images/icons/user_add.png", :label => "New Customer",
+                        :oncommand => remote_function(:url => {:action => 'new_xul'}, :loading => "$('spinner').removeAttribute('hidden');")
+                        
+  toolbar.toolbarbutton :id => "edit-customer", :image => "/images/icons/drive_user.png", :label => "Save Customer",
+                        :oncommand => remote_function(:url => {:action => 'edit_xul'}, :loading => "$('spinner').removeAttribute('hidden');")
+
+  
+  toolbar.spacer :flex => 10
+  
+  #toolbar << render( :partial => 'toolbar_paginator', :locals => { :paginator => paginator } )
+  
+  toolbar.spacer :flex => 20
+  
+  toolbar.textbox :id => "query", :size => 16,
+                  :onkeyup => remote_function(:url => {:action => 'search_xul'}, 
+                  :loading => "$('spinner').removeAttribute('hidden');", :complete => "$('spinner').setAttribute('hidden', 'true');", 
+                  :with => "Form.serialize('list-toolbar')")
+        
+  toolbar.toolbarbutton :id => "search", :image => "/images/icons/magnifier.png", :style => "margin-right: 0px; margin-left: 0px; ",
+                        :oncommand => remote_function(:url => {:action => 'search_xul'}, :with => "Form.serialize('list-toolbar')")
+  toolbar.toolbarbutton :id => "clear", :image => "/images/icons/cross.png", :style => "margin-right: 0px; margin-left: 0px; ",
+                        :oncommand => "$('query').value = '';" + remote_function(:url => {:action => 'search_xul'}, 
+                        :loading => "$('spinner').removeAttribute('hidden');", :complete => "$('spinner').setAttribute('hidden', 'true');", 
+                        :with => "Form.serialize('list-toolbar')")
+                        
+  toolbar.hbox(:width => "20px"){ |b| 
+    b.spacer
+    b.vbox { |vb|
+      vb.spacer :flex => 1
+      vb.image :id => 'spinner', :src => "/images/status_loading.gif", :hidden => true
+      vb.spacer :flex => 1 }
+    b.spacer :width => "4px"
+  }
+}

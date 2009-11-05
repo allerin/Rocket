@@ -1,0 +1,81 @@
+<% address_update_action = "update_address_field" -%>
+
+<% form_remote_tag :url => update_customer_existing_address_url(:address_id => @address.id) do %>
+
+<table>
+
+<tr>
+<td class="label" width="12%">Label</td>
+<td width="45%">
+	<%= text_field 'address', 'label', :value => "#{@address.label}", :size => 20 %>
+</td>
+<td class="label" width="12%"></td>
+<td width="28%"></td>
+
+</tr>
+
+<td class="label">First Name</td>
+<td>
+  <%= text_field 'address', 'first_name', :value => "#{@address.first_name}", :size => 20 %>
+</td>
+<td class="label">Company</td>
+<td>
+  <%= text_field 'address', 'company', :value => "#{@address.company}", :size => 20 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Last Name</td>
+<td>
+  <%= text_field 'address', 'last_name', :value => "#{@address.last_name}", :size => 20 %>
+</td>
+<td class="label">Phone</td>
+<td>
+	<%= text_field 'address', 'phone', :value => "#{@address.phone}", :size => 20 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Address 1</td>
+<td>
+  <%= text_field 'address', 'street_1', :value => "#{@address.street_1}", :size => 20 %>
+</td>
+<td class="label">State</td>
+<td>
+	<%= text_field 'address', 'state', :value => "#{@address.state}", :size => 2 %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Address 2</td>
+<td>
+	<%= text_field 'address', 'street_2', :value => "#{@address.street_2}", :size => 28 %>	
+</td>
+<td class="label">Zip</td>
+<td>
+	<%= text_field 'address', 'zip', :value => "#{@address.zip}", :size => 5 %>
+</td>
+</tr>
+
+<tr><td class="label">City</td>
+    <td><%= text_field 'address', 'city', :value => "#{@address.city}", :size => 20 %>
+    </td>
+    <td class="label">Country</td>
+    <td><%= text_field 'address', 'country', :value => "#{@address.country}", :size => 20 %>
+    </td>
+</tr>
+
+<tr>
+  <td class="label"></td>
+  <td><%= submit_tag 'Update Address' %></td>
+</tr>
+
+</table>
+
+<% end %>
+
+<% if false %>
+<script>
+new Form.EventObserver($("address_form"), function() { <%= remote_function(:url => update_customer_address_url(:customer_id => @record.id), :with => "Form.serialize('address_form')") %> }); 
+</script>
+<% end %>

@@ -1,0 +1,73 @@
+<% @upid = Time.now.to_i.to_s %>
+
+    <% form_for(:picture, :url => { :action => 'upload2', :order_id => order.id, :upload_id => @upid }, 
+                          :html => { :multipart => true , :onsubmit => "Element.show('spinner')" }) do |f| -%>
+     <p>
+        <label for="mugshot">Upload A Front:</label>
+       <%= file_field 'upload1', 'datafile1' %>
+      </p>
+        <p>
+        <label for="mugshot">Upload A Back:</label>
+      <%= file_field 'upload2', 'datafile2' %>
+      </p>
+     <p>
+        <%= submit_tag 'Create' %>
+        <%= image_tag 'progress_bar.gif', :id => 'spinner', :style => 'display:none' %>
+      </p>
+      
+    <% end -%>
+
+<% if false %>
+
+<% form_tag({:action => 'upload', :order_id => order.id, :upload_id => @upid}, 
+										{:multipart => true, :target => 'upload', :onsubmit => "UploadProgress.monitor('#{escape_javascript @upid}')"}) do %>
+
+<span class="subhead">Upload Artwork Now:</span>
+<table width="90%" border="0" cellspacing="0" cellpadding="4">
+	
+	<tr>
+		<td valign="top" width="10%"><strong>Front:</strong></td>
+		<td colspan="1" align="left" valign="top">
+			<%= file_field_tag "front", :id => "#{order.id}_front", :style => ('display: none;' if order.front_art_received) %>
+			<% if order.front_art_received %>
+			<span id='<%= "#{order.id}_front_another" %>' >
+			<%= image_tag(show_order_image_url(:id => order.front_image.id, :size => "64x64"), :style => 'margin-right: 8px; float: left;') if order.front_image %>
+				Artwork Received. 
+				<br/>
+				<%= link_to_function 'Upload Another', "Effect.Fade('#{order.id}_front_another', { duration: 0.0 } ); Effect.Appear('#{order.id}_front'); Effect.Appear('#{order.id}_agree'); Effect.Appear('#{order.id}_button');" %>
+			</span>
+			<% end %>
+		</td>
+	</tr>
+	<% unless order.one_sided? %>
+	<tr>
+		<td valign="top"><strong>Back:</strong></td>
+		<td colspan="1" align="left" valign="top">
+			<%= file_field_tag "back", :id => "#{order.id}_back", :style => ('display: none;' if order.back_art_received)  %>
+			<% if order.back_art_received  %>
+				<span id='<%= "#{order.id}_back_another" %>'>
+				<%= image_tag(show_order_image_url(:id => order.back_image.id, :size => "64x64"), :style => 'margin-right: 8px; float: left;') if order.back_image %>	
+	 			Artwork Received.<br/>
+				<%= link_to_function 'Upload Another', "Effect.Fade('#{order.id}_back_another', { duration: 0.0 } ); Effect.Appear('#{order.id}_back'); Effect.Appear('#{order.id}_agree'); Effect.Appear('#{order.id}_button');" %>
+				</span>
+			<% end %>
+		</td>
+	</tr>
+	<% end %>
+	<% show_form_stuff = (order.front_art_received and ( order.one_sided? or order.back_art_received )) %>
+	<tr style=<%= 'display:none;' if show_form_stuff %>, id='<%= "#{order.id}_agree" %>'>
+		<td colspan="2">
+			<input type="checkbox" name="agree" id="order_<%= order.id %>_agree" value="1" <%= checked_string( params[:agree] ) %> /> 
+			I have read the <a href="/artrequirements" target="_new">artwork submission guidelines</a>. (You must check this box.)
+		</td>
+	</tr>
+	<tr style=<%= 'display:none;' if show_form_stuff %>, id='<%= "#{order.id}_button" %>'>
+		<td colspan="2">						
+			<input type="image" src="/images/upload-btn.gif" alt="" id="upload" onclick="if ($('order_<%= order.id %>_agree').checked) { new Effect.Appear('status_<%= order.id %>'); $('progress_<%= order.id %>').id = 'progress-bar'; $('results_<%= order.id %>').id = 'results'; return true; } else { alert ('Please read the artwork submission guidelines, and then click the checkbox to indicate that you have done so.'); event.stopPropagation(); event.preventDefault(); return false; }"/>
+		</td>
+	</tr>  	
+</table>
+
+<% end %>
+
+<% end %>

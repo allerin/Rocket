@@ -1,0 +1,5 @@
+<%= @address.first_name %> <%= @address.last_name %><br />
+<%= @address.street_1 %><br />
+<%= "#{@address.street_2}<br />" unless @address.street_2.to_s.empty?%>
+<%= @address.city %>, <%= @address.state %> <%= @address.zip %><br />
+<%= @address.country %>

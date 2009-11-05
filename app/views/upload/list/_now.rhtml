@@ -1,0 +1,33 @@
+<% @upid = Time.now.to_i.to_s %>
+
+<% form_tag(	{ :action => 'upload', :order_id => order.id, :upload_id => @upid	}, 
+										{ :multipart => true, :target => 'upload', :onsubmit => "UploadProgress.monitor('#{escape_javascript @upid}')",
+											:name => "order[#{order.id}][list_upload_form]", :id => "order[#{order.id}][list_upload_form]"}) do %>
+											
+<span class="subhead">Upload List Now:</span>
+<table width="90%" border="0" cellspacing="0" cellpadding="4">
+	
+	<tr>
+		<td>List: </td>
+		<td align="left">
+			<%= file_field_tag "list", :id => "#{order.id}_list", :style => ('display: none;' if order.mailing_list_received) %>
+		</td>
+		<td aligh="right">
+			<% if order.mailing_list_received %>
+			<span id='<%= "#{order.id}_list_another" %>'>
+				<strong>Mailing List Received.</strong> <%= link_to_function 'Upload Another', "Effect.Fade('#{order.id}_list_another', { duration: 0.0 } ); Effect.Appear('#{order.id}_list'); Effect.Appear('#{order.id}_list_button');" %>
+			</span>
+			<% end %>
+		</td>
+	</tr>
+	<tr style=<%= 'display:none;' if order.mailing_list_received %>, id='<%= "#{order.id}_list_button" %>'>
+		<td></td>
+		<td colspan="1" align="right">
+			<input type="image" src="/images/upload-btn.gif" alt="" id="upload" onclick="Effect.Appear('status_<%= order.id %>'); $('progress_<%= order.id %>').id = 'progress-bar'; $('results_<%= order.id %>').id = 'results'; return true; " style="padding-right: 32px;"/>
+		</td>
+		<td></td>
+	</tr>  	
+</table>
+
+
+<% end %>

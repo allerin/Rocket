@@ -1,0 +1,117 @@
+<% shipping_address =  cart_design.shipping_address || @current_customer.shipping_address  
+	 design_index = cart_design.cart_index %>
+<table width="550" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="8">
+				<tr height="19">
+					<td align="left" bgcolor="#999999" width="182" height="19">
+						<div class="subhead-white">
+							<%= cart_design.custom_name or "Custom Design: #{cart_design.for_product.title}" %>
+						</div>
+					</td>
+					<td align="left" bgcolor="#999999" width="18" height="19"></td>
+					<td align="right" bgcolor="#999999" width="284" height="19">
+						<div class="white-nav">
+							<%= link_to "Remove this design #{image_tag('/images/close-btn.gif', :border => 0) }",
+													{ :view => 'shipping_info', :action => 'remove_product', :design_index => design_index },
+													:id => "remove_design_#{design_index}",
+													:onclick => 	"new Effect.Puff($(&quot;design_job_#{design_index}&quot;),{duration:0.5}); return false;"	%>
+						</div>
+					</td>
+				</tr>
+				<tr height="18">
+
+					<td rowspan="3" valign="top" bgcolor="#ececec" width="182" >
+						<strong>
+							<% if cart_design.reorder? %>
+								Reorder Job #<%= cart_design.job_number %>
+							<% else %>
+								<%= cart_design.custom_name %>
+							<% end %>
+						</strong>
+						
+						<p><img src="/images/diagram-palette.gif" alt="" height="86" width="119" border="0" /></p>
+
+						<p>For Product:
+							<%= cart_design.for_product.title %> 
+						</p>
+						
+						<%	options = cart_design.design_options
+								options.keys.sort{ |a,b| a.id <=> b.id }.each do | option | %>
+							<p><%= option.customer_label %>: <%= options[ option ].customer_label %></p>
+						<% end %>						
+
+						<% if cart_design.copy %> <p>Text: <%= cart_design.copy %></p> <% end %>
+
+						<% if cart_design.comments %> <p>Comments: <%= cart_design.comments %></p> <% end %>
+
+						<p>
+							<%= link_to 'Return To Cart To Edit This Item',
+							 						{ :view => 'review_cart', :action => 'review_cart', :edit_design => design_index },
+													:id => "edit_design_#{design_index}"
+							%>
+						</p>
+
+
+					</td>
+					<td align="right" valign="top" width="18" height="18"></td>
+					<td valign="top" width="284" height="18">
+							
+							<% if cart_design.soft_options[:proof] == "true" and ( cart_design.soft_options[:proof_delivery] == "mail" or cart_design.soft_options[:proof_delivery] == "messenger" or cart_design.soft_options[:proof_delivery] == "overnight" ) %>
+							<span class="subhead">Deliver Proof To:</span>
+								<p>
+									<%= shipping_address.first_name + " " + shipping_address.last_name %><br />
+									<%= shipping_address.street_1 %><br />
+									<%= ( shipping_address.street_2 + '<br />' ) if shipping_address.street_2 and not shipping_address.street_2.empty? %>
+									<%= shipping_address.city + ", " + shipping_address.state + " " + shipping_address.zip %><br />
+									<%= shipping_address.phone %>
+								</p>
+								<p>
+									<%= link_to 'Change Shipping Address',
+									 						{ :action => 'change_address', :edit_design => design_index }, :id => "change_shipping_design_#{design_index}" %>
+								</p>
+						
+							<% else %>
+								<span class="subhead">No shipping address required.</span>
+							<% end %>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr height="1">
+					<td></td>
+					<td></td>
+				</tr>
+				<tr height="84">
+					<td bgcolor="#ececec" width="182" height="84">
+						<%= render :partial => 'cart_design_totals', :locals => {:cart_design => cart_design} %>
+					</td>
+					<td width="18" height="84"></td>
+					<td align="right" valign="bottom" width="284" height="84">
+						<table width="282" border="0" cellspacing="0" cellpadding="4">
+							<tr>
+								<td><b>Shipping Cost:</b></td>
+								<td align="right"><b>$0.00</b></td>
+
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>
+<br />
+<br />

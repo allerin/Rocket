@@ -1,0 +1,49 @@
+<div class="title"> <%= @coupon.new_record? ? "New Coupon" : ('Coupon: ' + @coupon.name) %>	</div>
+<div class="content">
+<%= form_remote_tag :url => admin_save_coupon_url(:id => @coupon.id) %>
+<div id="couponInfo">
+	<div class="column">
+		<label for="coupon[title]" class="packageLabel">Name</label>
+		<%= secure_text_field( @coupon, :name, "coupon[name]", :size => 20 ) %>
+		<br class="clear">
+	
+		<label for="coupon[code]" class="packageLabel">Code</label>
+		<%= secure_text_field( @coupon, :code, "coupon[code]", :size => 20 ) %>
+		<br class="clear">		
+
+		<label for="coupon[discount]" class="packageLabel">Discount</label>
+		<%= secure_text_field( @coupon, :discount, "coupon[discount]", :size => 5 ) %>
+		<br class="clear">
+
+	</div>
+	
+	<div class="column right-column">
+		<h3>Products <%= link_to_function 'Add Product', "$$('.new_product').each(function(li) { if (li.style.display=='none') { li.style.display='block'; throw $break; } })" %></h3>
+		<ul>
+			<% @coupon.coupon_assignments.each do |assignment| %>
+				<% product = assignment.product %>
+				<li>
+					<%= product.title %> <%= link_to_function 'Remove', remote_function(:url => admin_remove_coupon_assignment_url(assignment)) %>
+				</li>
+				
+			<% end %>
+			
+			<% (0..9).each do |i| %>
+			<li class="new_product" style="display:none;">
+				<%= select_tag 'new_products[]', options_for_select(((Product.find(:all) - @coupon.products).collect { |p| [p.title, p.id] }).insert(0, ['Select', ''])) %>
+			</li>
+			<% end %>
+				
+		</ul>
+	</div>	
+
+	<br class="clear">
+	
+</div>
+
+<br class="clear">
+<label class="packageLabel"> </label>
+<input type="submit" value="Save" id="save_coupon">
+<br class="clear">
+</form>
+</div>

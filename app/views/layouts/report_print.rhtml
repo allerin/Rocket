@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Rocket Postcards Admin<%= ('- ' + @title) if @title %></title>
+<%= stylesheet_link_tag 'main' %>
+
+<%= javascript_include_tag :defaults %>
+<%= javascript_include_tag 'dialog' %>
+<style>
+h1 { text-align: left;}
+</style>
+</head>
+
+<body>
+
+<%= @content_for_layout %>
+
+</body>
+
+
+</html>
+

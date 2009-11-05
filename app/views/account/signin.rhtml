@@ -1,0 +1,52 @@
+<td valign="top" width="569" align="left">
+<p><img src="/images/title-cart.gif" alt="" height="33" width="350" border="0" /><br />
+	<img src="/images/checkout-graph1.gif" alt="" height="29" width="550" border="0" /></p>
+<div class="subhead">
+	<p>SIGN-IN</p>
+	
+	<% if flash[:error] %>
+	<div class="error">
+		<%= flash[:error ] %>
+	</div>
+	<% end %>
+	
+</div>
+
+<% form_tag( { :action => 'signin' }, :name => 'customer_signin', :id => "customerSignin" ) do %>
+
+<p>Existing customers, please sign in before proceeding:</p>
+<table width="351" border="0" cellspacing="0" cellpadding="6">
+	<tr>
+		<td align="right">Email Address:</td>
+		<td><input type="text" name="email" size="31" /></td>
+	</tr>
+	<tr>
+		<td align="right">Password:</td>
+
+		<td><input type="password" name="password" size="19" /></td>
+	</tr>
+	<tr>
+		<td align="right"></td>
+		<td>
+			<div class="small">
+				<%= link_to 'Forgotten your password?', { :controller => 'account', :action => 'forgot_password'} %>
+			</div>
+		</td>
+
+	</tr>
+	<tr>
+		<td align="right"></td>
+		<td>
+			<input type="image" name="submit" src="/images/submit-btn.gif">
+		</td>
+	</tr>
+</table>
+<p>New customers, please take a moment to set up a new account:</p>
+<p>
+	<%= link_to image_tag('create-account-btn.gif', :style => "border-width: 0px;"), { :controller => 'account', :action => 'create_account' } %>
+
+</p>
+<% end %>
+<p></p>
+<p></p>
+</td>

@@ -1,0 +1,423 @@
+<td valign="top">
+	<div align="left">
+		<form action="<%= custom_quote_url %>" method="post">
+		<table width="561" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td valign="top" width="561">
+					<p><img src="/images/title-custom-job-quote.gif" alt="" height="33" width="350" border="0" /></p>
+					<p>Have an idea for a great print piece that isn't included in the Rocket suite of products? We may be able to help you by producing a custom job to your specifications.</p>
+					<p>Please fill out the form below and submit it. One of our sales staff will contact you shortly with a quote. </p>
+					<hr />
+					<p><span class="small">• If you are unsure about what to request for any of the specifications listed below, fill out as much of the form as you can and we will contact you to discuss the remaining options further.</span></p>
+
+					<table width="447" border="0" cellspacing="0" cellpadding="6">
+						<tr>
+							<td class="subhead" align="right">CONTACT INFO</td>
+							<td><font color="#cc0000">* Required</font></td>
+						</tr>
+						  <% if flash[:notice]%>
+						   <%= flash[:notice]%>
+						   <%end%>
+						<tr>
+							<td class="subhead" align="right"><font size="+1" color="#cc0000">*</font>Email Address:</td>
+
+							<td><input type="text" name="email" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right"><font size="+1" color="#cc0000">*</font>Name:</td>
+							<td><input type="text" name="name" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">Organization:</td>
+
+							<td><input type="text" name="organization" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">Title:</td>
+							<td><input type="text" name="title" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">Address Line 1:</td>
+
+							<td><input type="text" name="address1" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">Address Line 2:</td>
+							<td><input type="text" name="address2" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">City:</td>
+
+							<td><input type="text" name="city" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td align="right">State:</td>
+							<td><select name="state" class="sitewideinput">
+									<option value="AL">Alabama</option>
+									<option value="AK">Alaska</option>
+
+									<option value="AZ">Arizona</option>
+									<option value="AR">Arkansas</option>
+									<option value="AA">Armed Forces Americas</option>
+									<option value="AE">Armed Forces Europe</option>
+									<option value="AP">Armed Forces Pacific</option>
+									<option value="CA">California</option>
+
+									<option value="CO">Colorado</option>
+									<option value="CT">Connecticut</option>
+									<option value="DC">D.C.</option>
+									<option value="DE">Delaware</option>
+									<option value="FL">Florida</option>
+									<option value="GA">Georgia</option>
+
+									<option value="HI">Hawaii</option>
+									<option value="ID">Idaho</option>
+									<option value="IL">Illinois</option>
+									<option value="IN">Indiana</option>
+									<option value="IA">Iowa</option>
+									<option value="KS">Kansas</option>
+
+									<option value="KY">Kentucky</option>
+									<option value="LA">Louisiana</option>
+									<option value="ME">Maine</option>
+									<option value="MD">Maryland</option>
+									<option value="MA">Massachusetts</option>
+									<option value="MI">Michigan</option>
+
+									<option value="MN">Minnesota</option>
+									<option value="MS">Mississippi</option>
+									<option value="MO">Missouri</option>
+									<option value="MT">Montana</option>
+									<option value="NE">Nebraska</option>
+									<option value="NV">Nevada</option>
+
+									<option value="NH">New Hampshire</option>
+									<option value="NJ">New Jersey</option>
+									<option value="NM">New Mexico</option>
+									<option value="NY">New York</option>
+									<option value="NC">North Carolina</option>
+									<option value="ND">North Dakota</option>
+
+									<option value="OH">Ohio</option>
+									<option value="OK">Oklahoma</option>
+									<option value="OR">Oregon</option>
+									<option value="PA">Pennsylvania</option>
+									<option value="PR">Puerto Rico</option>
+									<option value="RI">Rhode Island</option>
+
+									<option value="SC">South Carolina</option>
+									<option value="SD">South Dakota</option>
+									<option value="TN">Tennessee</option>
+									<option value="TX">Texas</option>
+									<option value="UT">Utah</option>
+									<option value="VT">Vermont</option>
+
+									<option value="VA">Virginia</option>
+									<option value="WA">Washington</option>
+									<option value="WV">West Virginia</option>
+									<option value="WI">Wisconsin</option>
+									<option value="WY">Wyoming</option>
+								</select></td>
+
+						</tr>
+						<tr>
+							<td align="right">Zip Code:</td>
+							<td><input type="text" name="zip" value="" size="10" /></td>
+						</tr>
+						<tr>
+							<td align="right"><font size="+1" color="#cc0000">*</font>Phone Number:</td>
+
+							<td><input type="text" name="phone" value="" size="31" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="right">
+								<hr />
+							</td>
+						</tr>
+						<tr>
+							<td class="subhead" align="right">JOB QUOTE REQUEST</td>
+
+							<td></td>
+						</tr>
+						<tr>
+							<td align="right" valign="top"><font size="+1" color="#cc0000">*</font>Job Description:</td>
+							<td><textarea name="job_description" rows="5" cols="40"></textarea></td>
+						</tr>
+						<tr>
+
+							<td align="right"><font size="+1" color="#cc0000">*</font>Type of Job:</td>
+							<td><select name="job_type" size="1">
+									<option value="">Please Select</option>
+									<option value="Postcard">Postcard</option>
+									<option value="Business Card">Business Card</option>
+									<option value="Door Hanger">Door Hanger</option>
+
+									<option value="Rack Card">Rack Card</option>
+									<option value="Poster">Poster</option>
+									<option value="Brochure">Brochure</option>
+									<option value="Booklet">Booklet</option>
+									<option value="Newsletter">Newsletter</option>
+									<option value="Letterhead">Letterhead</option>
+
+									<option value="Envelope">Envelope</option>
+									<option value="Sales Flyer">Sales Flyer</option>
+									<option value="NCR Form">NCR Form</option>
+									<option value="Other">Other</option>
+								</select></td>
+						</tr>
+						<tr>
+
+							<td align="right">Quote Quantity 1:</td>
+							<td><select name="quantity1" style="font-size:8pt" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="250">250</option>
+									<option value="500">500</option>
+									<option value="1000">1,000</option>
+
+									<option value="1500">1,500</option>
+									<option value="2000">2,000</option>
+									<option value="2500">2,500</option>
+									<option value="3000">3,000</option>
+									<option value="3500">3,500</option>
+									<option value="4000">4,000</option>
+
+									<option value="4500">4,500</option>
+									<option value="5000">5,000</option>
+									<option value="5500">5,500</option>
+									<option value="6000">6,000</option>
+									<option value="6500">6,500</option>
+									<option value="7000">7,000</option>
+
+									<option value="7500">7,500</option>
+									<option value="8000">8,000</option>
+									<option value="8500">8,500</option>
+									<option value="9000">9,000</option>
+									<option value="9500">9,500</option>
+									<option value="10000">10,000</option>
+
+									<option value="12500">12,500</option>
+									<option value="15000">15,000</option>
+									<option value="17500">17,500</option>
+									<option value="20000">20,000</option>
+									<option value="22500">22,500</option>
+									<option value="25000">25,000</option>
+
+									<option value="27500">27,500</option>
+									<option value="30000">30,000</option>
+									<option value="32500">32,500</option>
+									<option value="35000">35,000</option>
+									<option value="37500">37,500</option>
+									<option value="40000">40,000</option>
+
+									<option value="42500">42,500</option>
+									<option value="45000">45,000</option>
+									<option value="47500">47,500</option>
+									<option value="50000">50,000</option>
+									<option value="55000">55,000</option>
+									<option value="60000">60,000</option>
+
+									<option value="70000">70,000</option>
+									<option value="80000">80,000</option>
+									<option value="90000">90,000</option>
+									<option value="100000">100,000</option>
+									<option value="200000">200,000</option>
+								</select></td>
+
+						</tr>
+						<tr>
+							<td align="right">Quote Quantity 2:</td>
+							<td><select name="quantity2" style="font-size:8pt" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="250">250</option>
+									<option value="500">500</option>
+
+									<option value="1000">1,000</option>
+									<option value="1500">1,500</option>
+									<option value="2000">2,000</option>
+									<option value="2500">2,500</option>
+									<option value="3000">3,000</option>
+									<option value="3500">3,500</option>
+
+									<option value="4000">4,000</option>
+									<option value="4500">4,500</option>
+									<option value="5000">5,000</option>
+									<option value="5500">5,500</option>
+									<option value="6000">6,000</option>
+									<option value="6500">6,500</option>
+
+									<option value="7000">7,000</option>
+									<option value="7500">7,500</option>
+									<option value="8000">8,000</option>
+									<option value="8500">8,500</option>
+									<option value="9000">9,000</option>
+									<option value="9500">9,500</option>
+
+									<option value="10000">10,000</option>
+									<option value="12500">12,500</option>
+									<option value="15000">15,000</option>
+									<option value="17500">17,500</option>
+									<option value="20000">20,000</option>
+									<option value="22500">22,500</option>
+
+									<option value="25000">25,000</option>
+									<option value="27500">27,500</option>
+									<option value="30000">30,000</option>
+									<option value="32500">32,500</option>
+									<option value="35000">35,000</option>
+									<option value="37500">37,500</option>
+
+									<option value="40000">40,000</option>
+									<option value="42500">42,500</option>
+									<option value="45000">45,000</option>
+									<option value="47500">47,500</option>
+									<option value="50000">50,000</option>
+									<option value="55000">55,000</option>
+
+									<option value="60000">60,000</option>
+									<option value="70000">70,000</option>
+									<option value="80000">80,000</option>
+									<option value="90000">90,000</option>
+									<option value="100000">100,000</option>
+									<option value="200000">200,000</option>
+
+								</select></td>
+						</tr>
+						<tr>
+							<td align="right">Quote Quantity 3:</td>
+							<td><select name="quantity3" style="font-size:8pt" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="250">250</option>
+
+									<option value="500">500</option>
+									<option value="1000">1,000</option>
+									<option value="1500">1,500</option>
+									<option value="2000">2,000</option>
+									<option value="2500">2,500</option>
+									<option value="3000">3,000</option>
+
+									<option value="3500">3,500</option>
+									<option value="4000">4,000</option>
+									<option value="4500">4,500</option>
+									<option value="5000">5,000</option>
+									<option value="5500">5,500</option>
+									<option value="6000">6,000</option>
+
+									<option value="6500">6,500</option>
+									<option value="7000">7,000</option>
+									<option value="7500">7,500</option>
+									<option value="8000">8,000</option>
+									<option value="8500">8,500</option>
+									<option value="9000">9,000</option>
+
+									<option value="9500">9,500</option>
+									<option value="10000">10,000</option>
+									<option value="12500">12,500</option>
+									<option value="15000">15,000</option>
+									<option value="17500">17,500</option>
+									<option value="20000">20,000</option>
+
+									<option value="22500">22,500</option>
+									<option value="25000">25,000</option>
+									<option value="27500">27,500</option>
+									<option value="30000">30,000</option>
+									<option value="32500">32,500</option>
+									<option value="35000">35,000</option>
+
+									<option value="37500">37,500</option>
+									<option value="40000">40,000</option>
+									<option value="42500">42,500</option>
+									<option value="45000">45,000</option>
+									<option value="47500">47,500</option>
+									<option value="50000">50,000</option>
+
+									<option value="55000">55,000</option>
+									<option value="60000">60,000</option>
+									<option value="70000">70,000</option>
+									<option value="80000">80,000</option>
+									<option value="90000">90,000</option>
+									<option value="100000">100,000</option>
+
+									<option value="200000">200,000</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td align="right">Overall Size of Piece:</td>
+							<td><input type="text" name="flat_size" size="32" /></td>
+						</tr>
+						<tr>
+
+							<td align="right">Finished Size of Piece:</td>
+							<td><input type="text" name="finished_size" size="32" /></td>
+						</tr>
+						<tr>
+							<td align="right">Type of Paper Stock:</td>
+							<td><select name="paper_stock" size="1">
+									<option value="Please Select">Please Select</option>
+
+									<option value="Cover">Cover</option>
+									<option value="Text">Text</option>
+									<option value="Writing">Writing</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td align="right">Paper Finish:</td>
+
+							<td><input type="text" name="paper_finish" size="32" /></td>
+						</tr>
+						<tr>
+							<td align="right">Paper Weight:</td>
+							<td><input type="text" name="paper_weight" size="32" /></td>
+						</tr>
+						<tr>
+							<td align="right">Number of Inks - Side 1:</td>
+
+							<td><select name="ink_side_1" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="zero">0</option>
+									<option value="one">1</option>
+									<option value="two">2</option>
+									<option value="three">3</option>
+
+									<option value="four">4</option>
+									<option value="five">5</option>
+									<option value="six">6</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td align="right">Number of Inks - Side 2:</td>
+
+							<td><select name="ink_side_2" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="zero">0</option>
+									<option value="one">1</option>
+									<option value="two">2</option>
+									<option value="three">3</option>
+
+									<option value="four">4</option>
+									<option value="five">5</option>
+									<option value="six">6</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td align="right">How will you provide the artwork?</td>
+
+							<td><select name="artwork" size="1">
+									<option value="Please Select">Please Select</option>
+									<option value="finished art">We'll provide finished artwork files</option>
+									<option value="need-design">We need your design services</option>
+								</select></td>
+						</tr>
+						<tr>
+
+							<td align="right"></td>
+							<td><input type="image" src="/images/submit-btn.gif" alt="" height="26" width="70" border="0" /></td>
+						</tr>
+					</table>
+					<p></p>
+				</td>
+			</tr>
+
+		</table>
+	</div>
+	</form>
+</td>

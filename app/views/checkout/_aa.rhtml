@@ -1,0 +1,17 @@
+<p><span class="subhead">Choose Artwork Submission Method:</span></p>
+<p>
+<%= select_tag	"art_upload_method", 
+	options_for_select( [	['Please indicate how you will submit your artwork', ''],
+		['I will upload artwork now', 'now_modal'], 
+		#['I will upload artwork later', 'later'], 
+		['Email uploading instructions to my designer', 'email_modal'], 
+		['I will mail artwork', 'mail_modal'],
+		['I will drop off artwork', 'drop_modal'] ], 
+		@order.art_upload_method),
+	:id => "order[#{@order.id}][art_upload_method]",
+	:onchange => remote_function(:url => { :action => 'refresh1', :order_id => @order.id }, 
+	:with => "Form.Element.serialize('order[#{@order.id}][art_upload_method]')") %>
+</p>
+
+<div id="order_<%= @order.id %>">
+</div>

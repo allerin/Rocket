@@ -1,0 +1,19 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.instruct! "xml-stylesheet", :href => "chrome://global/skin", :type => "text/css"
+xml.instruct! "xml-stylesheet", :href => "/stylesheets/xul.css", :type => "text/css"
+
+xml.window( :title => "Rocket Postcards: Administration", 
+            "xmlns:html" => "http://www.w3.org/1999/xhmlt",
+            :xmlns => "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ){ |window|
+
+ xml.script :src => "/javascripts/application.js"
+ xml.script :src => "/javascripts/prototype_xul.js"
+ xml.script :src => "/javascripts/xul_stuff.js"
+            
+ window.vbox(:id => "main") { |main| 
+  
+  main << @content_for_layout    
+    
+ } #main
+  
+} # window        

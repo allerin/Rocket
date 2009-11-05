@@ -1,0 +1,35 @@
+<table class="money customer_stuff" height="100%" width="100%">
+	<tr>
+		<td>Printing</td>
+		<td class="amount"><%= number_to_currency @record.price %></td>
+		<td>Postage</td>
+		<td class="amount"><%= number_to_currency @record.postage_price.to_f %></td>
+	</tr>
+	<tr>
+		
+		<td>Add'l</td>
+		<td class="amount">
+			<%= number_to_currency @record.extra_charges_total %>
+		</td>
+		<td>
+			Tax
+		</td>
+		<td class="amount"><%= number_to_currency @record.tax %></td>
+		
+	</tr>
+	<tr>
+		<td>Mailing</td>
+		<td class="amount"><%= number_to_currency @record.mailing_price.to_f %></td>
+		<td>Total</td>
+		<td class="amount" id="orderTotal"><%= number_to_currency @record.total %></td>
+	</tr>
+	<tr>
+		<td>Paid</td>
+		<td>
+			<%= secure_text_field( @record.payment, :amount_paid, "amount_paid", :size => 6 )  if @record.payment %>
+			<input type="button" value="Paid in Full" style="margin-left: 5px; text-align: right;" onclick="$('amount_paid').value = /\d+\.\d+/.exec($('orderTotal').lastChild.nodeValue)[0]; updateOrder();">
+		</td>
+		<td>Due</td>
+		<td class="amount"><%= number_to_currency @record.amount_due %></td>
+	</tr>
+</table>

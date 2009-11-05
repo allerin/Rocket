@@ -1,0 +1,5 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first_submit_method:
+  id: 1
+another_submit_method:
+  id: 2

@@ -1,0 +1,126 @@
+<%= stylesheet_link_tag 'ibox' %>
+<%= javascript_include_tag 'ibox' %>
+
+<style>
+	table.images_table th { background-color: #000099; color: white;}
+	table.images_table th a { color: white; text-decoration: underline;}
+</style>
+
+<table class="images_table" style="" width="100%" padding="0" spacing="0">
+	<thead>
+		<tr>
+			<th colspan="3">
+				Images and Files
+				<span style="padding-left: 12px">[<%= link_to_function 'Add', "$('new_image_container').style.display='block'; $('new_image_row').style.display='table-row'" %>]</span>
+			</th>
+		</tr>
+	</thead>
+	
+	<tr style="display:none;" id="new_image_row">
+		<td colspan="2">
+			<div id="new_image_container" style="display:none;">
+
+			<% @upid = Time.now.to_i.to_s %>
+			<% form_tag(admin_upload_url(:order_id => @record.id, :upload_id => @upid), 
+									{:multipart => true, 
+									 :onsubmit => "UploadProgress.monitor('#{escape_javascript @upid}')"})  do %>
+			<table>
+				<tr>
+					<td>Side:</td>
+					<td><%= select_tag "side", options_for_select([['Front', 'front'], ['Back', 'back']]) %></td>
+				</tr>
+				<tr>
+					<td>File: </td>
+					<td><%= file_field "picture", "uploaded_data" %> </td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="image" src="/images/upload-btn.gif" alt="" id="upload"/>
+					</td>
+				</tr>
+			</table>
+			<% end %>
+			</div>
+
+		</td>
+	</tr>
+    
+    <!--  Following 'TR' is added to display picture (Front, Back) on ORDER details page - Sept 16, 2008 -->
+    <tr>
+    <% @pictures = Picture.find(:all, :conditions => [" order_id =? ", @record.id]) %>
+
+    <% for picture in @pictures %>
+        <td><%= picture.side %></td>
+        <td><%= link_to image_tag(picture.public_filename(:thumb)), 
+                        { :controller => "orders", :action => "actual_image", :id => picture.id}, 
+                        :rel => "ibox?type=3&height=280&width=350" %></td>
+    <% end %>
+    </tr>
+
+
+	<% unless @record.front_images.empty? and @record.back_images.empty? %>
+	
+	<tr>
+		<td>
+			<label style="margin-left: 8px;"><strong>Front</strong></label>
+		</td>
+		<td>
+			<label style="margin-left: 8px;"><strong>Back</strong></label>
+		</td>
+		<% if @record.list %>
+		<td>
+			<label style=""><strong>List</strong></label>
+		</td>
+		<% end %>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+			<table >
+			<% @record.front_images.reverse.each do |image| %>
+				<tr>
+					<td>
+					<%= image_tag(show_order_image_url(:id => image.id, :size => "192x92")) %>
+					</td>
+					<td valign="top">
+						<%= image.created_at.strftime("%m-%d-%y %H:%M") if image.created_at %><br/><br/>
+						<%= link_to File.basename(image.filename), image_original_url(:id => image.id) %><br/><br/>
+						<%= link_to_function 'Remove', "if (confirm('Are you sure you want to delete this image?')) {" + remote_function(:url => remove_image_url(:id => image.id)) + "}" %>
+					</td>
+				</tr>
+			<% end %>
+			</table>
+		</td>
+		<td valign="top">
+			<table>
+			<% @record.back_images.reverse.each do |image| %>
+				<tr>
+					<td>
+					<%= image_tag(show_order_image_url(:id => image.id, :size => "92x92")) %>
+					</td>
+					<td valign="top">
+						<%= image.created_at.strftime("%m-%d-%y %H:%M") if image.created_at %><br/><br/>
+						<%= link_to File.basename(image.filename), image_original_url(:id => image.id) %><br/><br/>
+						<%= link_to_function 'Remove', "if (confirm('Are you sure you want to delete this image?')) {" + remote_function(:url => remove_image_url(:id => image.id)) + "}" %>
+					</td>
+				</tr>
+			<% end %>
+			</table>
+		</td>
+		<% if @record.list %>
+		<td valign="top">
+			Uploaded <%= @record.list.created_at.strftime("%m-%d-%y %H:%M") %><br/><br/>
+			<%= link_to @record.list.filename, download_list_url(:id => @record.list.id ) %>
+		</td>
+		<% end %>
+	</tr>
+	
+	<% else %>
+	   <!-- 
+		<tr>
+			<td colspan="2"><label style="margin-left: 2px;"><strong>No images have been uploaded for this job.</strong></label></td>
+		</tr>
+		-->
+	<% end %>
+</table>

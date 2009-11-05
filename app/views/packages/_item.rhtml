@@ -1,0 +1,92 @@
+<table width="530" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="6">
+				<tr height="19">
+					<td colspan="2" align="left" bgcolor="#999999" height="19">
+						<div class="subhead-white">
+							<%= item.title %>
+						</div>
+						</td>
+						<td align="right" bgcolor="#999999" width="215" height="19">
+							<div class="white-nav" align="right">
+							</div>
+						</td>
+					</tr>
+					<tr height="25">
+						<td height="25">
+							<div align="left"></div>
+						</td>
+						<td width="40%" height="25">
+							<%= image_tag item.product.cart_image %>
+						</td>
+						<td rowspan="10" align="right" valign="bottom" bgcolor="#ececec" width="215">
+							<table width="162" border="0" cellspacing="0" cellpadding="4" align="right">
+								<tr>
+									<td align="left"><b>Item Total:</b></td>
+									<td align="right" id="subtotal"><b><%= number_to_currency(item.price) %></b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					
+					<% item.visible_options.each do |option| %>
+					<tr>
+						<td align="right" valign="top"><%= option.title %></td>
+						<td width="40%">
+							<%= package_options_select( "items[#{item.id}][options][#{option.id}]", item, option, item.option_values[option].label ) %>
+						</td>
+					</tr>
+					<% end %>
+				<% if item.max_versions and item.max_versions > 1 %>
+				<tr>
+					<td align="right">Versions</td>
+					<td width="40%">
+						<select name="items[<%= item.id %>][versions]" style="font-size:8pt" size="1">
+						<%= options_for_select((1..item.max_versions).collect{ |n| [n,n] }, item.versions ) %>
+						</select>
+					</td>
+				</tr>
+				<% end %>
+				<tr>
+					<td align="right">Quantity</td>
+					<td width="40%">
+						<select name="items[<%= item.id %>][quantity]" style="font-size:8pt" size="1">
+						<%= quantity_options item, item.quantity, item.versions %>
+						</select>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>
+
+<input type="button" style="display:none;" onclick="$('priceExplanation_<%= item.id %>').style.display = 'block'" value="Explain">
+<div id="priceExplanation_<%= item.id %>" style="display: none;"> 
+	<% item.product.price_explanations.each do |line| %>
+	<%= line %><br>
+	<% end %>
+</div>
+
+<br />
+
+<% if item.versions and item.versions > 1 %>
+	<% for version in 0..(item.versions - 1) do 
+			version_name = item.version_names[version] %>
+		<% render :partial => 'version', :locals => { :item => item, :version => version, :version_name => version_name } %>
+	<% end %>
+<% end %>
+<br />
+<br />
+<%= observe_form 'packages_form', :function => remote_function(:url => {:action => 'calculate_price'}, :with => "Form.serialize('packages_form')") %>
+<%= observe_form 'packages_form', :function => "$(\"subtotal\").update(\"<img src='/images/status_loading.gif'/> \")" %>
+

@@ -1,0 +1,106 @@
+<% loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'" -%>
+<% complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'" -%>
+<div id="data" style="margin-left: 8px;">
+
+<h1 style="margin: 0;">Invoice R-<%= @record.id%><span style="padding-left: 32px; font-size: 20px;"><%= link_to 'Print', print_invoice_url(:id => @record.id) %></span></h1>
+
+<% unless @record.new_record? %>
+<strong>Created:</strong> <%= @record.created_at.strftime("%a %d/%m/%y at %H:%M") %> <br/>
+
+<% if @record.orders.to_a.find { |o| o.payment_type.to_s == 'TermsPayment' } %>
+	<strong>Invoice Sent:</strong>
+
+	<% if @record.sent_at %>
+		<%= @record.sent_at.strftime("%a %d/%m/%y at %H:%M") %>
+	<% else %>
+		<%= link_to_remote 'Mark As Sent', :url => mark_as_sent_url(:id => @record.id) %>
+	<% end %>
+<% end %>
+
+<% end %>
+
+<div style="float: left;">
+<h3 style="text-align: left; margin-bottom: 2px;"><%= link_to "#{@record.customer.first_name} #{@record.customer.last_name}", view_customer_url(:id => @record.customer_id) %><br />
+<%= @record.customer.company %></h3>
+
+<% @address =  @record.address || @customer.addresses.first
+
+onchange = remote_function(
+	:url => {:action=>"change_address"},
+	:with => "Form.Element.serialize(this)",
+	:update => "address_selected", 
+	:method => "'post'"
+)
+
+-%>
+<br/>
+<strong>Bill To:</strong> <%= select_tag ("id", options_from_collection_for_select(@record.customer.addresses, "id", "label"), {:onchange=>onchange} ) %>
+<br/>
+<%= render :partial => "address" -%>
+</div>
+
+<br style="clear: both;"/><br/>
+<hr class="nice">
+<div >
+	<strong>Print Jobs</strong>
+	[ <%= link_to 'Add Job', create_order_url(:invoice_id => @record.id )%> ]
+</div>
+
+<div id="orders" class="list">
+<% unless @record.order_list.empty? %>
+<%=
+
+columns = [ { :label => 'Job',
+			        :field => :job_number, 
+			        :format => nil },
+			      { :label => 'Qty',
+			        :field => :quantity, 
+			        :format => nil },
+			      { :label => 'Product',
+			        :field => :product, 
+			        :format => nil },
+			      { :label => 'Batch',
+			        :field => :batch, 
+			        :format => nil },
+			      { :label => 'Run',
+			        :field => :run, 
+			        :format => nil },
+			      { :label => 'Price',
+			        :field => :total, 
+			        :format => "currency" }
+			]
+
+orders = @record.order_list
+record_table columns, orders, nil, "application", #hash_for_view_order_url, 
+							hash_for_show_order_url(), loading, complete, false
+
+%>
+<% else %>
+No jobs.<br/><br/>
+<% end %>
+</div>
+
+<br/>
+<hr class="nice">
+
+<strong>Design Jobs</strong> [ <%= link_to 'Add Job', create_order_url(:invoice_id => @record.id, :design => true )%> ]
+<div id="designs" class="list">
+<% unless @record.design_list.empty? %>
+<%=
+	columns = [ { :label => 'Job', :field => :job_number, :format => nil},
+							{ :label => 'Name', :field => :name, :format => nil},
+							{ :label => 'Price', :field => :total, :format => 'currency'} ]
+							
+	designs = @record.design_list
+	record_table columns, designs, nil, "application", hash_for_view_design_order_url, loading, complete, false
+%>
+<% else %> 
+No jobs.<br/><br/>
+<% end %>
+</div>
+
+<br/>
+<hr class="nice">
+<div id="comments" class="comments-148" style="margin: 0px 16px 0px 0px;">
+	<%= render :partial => 'comments' %>
+</div>

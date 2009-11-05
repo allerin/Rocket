@@ -1,0 +1,40 @@
+<form id="status_form" name="status_form">
+<table>
+   <tr>
+		<td>
+			<span style="font-size:10px;">Batch:</span>
+			<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]} %>
+			<%= select_tag	'batch', 
+											options_for_select(batches.collect {|b| 
+												["#{b.first} #{('(' + b.last + ')') if b.last}", b.first] }, params[:batch]),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "status_list"}, :with=>"'batch='+escape($F('batch')) + '&Search_by_status=' +escape($F('Search_by_status'))")%></td>
+	<td>
+<span style="font-size:10px;">Sort<%= link_to_remote "Order",:url => { :controller=>'admin/reports',:action=>'sort',:id=>'1'},:with => "'batch_id='+$F('batch')" %>,<%= link_to_remote "On Run B",:url => { :controller=>'admin/reports',:action=>'sort',:id=>'4'},:with => "'batch_id='+$F('batch')" %>,<%= link_to_remote "On Run A ",:url => { :controller=>'admin/reports',:action=>'sort',:id=>'2'},:with => "'batch_id='+$F('batch')" %>,<%= link_to_remote "Proof",:url => { :controller=>'admin/reports',:action=>'sort',:id=>'3'},:with => "'batch_id='+$F('batch')" %></span>
+</td>
+	
+	
+	
+		<td style="display: block;">
+			Status:
+		 <%= select_tag "Search_by_status",  options_for_select(statuses_array),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "status_list"},  :with=>"'batch='+escape($F('batch')) + '&Search_by_status=' +escape($F('Search_by_status'))")%>
+	
+		</td>
+		<td >
+			<%= mag_button_to_function	"Print List", "window.open('#{report_status_list_url}?print=true&batch=' + $('batch').value)",
+			 														:class => 'yellow'%>
+		</td>
+		<td>
+		<a onclick="window.location='/admin/reports/run_export?batch=' + $('batch').value; return false;" href="#" class="button yellow"><span>ExportToRunBuilder</span></a> </td>
+	</tr>
+</table>
+</form>
+
+<hr class="nice">
+    
+    
+   
+	<script>
+	 
+	
+	setTimeout("<%= remote_function(	:url => report_status_list_url, :with => "Form.serialize('status_form')") %>", 500)
+	</script>
+	

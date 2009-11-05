@@ -1,0 +1,17 @@
+<div id="subnav">
+<%= link_to_function 'advanced search', "$('search_container').style.display='block';" %>
+|
+
+<span id="sort">
+<%= render :partial => 'sort' %>
+</span>
+</div>
+
+<%= render :partial => "admin/components/quicksearch"%>
+
+<div id="content">
+<%= render(:partial => 'list') %>
+<%= render(:partial => 'admin/components/search_paginator')%>
+</div>
+
+<%= render :partial => "admin/components/status" %>

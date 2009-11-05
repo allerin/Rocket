@@ -1,0 +1,112 @@
+<% cart_index = item.cart_index %>
+<div id="cart_package_item_<%= cart_index %>">
+<table width="533" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="301">
+		<td bgcolor="#999999" width="1" height="301"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="301">
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="8">
+				<tr height="19">
+					<td align="left" bgcolor="#999999" width="251" height="19">
+						<div class="subhead-white">
+							<%= item.product.title %>
+						</div>
+					</td>
+					<td align="right" bgcolor="#999999" width="244" height="19">
+						<div class="white-nav">
+							<%= link_to "Remove this item #{image_tag('/images/close-btn.gif', :border => 0) }",
+													{ :view => view, :action => 'remove_product', :package_index => cart_index },
+													:id => "remove_link_#{cart_index}",
+													:onclick => %Q{if (confirm('By removing this item, you will be removing the entire package it belongs to. Do you want to remove the package?')) { new Effect.Puff($("cart_package_#{cart_index}"),{duration:0.5}); #{remote_function( :url => { :view => 'review_cart', :action => 'remove_product', :package_index => cart_index})};} return false;}	%>	
+
+						</div>
+					</td>
+				</tr>
+				<tr height="83">
+					<td rowspan="2" valign="top" bgcolor="#ececec" width="251" height="253">
+						<div class="subhead">
+							<strong><%= item.title %></strong>
+						</div>
+
+						<p><%= image_tag item.product.cart_image %></p>
+						<p>Size: <%= dimensions_nice item.product.width, item.product.height %>"</p>
+						<% if item.versions and item.versions > 1 %>
+						<p>Versions: <%= item.versions %>
+						<p>Quantity: <%= item.versions %> x <%= item.quantity %> </p>	
+						<% else %>
+						<p>Quantity: <%= item.quantity %> </p>
+						<% end %>
+						
+						
+						<%	item.product_options.each do | option | 
+									next if option.never_visible %>
+							<p><%= option.title %>: <%= item.option_values[option].label %></p>
+						<% 	end %>
+						
+						<% if item.reseller_id %>
+						<p>Reseller ID: <%= item.reseller_id.empty? ? 'None' : item.reseller_id %></p>
+						<% end %>
+						
+						<p>
+							Comments: <%= (item.comments and not item.comments.empty?) ? item.comments : 'None' %>
+						</p>
+						
+						<br/>
+						
+							<p>
+							<% if view == 'review_cart' %>
+								<%= link_to image_tag('edit-item-btn.gif', :style => 'border-width: 0px;'),
+								 						{ :controller => 'checkout', :action => 'review_cart', :edit_package => cart_index },
+														:id => "edit_package_#{cart_index}",
+														:onclick => remote_function( :url => { :controller => 'checkout', :action => 'review_cart', :edit_package => cart_index }) + "; return false;"
+														
+								%>
+								<% else %>
+									<%= link_to 'Return To Cart To Edit This Item',
+									 						{ :view => 'review_cart', :action => 'review_cart', :edit_package => cart_index },
+															:id => "edit_package_#{cart_index}"
+									%>							
+								<% end %>
+							</p>
+							<br/>
+					</td>
+					<td valign="top" bgcolor="#ececec" width="244" height="83">
+						<% if params[:action] == "pay" %>
+						<p><span class="subhead">Ship To:</span></p>
+						<p>
+						<% if shipping_address = item.shipping_address %>						
+								<%= shipping_address.first_name + " " + shipping_address.last_name %><br />
+								<%= shipping_address.street_1 %><br />
+								<%= ( shipping_address.street_2 + '<br />' ) if shipping_address.street_2 and not shipping_address.street_2.empty? %>
+								<%= shipping_address.city + ", " + shipping_address.state + " " + shipping_address.zip %><br />
+								<%= shipping_address.phone %>
+						<% else %>
+							Customer Pick Up
+						<% end %>
+						</p>
+						<p> <%= link_to 'Edit Shipping Options For This Item', { :action => 'shipping_info' } %> </p>
+						<% end %>
+					</td>
+				</tr>
+
+				<tr height="154">
+					<td align="right" valign="bottom" bgcolor="#ececec" width="244" height="154">
+						<div id="cart_package_totals_<%= item.cart_index %>">
+						<%= render :partial => 'cart_package_totals', :locals => { :item => item } %>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" height="301"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>
+</div>
+<br/>
+<br/>

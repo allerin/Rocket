@@ -1,0 +1,28 @@
+<vbox>
+<grid flex="1" style="overflow: auto">
+	<columns>
+		<column/>
+		<column width="83"/>
+		<column flex="1"/>
+		<column flex="1"/>
+		<column flex="1"/>
+		<column/>
+	</columns>
+	<rows id="tr_call_workorder_portal">
+		<row>
+			<label value="ID"/>
+			<label value="Date Created"/>
+			<label value="Location"/>
+			<label value="Type"/>
+			<label value="Status"/>
+			<spacer/>
+		</row>
+	</rows>
+</grid>
+<hbox>
+	<label value="Keyword:"/>
+	<textbox id="tr_call_workorder_keyword" flex="1" observes="isEditable" type="timed" oncommand="calls_workorder(0);"/>
+	<checkbox id="tr_call_workorder_restrict" observes="isEditable" label="Show only personal" oncommand="calls_workorder(0);" tooltiptext="Show only personal service orders"/>
+	<toolbarbutton label="Search" observes="isEditable" image="images/find.png" oncommand="calls_workorder(0);"/>
+</hbox>
+</vbox>

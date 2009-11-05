@@ -1,0 +1,93 @@
+<table width="553" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<table class="small" width="551" border="0" cellspacing="0" cellpadding="8">
+				<tr height="19">
+					<td colspan="2" align="left" bgcolor="#999999" width="536" height="19">
+						<div class="subhead-white">Rocket Job # <%= order.full_job_number %></div>
+					</td>
+				</tr>
+				<tr height="230">
+					<td valign="top" bgcolor="#ececec" width="210" height="230">
+						<div class="subhead"><strong><%= order.custom_name %></strong></div>
+
+						<p><%= image_tag(order.product.cart_image) if order.product %></p>
+						<p>Size: <%= dimensions_nice order.product_width, order.product_height %>"</p>
+						<p>Quantity: <%= order.quantity %></p>
+						
+						<% order.product_option_values.each do | option | 
+								next if option.never_visible %>
+						<p><%= option.title %>: <%= option.customer_label || option.label %></p>
+							<% if option.title == "Mailing" and option.label.downcase != "none" %>
+							<p>Quantity To Be Mailed: <%= order.mailing_quantity %></p>
+							<% end
+						 end %>
+						
+					</td>
+					<td valign="top" bgcolor="#ececec" width="310" height="230">
+							<p><span class="subhead">Choose Artwork Submission Method:</span></p>
+							<p>
+								<%= select_tag	"art_upload_method", 
+																options_for_select( [	['Please indicate how you will submit your artwork', ''],
+																											['I will upload artwork now', 'now'], 
+																											#['I will upload artwork later', 'later'], 
+																											['Email uploading instructions to my designer', 'email'], 
+																											['I will mail artwork', 'mail'],
+																											['I will drop off artwork', 'drop'] ], 
+																											order.art_upload_method),
+																:id => "order[#{order.id}][art_upload_method]",
+																:onchange => remote_function(:url => { :action => 'refresh', :order_id => order.id }, 
+																		:with => "Form.Element.serialize('order[#{order.id}][art_upload_method]')") %>
+							</p>
+
+							<div id="upload_<%= order.id %>">
+							<%= render :partial => ("upload/art/" + order.art_upload_method), :locals => { :order => order } if order.art_upload_method and not order.art_upload_method.empty? %>
+							</div>
+							
+						<% if order.mailing_quantity and order.mailing_quantity.to_i > 0 %>
+							<p><span class="subhead">Choose Mailing List Submission Method:</span></p>
+							<p>
+								<%= select_tag	"list_upload_method", 
+																options_for_select( [	['Please indicate how you will submit your mailing list', ''],
+																											['I will upload mailing list now', 'now'], 
+																											['I will upload mailing list later', 'later'], 
+																											['Email uploading instructions to another person', 'email'], 
+																											['I will mail mailing list to Rocket', 'mail'],
+																											['I will drop off mailing list', 'drop'] ], 
+																											order.list_upload_method ),
+																:id => "order[#{order.id}][list_upload_method]",
+																:onchange => remote_function(:url => { :action => 'refresh', :order_id => order.id }, :with => "Form.Element.serialize('order[#{order.id}][list_upload_method]')"  ) %>
+							
+							</p>
+
+							
+							<div id="upload_list_<%= order.id %>">
+							<%= render :partial => ("upload/list/" + order.list_upload_method), :locals => { :order => order } if order.list_upload_method and not order.list_upload_method.empty? %>
+							</div>
+							
+						<% end %>
+
+						<div id="status_<%= order.id %>" style="display: none;">
+							<div class="results" id="results_<%= order.id %>"></div>
+							<div class="progress-bar" id="progress_<%= order.id %>"></div>
+						</div>
+
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	
+</table>
+<br />
+<br />
+

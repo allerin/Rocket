@@ -1,0 +1,11 @@
+<%= render :partial => 'search' %>
+		
+
+<% if params[:use_report] and session[:report_params] %> 
+	<script>
+	<%= remote_function(:url => change_report_url, :with => "Form.serialize('reports_form')") %>
+	</script>
+<% end %>
+
+
+<%= render :partial => 'list_table' %>

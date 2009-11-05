@@ -1,0 +1,115 @@
+<table width="100%">
+    <tr>
+        <td colspan="5" style="height:15px; background:#ccc;font-size:13px;font-weight:bold;">
+            <%= order.color_code %>
+            <%= order.shipping_method.name if order.shipping_method %>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="width:20%;" valign="top">
+            <div class="job_column job_image">
+                <% if order.art_upload_method=='now'%>
+    				<img src="admin/reports/show_me/<%= order.id %>" alt="1" width="60px" height="60px" border="1" align="left"/>
+    			<%else%>
+                    <div style="border: 1px dotted gray; width: 80px; height: 60px;" class="thumbnailPlaceholder"></div>
+    			<%end%><br>
+    
+                <div style="width:100px;padding:7px 0 0 0;">
+                   <span style="float:left;font-size:10px;font-weight:bold;width:50px;text-align:left;">500</span>
+                   <span style="float:right;font-size:10px;font-weight:bold;width:50px;text-align:right;">01-SSP</span>
+                </div>
+            </div>
+        </td>
+        
+        <td style="width:20%;" valign="top">
+            <div class="job_column">
+                <span class="new"><%= order.full_job_number %></span><br>
+                <span class="new1"><%= order.shipping_method.name if order.shipping_method %></span><br>
+                <span class="new">$ 14.84</span><br><br>
+        	    <span style="font-size:10px;text-align:left;font-weight:bold;"> Amt Due:<span style="color:red;font-size:10px;text-align:left;font-weight:bold;padding:0 0 0 3px;"><%= order.price %>  </span></span>  
+        	</div>
+        </td>
+        
+        <td style="width:30%;" valign="top">
+            <!--<label class="job_number"><%= order.full_job_number %></label><br/>-->
+        	 <div style="font-size:12px;">
+        	   <% if order.address %>
+        	   <%= order.address.first_name %><br/>
+        	   <%= order.address.last_name %><br/>
+        	   <%= order.address.company %><br/>
+        	   <%= order.address.street_1 %><br/>
+        	   <%= order.address.street_2 %><%= order.address.city %><%= order.address.state %><%= order.address.zip %><%= order.address.country %><br/>
+        	   <b>Billing Phone:</b><%= order.address.phone %><br/>
+        	   <% end %>
+        	   Status: <%= order.status %>
+             </div>
+            <div class="job_column job_details">
+                <% if false %>
+                <!-- Commented Code -->
+            	<!-- <label class="sku"><%= order.product_sku %></label>
+            	<label class="product_name"><%= order.product_title %></label>
+            	<br/>
+            	<label class="last_name"><%= order.invoice.customer.last_name %></label>
+            	<label class="first_name"><%= order.invoice.customer.first_name %></label>
+            	<br/>
+            	<label class="email"><%= order.invoice.customer.email %></label><br/>
+            	<label class="paid_label"><b>Paid:</b></label>
+            	<label class="paid"><%= order.paid_at.strftime("%m/%d/%y") if order.paid_at %></label>-->
+                <% end %>
+            </div>
+        </td>
+
+        <td style="width:30%;" valign="top">
+            <div style="border:1px solid #ccc; overflow:scroll; height:50px; font-size: 10px;"><%= order.customer_comments %></div>
+            <br>
+            <div style="border:1px solid #ccc; overflow:scroll; height:50px; font-size: 10px;"><%= order.prepress_comments.collect { |c| "<strong> <br/> " + 
+    				    c.user.first_name + 
+    				    c.created_at.strftime(" (%m/%d/%y %H:%M)</strong> ") +
+    				    c.comment }.join(' ') %>
+    				    <br/>
+    		</div>
+    
+            <% if false %>
+            <!--<div class="job_column">
+                <div class="prepress_comments">
+             	<%= order.prepress_comments.collect { |c| "<strong>" + 
+            				c.user.first_name + 
+            				c.created_at.strftime(" (%m/%d/%y %H:%M)</strong> ") +
+            				 c.comment }.join(' ') %>
+            	[<%= link_to_function 'Add', "$('new_press_comment_container_#{order.id}').style.display='block';" %>]
+            	</div>-->
+            	<!--<div class="new_press_comment" id="new_press_comment_container_<%= order.id %>" style="display:none;">
+            		<%= form_remote_tag(:url => report_add_comment_url(:kind => 'PrePress', :order_id => order.id, :batch => params[:batch], :run => params[:run], :view => "status_order")).gsub('amp;','') %> 
+            			<%= text_field_tag "new_press_comment_#{order.id}", nil, :size => 20, :style => "float: left;" %><br/>
+            			<input style="float:left;border:none;" src="images/save.gif" type='image' value='save'/>
+            			<a style="font-size:13px; color:#666; padding-left:4px;" href="javascript:void(0);" onclick="javascript:Effect.toggle('new_press_comment_container_<%= order.id %>', 'blind');">Cancel</a>
+            		</form>
+            	</div>
+            </div>-->
+            <% end %>
+        </td>
+        
+        <% if false %>
+        <!--<td style="width:20%;">
+        <div >
+            <div class="runs" style="float:left;"></div>
+            <div class="batch_proof"></div>
+            <br style="clear: both;">
+        </div>				
+        </td>-->
+        <% end %>
+    </tr>
+  </table>
+  
+            
+        
+            
+		
+            
+    
+	
+
+	
+
+	

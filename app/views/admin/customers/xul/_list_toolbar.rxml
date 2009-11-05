@@ -1,0 +1,28 @@
+xml.toolbar(:id => 'toolbar') { |toolbar| 
+
+ toolbar.hbox(:id => 'main-buttons') { |buttons| 
+   buttons.toolbarbutton :id => "add-customer", :image => "/images/icons/user_add.png", :label => "New Customer",
+                         :oncommand => remote_function(:url => {:action => 'edit_xul', :page => @page}, 
+                                                       :loading => "$('spinner').removeAttribute('hidden');")
+
+   buttons.toolbarbutton :id => "edit-customer", :image => "/images/icons/user_edit.png", :label => "Edit Customer",
+                         :command => 'edit-customer-command'
+
+ }
+ 
+  toolbar.spacer :flex => 1
+  
+  toolbar << render( :partial => 'admin/components/xul/toolbar_paginator' ) 
+ 
+  toolbar.spacer :flex => 1
+ 
+  toolbar << render( :partial => 'admin/components/xul/live_search' )
+  
+  toolbar.command :id => 'edit-customer-command', 
+                  :oncommand => remote_function(:url => {:action => 'edit_xul', :page => @page}, 
+                                                :with => "Form.serialize('container')",
+                                                :loading => "add_ajax_call();",
+                                                :complete => "remove_ajax_call();")
+  
+  
+}

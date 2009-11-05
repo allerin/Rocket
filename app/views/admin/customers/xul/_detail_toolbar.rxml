@@ -1,0 +1,29 @@
+xml.toolbar(:id => 'toolbar') { |toolbar| 
+
+ toolbar.hbox(:id => 'main-buttons') { |buttons| 
+   buttons.toolbarbutton :id => "add-customer", :image => "/images/icons/user_add.png", :label => "New Customer",
+                         :oncommand => remote_function(:url => {:action => 'edit_xul'}, 
+                                                       :loading => "add_ajax_call();",
+                                                       :complete => "remove_ajax_call();")
+
+   buttons.toolbarbutton :id => "save-customer", :image => "/images/icons/drive_user.png", :label => "Save Customer",
+                         :oncommand => remote_function(:url => {:action => 'edit_xul', :save => true, :records => @customer.id}, 
+                                                       :with => "Form.serialize('container')", 
+                                                       :loading => "add_ajax_call();",
+                                                       :complete => "remove_ajax_call();")
+                                                       
+   buttons.toolbarbutton :id => "back-to-list", :image => "/images/icons/application_view_list.png", :label => "Back To List",
+                         :oncommand => remote_function(:url => {:action => 'list_xul', :page => @page, :last_viewed_record => @customer.id }, 
+                                                       :with => "Form.serialize('toolbar')", 
+                                                       :loading => "add_ajax_call();",
+                                                       :complete => "remove_ajax_call();")
+ }
+ 
+ toolbar << render( :partial => 'admin/components/xul/hidden_paginator' )
+ 
+ toolbar.spacer :flex => 1
+   
+ toolbar.spacer :flex => 1
+ 
+ toolbar << render( :partial => 'admin/components/xul/search' )
+}

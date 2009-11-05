@@ -1,0 +1,7 @@
+xml.grid( :flex => 1, :style => "overflow: auto;") { |grid| 
+  grid.colums { |columns| 
+    columns.column 
+    columns.column :width => 83 }
+
+}
+

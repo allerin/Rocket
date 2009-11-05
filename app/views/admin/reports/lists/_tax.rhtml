@@ -1,0 +1,85 @@
+<table class=" tax_report" cellspacing="2">
+	<thead>
+		<tr>
+			<th>Job</th>
+			<th>Payment</th>
+			<th>Account</th>
+			<th class="numeric">Subtotal</th>
+			<th class="numeric">Ship</th>
+			<th class="numeric">Tax</th>
+			<th class="numeric">Total</th>
+			<th class="numeric">Paid</th>
+			<th class="numeric">Due</th>
+			<th>Paid Date</th>
+			<th>Batch</th>
+			<th>Rep</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% i = 1 %>
+	<% @orders.each do |order| %>
+		<tr class="tax_report">
+			<td><%= order.full_job_number %></td>
+			<td><%= order.payment_type.gsub('Payment','') %></td>
+			<td><%= order.payment.number if order.payment %></td>
+			<td class="numeric"><%= number_to_currency(order.subtotal, :unit => '') %></td>
+			<td class="numeric"><%= number_to_currency(order.shipping_price, :unit => '') %></td>
+			<td class="numeric"><%= number_to_currency(order.tax, :unit => '')%></td>
+			<td class="numeric"><%= number_to_currency(order.total, :unit => '') %></td>
+			<td class="numeric"><%= number_to_currency(order.amount_paid, :unit => '')%></td>
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '')%></td>
+			<td><%= order.paid_at.strftime("%m/%d/%y") if order.paid_at %></td>
+			<td><%= order.batch %></td>
+			<td><%= order.account_rep %></td>
+		</tr>	
+		<% if params[:print] and i.modulo(44).zero? and not i.zero? %>
+</table><br/>
+<table class=" tax_report" cellspacing="2">
+		<thead>
+		<tr>
+			<th>Job</th>
+			<th>Payment</th>
+			<th>Account</th>
+			<th class="numeric">Subtotal</th>
+			<th class="numeric">Ship</th>
+			<th class="numeric">Tax</th>
+			<th class="numeric">Total</th>
+			<th class="numeric">Paid</th>
+			<th class="numeric">Due</th>
+			<th>Paid Date</th>
+			<th>Batch</th>
+			<th>Rep</th>
+		</tr>
+	</thead>
+	<tbody>	
+		<% end %>
+		<% i += 1 %>
+	<% end %>
+	<tr class="tax_report grand_total">
+		<td colspan="3" class="grand_total_label" valign="center">Grand Totals</td>	
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.subtotal }, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.shipping_price.to_f }, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.tax.to_f }, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.total }, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.amount_paid.to_f }, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.amount_due.to_f }, :unit => '') %></td>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	</tbody>
+</table>
+
+<style>
+	table.tax_report { width: 680px; margin-left: 8px; margin-top: -8px; page-break-after: always;}
+	tr.tax_report td { font-size: 12px; }
+	tr.tax_report td.numeric { text-align: right; }
+	th.numeric { text-align: right;}
+	tr.grand_total td { height: 28px; border-top: 2px solid black; }
+	td.grand_total_label { padding-right: 4px; font-size: 12px !important; font-weight: bold; text-align: right; }
+	
+	table.tax_report thead tr {
+	background-color: black;
+	color: white;
+	font-size: .8em;
+	text-align: left;
+}
+</style>

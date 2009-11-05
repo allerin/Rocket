@@ -1,0 +1,96 @@
+<td valign="top" width="562" align="left">
+	<p><img src="/images/title-my-account-profile.gif" alt="" height="33" width="350" border="0" /><br />
+	</p>
+	<table class="white-nav" width="402" border="0" cellspacing="0" cellpadding="8" bgcolor="#9c9ea0">
+		<tr>
+			<td align="left" width="28%"><u><%= link_to 'My Profile', :controller => 'account', :action => 'profile' %></u></td>
+			<td align="left" width="33%"><u><%= link_to 'Job Status', :controller => 'account', :action => 'job_status' %></u></td>
+			<td align="left" width="33%"><u><%= link_to 'Order History', :controller => 'account', :action => 'order_history' %></u></td>
+		</tr>
+	</table>
+	<p>
+		<% if flash[:error] %>
+			<div class="error">
+				<%= flash[:error] %>
+			</div class="error">
+		<% end %>
+	</p>
+	
+	<table width="450" border="0" cellspacing="0" cellpadding="8">
+		<tr>
+			<td valign="top" width="50%">
+				<% form_tag( { :action => 'profile', :update => 'email'}, :name => 'email', :id => 'email' ) do %>
+				<div class="subhead">
+					Email Address:</div>
+				<p><%= @current_customer.email %></p>
+				<p>New Email:<br />
+					<%= text_field_tag "email", params[:email], :size => 24 %>
+				</p>
+				<p>Confirm New Email:<br />
+					<%= text_field_tag "email_confirm", params[:email_confirm], :size => 24 %>
+				</p>
+				<p>
+				<input type="image" src="/images/save-btn.gif" alt="" height="17" width="33" border="0" /></p>
+				<% end %>
+			</td>
+			<td valign="top">
+				<% form_tag( { :action => 'profile', :update => 'password'}, :name => 'password', :id => 'password' ) do %>
+				<div class="subhead">
+					Create New Account Password:</div>
+				<p>New Password:<br />
+					<%= text_field_tag "password", params[:password], :size => 24, :type => 'password' %>
+				</p>
+				<p>Confirm New Password:<br />
+					<%= text_field_tag "password_confirm", params[:password_confirm], :type => 'password', :size => 24 %>
+				</p>
+				<p>
+				<input type="image" src="/images/save-btn.gif" alt="" height="17" width="33" border="0" /></p>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top" width="50%">
+				<div class="subhead">
+					Billing Address:</div>
+
+				<p>
+					<%= @current_customer.billing_address.label %>
+				</p>
+				<p>
+					<%= @current_customer.billing_address.name %><br />
+					<%= (@current_customer.billing_address.company + "<br />") if @current_customer.billing_address.company and not @current_customer.billing_address.company.empty? %>
+					<%= @current_customer.billing_address.street_1 %>
+					<%= (@current_customer.billing_address.street_2 + "<br />") if @current_customer.billing_address.street_2 and not @current_customer.billing_address.street_2.empty? %>
+					<%= @current_customer.billing_address.city %>, <%= @current_customer.billing_address.state %> <%= @current_customer.billing_address.zip %></p>
+				<p>
+					Phone: <%= @current_customer.billing_address.phone %><br />
+					<%= ("Fax: " + @current_customer.fax ) if @current_customer.fax and not @current_customer.fax.empty? %></p>
+
+				<p>
+					<%= link_to image_tag("edit-btn.gif", :border => 0), :action => 'edit_address', :address_id => @current_customer.billing_address_id %>
+				</p>
+			</td>
+			<td valign="top">
+				<div class="subhead">
+					Default Shipping Address:</div>
+					<p>
+						<%= @current_customer.shipping_address.label %>
+					</p>
+					<p>
+						<%= @current_customer.shipping_address.name %><br />
+						<%= (@current_customer.shipping_address.company + "<br />") if @current_customer.shipping_address.company and not @current_customer.shipping_address.company.empty? %>
+						<%= @current_customer.shipping_address.street_1 %><br />
+						<%= (@current_customer.shipping_address.street_2 + "<br />") if @current_customer.shipping_address.street_2 and not @current_customer.shipping_address.street_2.empty? %>
+						<%= @current_customer.shipping_address.city %>, <%= @current_customer.shipping_address.state %> <%= @current_customer.shipping_address.zip %></p>
+					<p>
+						Phone: <%= @current_customer.shipping_address.phone %><br />
+					</p>
+					<p>
+						<%= link_to image_tag("edit-btn.gif", :border => 0), :action => 'address_book' %>
+					</p>
+			</td>
+		</tr>
+
+	</table>
+	<div align="right"></div>
+</td>

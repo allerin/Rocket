@@ -1,0 +1,40 @@
+<ul id="package_options">
+<% @product_options.each do | option | %>
+	<li class="productOption"><%= option.title %>
+	
+	<ul class="productOptionValues">
+	<% option.product_option_values.each do |value| %>
+		<% package_value = @package.package_option_values.to_a.find { |v| v.product_option_value == value } %>
+		<li class="productOptionValue">
+		<%= secure_check_box( @package, 
+													:package_option_values, 
+													"package_option_values[#{value.id}]", package_value ) %>
+								
+		<%= secure_radio_button(@package, 
+														:package_option_values, 
+														"package_option_value_defaults[#{option.id}]",
+														value.id, 
+														(package_value.default if package_value), 
+														:class => 'default_radio' ) %>
+		
+		<label class="productOptionValue"><%= value.label %></label>						
+		<br class="clear">
+		</li>
+	
+	<% end %>
+	</ul>
+	</li>
+<% end %>
+
+<li class="productOption"> 
+	<% new_options = "<option value='none' SELECTED>Additional Options</option>" %>
+	<% new_options += options_for_select((ProductOption.find(:all) - @package.product_options ).collect { |po| [ po.title, po.id ] }) %>
+	<%= select_tag( "new_package_option", new_options ) %>
+				
+	<%= link_to_remote 'Add Option',	:url => add_package_option_url(:package_id => (@package.id or 'new')), 
+	  																:with => "Form.Element.serialize('new_package_option')" %>
+	<br class="clear">
+				
+</li>
+
+</ul>

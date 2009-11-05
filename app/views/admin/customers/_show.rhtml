@@ -1,0 +1,41 @@
+<%
+@loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'"
+@complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'"
+%>
+
+<div id="subnav">
+<% if @view == 'detail' %>
+<%=	link_to	'back to list',
+ 						{ :view => 'list', :page => session[:page] },
+						:id => 'backToList' %> 
+		
+<% elsif session[:customer_id] || session[:customer_key] || session[:customer_value] || session[:quicksearch] ||  @view == 'detail' -%>
+
+<%= link_to 'list all', 
+			{ :view => 'list', :page => 1, :all => true, :key => nil, :value => nil },
+			:id => 'listAll' %>
+			
+
+<% end -%> 
+
+<% if @records.length == 1  %>
+| 
+	<%= link_to 'create invoice', create_invoice_url(:customer_id => @records.first.id) %>
+<% end %>
+
+| 
+<%= link_to 'add a new customer', 
+						{ :action => 'create' },
+						:id => 'addNewCustomer' %>
+
+
+
+</div>
+<%= render :partial => "admin/components/quicksearch"%>
+
+<div id="content">
+<%= render :partial => "admin/components/record_viewer" %>
+</div>
+
+<%= render :partial => "admin/components/status" %>
+

@@ -1,0 +1,2 @@
+class TradePayment < AbstractPayment
+end

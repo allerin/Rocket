@@ -1,0 +1,133 @@
+
+<td valign="top" width="561" align="left">
+
+	<p><img src="/images/title-order-summary.gif" alt="" height="33" width="350" border="0" /><br />
+		</p>
+	<div class="subhead">
+		<p>Thank You!</p>
+	</div>
+	<p>Thank you for your Rocket Postcards order! A copy of your invoice is provided below.</p>
+	<div class="subhead">
+		<p>ROCKET INVOICE # <%= @invoice.id %></p>
+	</div>
+
+
+<%= @invoice.created_at.to_date.to_formatted_s %>
+
+<% @customer = @invoice.customer %><br/>
+<%= @customer.first_name %> <%= @customer.last_name %><br/>
+<%= @customer.billing_address.company %><br/>
+<%= @customer.billing_address.street_1 %> <%= ( "\n" + @customer.billing_address.street_2 ) if @customer.billing_address.street_2 and not @customer.billing_address.street_2.empty? %><br/>
+<%= @customer.billing_address.city %>, <%= @customer.billing_address.state %> <%= @customer.billing_address.zip %><br/><br/>
+
+
+<!-- ROCKET INVOICE starts -->
+<% @invoice.orders.reverse.each do | order | %>
+    ------------------<br/>
+    <strong>ROCKET JOB # </strong><%= order.full_job_number %><br/>
+    <strong><%= order.product_title %></strong><br/>
+    <%= order.custom_name %><br/>
+    
+    Size: <%= dimensions_nice order.product_width, order.product_height %>"<br/>
+    Quantity: <%= order.quantity %><br/>
+    <% order.product_option_values.each do | option |%>
+        <% next if option.never_visible %><%= option.title %>: <%= option.customer_label || option.label %><br/>
+        <% if option.title == "Mailing" and option.label.downcase != "none" %>
+            <%= "\n" %>
+            Quantity To Be Mailed: <%= order.mailing_quantity %><br/>
+        <% end %>
+    <% end %>
+
+    <% if order.shipping_method %>Shipping Method: <%= order.shipping_method.name %><% end %><br/>
+    
+    Ship To:<% if order.address %>
+    <%= order.address.first_name + " " + order.address.last_name %><br/>
+    <%= order.address.street_1 %><%= ( "\n" + order.address.street_2 ) if order.address.street_2 and not order.address.street_2.empty? %><br/>
+    <%= order.address.city + ", " + order.address.state + " " + order.address.zip %><br/>
+    <%= order.address.phone %><% else %>Customer Pickup<% end %><br/>
+
+    Quantity: <%= order.shipping_quantity %><br/>
+    
+    Printing: <%= number_to_currency order.price %><br/>
+    <% if order.mailing_price and order.mailing_price > 0 %>
+        Mail Services: <%= number_to_currency order.mailing_price %><br/>
+        <%= "\n" %>
+        Postage: <%= number_to_currency order.postage_price %><br/>
+        <%= "\n" %>
+    <% end %>
+    
+    <% if order.tax and order.tax > 0 %>
+        Sales Tax: <%= number_to_currency order.tax%><br/>
+        <%= "\n" %>
+    <% end %>
+
+    <% if order.shipping_price and order.shipping_price > 0 %>
+        Shipping: <%= number_to_currency order.shipping_price %><br/>
+        <%= "\n" %>
+    <% end %>
+    
+    <% if order.tax and order.price > 0 %>
+        Tax: <%= number_to_currency order.tax %><%= "\n" %><br/>
+    <% end %>
+    
+    Item Total: <%= number_to_currency order.total %><br/>
+
+<% end %>
+<!-- ROCKET INVOICE ends -->
+
+
+<% @invoice.design_orders.each do | design | %>
+    ------------------<br/>
+    <strong>ROCKET DESIGN JOB # </strong><%= design.full_job_number %><br/>
+    <% if design.parent_id %>
+        Reorder Job #<%= design.parent_id %><br/>
+    <% else %>
+        <%= design.custom_name || "Custom Design" %><br/>
+    <% end %>
+    
+    <% design.design_option_values.each do | option | %>
+        <%= option.option_customer_label %>: <%= option.value_customer_label %><br/>
+    <% end %>
+    
+    <% if design.copy %>Text: <%= design.copy %><% end %><br/>
+    
+    <% if design.comments %>Comments: <%= design.comments %><% end %><br/>
+    
+    For Item: <%= design.for_product_title %><br/>
+    
+    Total Cost: <%= number_to_currency( design.total ) %><br/>
+<% end %>
+
+------------------<br/>
+
+<strong>PAYMENT METHOD :</strong> <%= (@invoice.orders.first || @invoice.design_orders.first).payment.nice_type rescue '' %><br/>
+
+Your payment was successfully authorized for <%= number_to_currency( @invoice.total ) %><br/>
+
+Order Subtotals:<br/>
+Printing: <%= number_to_currency @invoice.printing_total %><br/>
+
+<% if ( mailing_total = @invoice.mailing_total ) > 0 %>
+    Mailing Services: <%= number_to_currency mailing_total %><%= "\n" %>
+    Postage: <%= number_to_currency @invoice.postage_total %><%= "\n" %>
+<% end %>
+
+<% if ( design_total = @invoice.design_total ) > 0 %>
+    Design Services: <%= number_to_currency design_total %>
+    <%= "\n" %>
+<% end %>
+
+<% if ( shipping_total = @invoice.shipping_total ) > 0 %>
+    Shipping: <%= number_to_currency shipping_total %>
+    <%= "\n" %>
+<% end %>
+
+<% if @invoice.tax_total and @invoice.tax_total > 0 %>
+    Tax: <%= number_to_currency @invoice.tax_total %>
+    <%= "\n" %>
+<% end %> 
+
+Order Total: <%= number_to_currency @invoice.total %>
+
+
+</td>

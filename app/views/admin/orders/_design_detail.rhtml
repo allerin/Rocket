@@ -1,0 +1,228 @@
+<form id="design_form">
+	<%= hidden_field_tag "id", @record.id %>
+<div id="data">
+<div id="order" class="panel left fullwidth">
+<div class="title" >Job <%= @record.full_job_number %>
+
+	<% if @record.order %>
+	[ <%= link_to "Job", 
+						show_order_url(:id => @record.order_id) %> ]
+	
+	<% end %>
+	[ <%= link_to "Invoice", 
+						show_invoices_url(:id => @record.invoice_id, :view => 'detail'),
+ 						:id => 'viewInvoice' %> ]
+						
+	[ <%= link_to "Customer", 
+						show_customers_url(:id => @record.invoice.customer_id, :view => 'detail'),
+						:id => 'viewCustomer' %> ]
+						
+	
+	<span style="padding-left: 16px;">		
+	<%= secure_select(@record, :designer, 'designer', (DesignOrder.designers.insert(0,nil)<<('Other')).uniq, :onchange => "if 
+	($('designer').value=='Other') { $('designer').parentNode.removeChild($('designer')); $('other_designer').id='designer'; $('designer').name='designer'; $('designer').style.display='inline'; $('designer').focus(); }") %>
+	<%= text_field_tag 'other_designer', nil, :size => 12, :style => "display: none; float: none;"%>
+	</span>
+	
+	<span style="">			
+	<%= secure_select(@record, :status, 'status', DesignOrder.statuses) %>
+	</span>
+	
+</div>
+<div class="content">
+
+<div class="address" id="billingAddress">
+	<span class="addressHeader">Billing Address</span>
+	
+	<%= secure_select(  @record.invoice, 
+	                		'address_id', 
+	                		'order[billing_address_id]', 
+	                		@record.invoice.customer.addresses.collect { | ad | [ ad.label, ad.id.to_s ] } ) %>
+	
+	<script>
+		$('order[billing_address_id]').addEventListener('change', function(){ 
+			<%= remote_function(	:url => change_address_url(:address_type => 'billing', :order_id => @record.id, :design => true),
+														:with => "'address_id=' + escape($('order[billing_address_id]').value)",
+														:loading => @loading,
+														:complete => @complete ) %>}, false)
+	</script>
+	
+	<br class="clear">
+	
+	<div id="billingAddressTable">
+	<%= render :partial => "address_table", :locals => { :address => @record.invoice.address } %>
+	</div>
+	
+</div>
+
+<div class="address" id="shippingAddress">
+	<span class="addressHeader">Shipping Address</span>
+	<%	shipping_addresses = @record.invoice.customer.addresses.inject([['Customer Pickup', '' ]]){ |addresses, ad| addresses << [ ad.label, ad.id ] } 
+		%>
+	<%= secure_select(  @record, 
+	                		'address_id', 
+	                		"order[shipping_address_id]", 
+											shipping_addresses
+	                		 )
+	%>
+	<br class="clear">
+	
+		<script>
+		$('order[shipping_address_id]').addEventListener('change', function(){ 
+			<%= remote_function(	:url => change_address_url(:address_type => 'shipping', :order_id => @record.id, :design => true),
+														:with => "'address_id=' + escape($('order[shipping_address_id]').value)",
+														:loading => @loading,
+														:complete => @complete ) %>}, false)
+	</script>
+	
+	<div id="shippingAddressTable">
+		<%= render :partial => "address_table", :locals => { :address => @record.address} %>
+	</div>
+	
+</div>
+
+<hr class="nice">	
+	
+	<table>
+	<tr>
+		<td width="18%" class="formLabel">
+			<% if @record.parent %><span style="color: red;">Reorder #</span><% end %>
+		</td>
+		<td width="10%">
+			<%= link_to(@record.parent.full_job_number, view_design_order_url(:id => @record.parent_id)) if @record.parent %>
+		</td>
+		<td width="10%" class="formLabel">Payment</td>
+		<td width="26%" ><%= secure_select( @record, :payment_type, 'payment_type', [['Credit', 'CreditPayment'], ['Check', 'CheckPayment'], ['Cash', 'CashPayment'], ['Terms', 'TermsPayment'], ['Trade', 'TradePayment']]) %></td>
+		<td width="12%"class="formLabel">Invoiced</td>
+		<td width="8%">
+			<label id="invoiced_at" style="padding-top:2px"><%= @record.invoice.sent_at.strftime("%m/%d/%y") if @record.invoice.sent_at %></label>
+		</td>
+		<td>
+			<input type="button" value="Now" style="margin-left: 3px;" onclick="<%= remote_function(:url => invoice_sent_now_url(:id => @record.invoice_id)) %>">
+		</td>
+	</tr>
+	<tr>
+		<td class="formLabel">Customer Issues</td>
+		<td>
+			<%= secure_select(@record.invoice.customer, :issues, 'issues', (Customer.issues.insert(0,nil)<<('Other')).uniq, :onchange => "if ($('issues').value=='Other') { $('issues').parentNode.removeChild($('issues')); $('other_issues').id='issues'; $('issues').name='issues'; $('issues').style.display='block'; $('issues').focus(); }") %>
+			<%= text_field_tag 'other_issues', nil, :size => 12, :style => "display: none;"%>
+		</td>
+		<td class="formLabel">Name</td>
+		<td><%= @record.payments.last.name if @record.payments.last %></td>
+		<td class="formLabel">Comm. Paid</td>
+		<td>
+			<span id="commission_paid_at">
+			<% if @record.commission_paid_at %>
+				<%= @record.commission_paid_at.strftime("%m/%d/%y") %>
+			<% end %>
+			</span>
+		</td>
+		<td>
+			<input type="button" value="Now" style="margin-left: 3px; float: none;" onclick="<%= remote_function(:url => design_commission_paid_now_url(:id => @record.id)) %>">
+			
+		</td>
+	</tr>
+	<tr>
+		<td class="formLabel">Design Name</td>
+		<td>
+			<%= secure_text_field( @record, :custom_name, "custom_name", :size => 12 ) %>
+		</td>
+		<td class="formLabel">Number</td>
+		<td>
+			<%= @record.payments.last.number if @record.payments.last %>
+			<%= format_cc_exp(@record.payments.last.exp_month, @record.payments.last.exp_year) if ['CreditPayment'].include? @record.payment_type %>
+		</td>
+		<td class="formLabel">Paid Date</td>
+		<td>
+			<label id="paid_at" style="padding-top:2px"><%= @record.paid_at.strftime("%m/%d/%y") if @record.paid_at %></label>
+		</td>
+		<td>	
+			<input type="button" value="Now" style="margin-left: 3px;" onclick="<%= remote_function(:url => design_paid_now_url(:id => @record.id)) %>">
+		</td>
+	</tr>
+	<tr>
+		<td class="formLabel">Product</td>
+		<td>
+			<select name="product_id" id="product_id" style="float: none; margin-top: 3px;">
+		<% @record.invoice.orders.each do |order| %>
+			<% next unless product = order.product %>
+			<option value="<%= product.id %>"<% if product.id == @record.product_id; @product_selected = true %> selected='true' <% end %> > 
+				<%= order.full_job_number %> (<%= product.sku %>)
+			</option>
+		<% end %>
+		<% Product.find(:all, :order => 'product_page_id', :conditions => "disabled IS NULL or disabled=0" ).each do |product| %>
+			<% next unless product.one_sided_layout_price.to_f > 0 or product.two_sided_layout_price.to_f > 0 %>
+				<option value="<%= product.id %>" <%= selected_string( product.id == @record.product_id ) unless @product_selected %> >
+					<%= product.sku %>
+				</option>
+			<% end %>
+	</select>
+		</td>
+		<td class="formLabel"  style="">Approved</td>
+		<td>
+			<table><tr>
+				<td><%= secure_select(@record, :payment_approved, 'payment_approved', [['Yes', true], ['No', false]]) %></td>
+				<td><span id="captured_at">
+			<% if @record.payment %>
+				<% if @record.payment.captured %>
+					<strong>Captured</strong>
+					<%= @record.payment.captured_at.strftime("%m/%d/%y") %>
+				<% else %>
+					<input type="button" value="Capture" style="margin-left: 0px;;" onclick="<%= remote_function(:url => capture_payment_url(:id => @record.payment.id)) %>">
+				<% end %>
+			<% end %>
+				</span></td></tr></table>
+		</td>
+		<td class="formLabel">Amt Paid</td>
+		<td>
+			<%= secure_text_field( @record.payment, :amount_paid, "amount_paid", :size => 6 )  if @record.payments.last %>
+		</td>
+		<td>
+			<input type="button" value="Full" style="margin-left: 5px;" onclick="$('amount_paid').value = /\d+\.\d+/.exec($('orderTotal').lastChild.nodeValue)[0]; <%= remote_function(:url => {:action => 'change_design'}, :with => "Form.serialize('design_form')") %>">
+		</td>
+	</tr>
+	
+</table>
+
+	<hr class="nice">
+
+	<div style="margin-left: 16px;">
+
+	<label style="font-weight: bold; font-size: 14px; ">Copy:</label><br/>
+	<%= secure_text_area(@record, :copy, 'copy', :rows => 4, :cols => 60 )%>
+	<br class="clear"/>
+	
+	<label style="font-weight: bold; font-size: 14px; ">Comments:</label><br/>
+	<%= secure_text_area(@record, :comments, 'comments', :rows => 3, :cols => 60 )%>
+	<br/>
+	
+	</div>
+	
+	<script>
+		['payment_type', 'payment_approved', 'amount_paid', 'custom_name', 'designer', 'other_designer', 'copy', 'comments', 'product_id', 'status'].each(function(thing) {
+			if ($(thing)) 
+				$(thing).addEventListener('change', function() { <%= remote_function(:url => {:action => 'change_design'}, :with => "Form.serialize('design_form')") %> }, false)
+		})
+	</script>
+	
+	<div id="design_options" style="margin-left: 16px;">
+		<%= render :partial => 'design_options' %>
+	</div>
+	
+	
+	<div style="clear: both;"></div>
+		
+<hr class="nice">
+
+	<div id="moneyStuff" style="">
+		<%= render :partial => 'design_totals' %>
+	</div>
+</div>
+
+
+<br class="clear">
+</div>
+</div>
+</div>
+
+</form>

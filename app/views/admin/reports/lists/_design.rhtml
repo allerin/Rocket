@@ -1,0 +1,62 @@
+<table class="productsTable" style="width: 100%; margin-left: 8px;">
+	<thead>
+		<tr>
+			<th>Job #</th>
+			<th>Status</th>
+			<th>Product</th>
+			<th>Designer</th>
+			<th>Reorder</th>
+			<th>Paid</th>
+			<th>Com. Paid</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+<% for record in @orders %> 
+<tr class="orderIndex" id='design_<%= record.id %>'>
+	<td class="orderId">
+		<%= link_to record.full_job_number, view_design_order_url(:id => record.id), :id => "#{record.id}"	%>
+	</td>
+	<td>
+		<%= record.status %>&nbsp;
+	</td>
+	<td>
+		<%= record.product.sku if record.product %>&nbsp;
+	</td>
+	<td>
+		<%= record.designer %>&nbsp;
+	</td>
+	<td>
+		<%= record.parent.full_job_number if record.parent %>&nbsp;
+	</td>
+	<td>
+	<%= record.paid_at.strftime("%m/%d/%y") if record.paid_at %>&nbsp;
+	</td>
+	<td>
+		<%= record.commission_paid_at.strftime("%m/%d/%y") if record.commission_paid_at %>&nbsp;
+	</td>
+	<td>
+		<%= number_to_currency(record.total, :symbol => '') %>
+	</td>
+
+</tr>
+<% end %>
+<% if @orders.length == 0 %>
+<tr>
+	<td colspan="10">
+		No design orders Found
+	</td>
+</tr>
+<% else %>
+<tr class="grand_total">
+	<td colspan="7">&nbsp;</td>
+	<td><%= number_to_currency(@orders.inject(0.0) { |t,o| t += o.total }) %></td>
+</tr>
+<% end %>
+
+</table>
+
+<style>
+	tr.grand_total td { height: 28px; border-top: 2px solid black; }
+	td.grand_total_label { padding-right: 4px; font-size: 12px !important; font-weight: bold; text-align: right; }
+</style>
+

@@ -1,0 +1,21 @@
+<% @upid = Time.now.to_i.to_s %>
+
+    <% form_for (:picture, :url => { :action => 'upload3', :order_id => order.id, :upload_id => @upid }, 
+                          :html => { :target => "upload_frame", :multipart => true , :onsubmit => "Element.show('spinner')" }) do |f| -%>
+
+        <p>
+            <label for="mugshot">Upload A Front:</label>
+            <%= file_field 'upload1', 'datafile1' %>       
+        </p>
+        <p>
+            <label for="mugshot">Upload A Back:</label>
+            <%= file_field 'upload2', 'datafile2' %>
+        </p>
+        <p>
+            <%= submit_tag 'Create' %>
+            <%= image_tag 'progress_bar.gif', :id => 'spinner', :style => 'display:none' %>
+        </p>
+      
+<% end -%>
+
+

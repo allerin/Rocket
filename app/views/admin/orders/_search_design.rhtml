@@ -1,0 +1,83 @@
+<div id="search_container" style="display: none; border-bottom: 1px solid black; margin-bottom: -2px;">
+	<form id="search_form" name="search_form">
+		<% params[:search] ||= {} %>
+		<table class="productsTable" style="margin-bottom: -6px;">
+			<tr>
+				<td class="label">First Name</td>
+				<td>
+					<%= text_field_tag "search[first_name]", params[:search][:first_name], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">City</td>
+				<td>
+					<%= text_field_tag "search[city]", params[:search][:city], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class='label' style="padding-left: 32px;">Company</td>
+				<td>
+					<%= text_field_tag "search[company]", params[:search][:company], :size => 18, :class => 'search-field' %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Last Name</td>
+				<td>
+					<%= text_field_tag "search[last_name]", params[:search][:last_name], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">State</td>
+				<td>
+					<%= select_tag "search[state]", options_for_select(states_array(true, ''), params[:search][:state]) %>
+				</td>
+				<td class="label">Payment Type</td>
+				<td>
+					<%= select_tag 'search[type]', options_for_select(payment_types_array(true), params[:search][:type]) %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Email</td>
+				<td>
+					<%= text_field_tag "search[email]", params[:search][:email], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label" style="padding-left: 32px;">Zip</td>
+				<td>
+					<%= text_field_tag "search[zip]", params[:search][:zip], :size => 18, :class => 'search-field' %>
+				</td>
+				<td class="label">Status
+				</td>
+				<td>
+					<%= select_tag 'search[status]', options_for_select(design_statuses_array, params[:search][:status]) %>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"></td>
+				<td>
+				</td>
+				<td class="label"></td>
+				<td>
+				</td>
+				<td>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"></td>
+				<td>
+				</td>
+				<td class="label"></td>
+				<td>
+				</td>
+			</tr>
+			<tr>
+				
+				
+			</tr>
+			<tr>
+				
+			</tr>
+			
+			
+		</table>
+	</form>
+	
+	<script>
+	new Form.EventObserver($("search_form"), function() { <%= remote_function(:url => list_design_orders_url, 
+																																					:with => "Form.serialize('search_form')") %> }); 
+	</script>
+
+</div>

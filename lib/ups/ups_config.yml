@@ -1,0 +1,13 @@
+### Access Info
+user_id: nomadprinting
+password: nomad5683
+license: 9BB32E7E0DBD2908
+
+
+rates_and_services: { 
+ pickup_type: '01',
+ shipper_postal_code: '94102',
+ host: 'www.ups.com',
+ port: 443,
+ document: '/ups.app/xml/Rate'
+}

@@ -1,0 +1,59 @@
+<%= stylesheet_link_tag 'ibox' %>
+<%= javascript_include_tag 'ibox' %>
+
+	<td class='orderId'>
+		<%= link_to order.full_job_number, show_order_url(:id => order.id), :id => "#{order.id}"	%>
+	</td>
+	<td class='orderThumbnail' valign="top">
+		<% if order.front_image %>
+			<%= link_to image_tag(show_order_image_url(:id => order.front_image.id, :size => "80x60")),
+								show_order_url(:id => order.id), 
+								:id => "#{order.id}"	%>
+		<% else %>
+			<div class='thumbnailPlaceholder' style="width: 80px; height: 60px; border: 1px dotted gray;" >
+                <!--  Following is added to display picture (Front, Back) on ORDER details page - Sept 16, 2008-->    
+                <% @pictures = Picture.find(:all, :conditions => [" order_id =? and side ='front'", order.id]) %>            
+                <% for picture in @pictures %>        
+                    <%= link_to image_tag(picture.public_filename(:thumb)), 
+                        { :controller => "orders", :action => "actual_image", :id => picture.id}, 
+                        :rel => "ibox?type=3&height=280&width=350" %>
+                <% end %>
+
+			</div>
+		<% end %>
+	</td>
+	<td>
+		<table class="orderSummary">
+			<tr>
+				<td width="15%" class="productCode">
+					<%= order.product_sku %><br>
+					<%= order.paper %>
+				</td>
+				<td width="20%" class="productTitle">
+					<%= order.title %><br>
+					<%= order.coating %>
+				</td>
+				<td width="35%" rowspan="3" colspan="2" valign="top" class="orderNotes"> 
+					<%= order.notes.first.content if order.notes and order.notes.first %>
+				</td>
+				<td width="20%">
+					<%= order.batch %>
+				</td>
+			</tr>
+			<tr>
+				<td class="orderName"><%= order.last_name %></td>
+				<td class="orderName"><%= order.first_name %></td>
+				<td class="orderProofMethod"><%= order.proof_method_name %></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="orderEmail">Email: <%= order.email %></td>
+				<td class="" valign="bottom">Status:</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="orderPaidDate">Paid Date: <%= format_date(order.paid_at)%></td>
+				<td class="orderAmountDue">Amt Due: <%= number_to_currency(order.amount_due) %></td>
+				<td class="orderQuantity">Qty: <%= order.quantity %></td>
+				<td class="orderStatus" valign="top"><%= order.status %></td>
+			</tr>
+		</table>
+	</td>

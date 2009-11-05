@@ -1,0 +1,142 @@
+<% design_index = cart_design.cart_index %>
+<table width="550" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<% form_tag( { :action => 'edit_design', :design_index => design_index }, :name => "editDesign_#{design_index}", :id => "editDesign_#{design_index}" ) do %>
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="6">
+				<tr height="19">
+					<td colspan="2" align="left" bgcolor="#999999" height="19">
+						<div class="subhead-white">
+							<%= cart_design.custom_name or "Custom Design: #{cart_design.for_product.title if cart_design.for_product}" %>
+						</div>
+					</td>
+					<td align="right" bgcolor="#999999" width="215" height="19">
+						<div class="white-nav" align="right">
+							<%= link_to "Remove this design #{image_tag('/images/close-btn.gif', :border => 0) }",
+													{ :view => 'review_cart', :action => 'remove_product', :design_index => design_index },
+													:id => "remove_design_#{design_index}",
+													:onclick => %Q{new Effect.Puff($("design_job_#{design_index}"),{duration:0.5}); #{remote_function( :url => { :view => 'review_cart', :action => 'remove_product', :design_index => design_index})}; return false;}	%>
+
+						</div>
+					</td>
+				</tr>
+				<tr height="25">
+					<% if cart_design.reorder? %>
+					<td></td>
+					<td><strong>Reorder Job #<%= cart_design.job_number %></strong></td>
+					<% else %>
+					<td align="right" height="25">
+						<strong>Custom Name</strong>
+					</td>
+					<td width="40%" height="25">
+							<%= text_field_tag	"custom_name", 
+																	( cart_design.custom_name or 'Enter a name for this design'),
+																	:id => "design[#{design_index}][custom_name]",
+																	:size => 31, :maxlength => 50
+							%>
+					</td>
+					<% end %>
+					<td rowspan="30" align="right" valign="bottom" bgcolor="#ececec" width="215">
+						<%= render :partial => 'cart_design_totals', :locals => {:cart_design => cart_design} %>
+					</td>
+				</tr>
+				
+				<tr height="25">
+					<td height="25">
+						<div align="left"></div>
+					</td>
+					<td width="40%" height="25">
+						<img src="/images/diagram-palette.gif" alt="" height="86" width="119" border="0" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td align="right">For Product: </td>
+					<td width="40%">
+						<% if @cart.products.empty? %>
+							<select name="for_product_id" id="for_product_id">
+								<% Product.find(:all, :order => 'product_page_id' ).each do |product| %>
+									<option value="<%= product.id %>" <%= selected_string( product == cart_design.product ) %> ><%= product.title %></option>
+								<% end %>
+							</select>
+						<% else %>
+							<select name="for_cart_item" id="for_cart_item">
+							<% @cart.products.each do | cart_product | %>
+								<option value="product_<%= cart_product.cart_index %>" <%= selected_string( cart_product == cart_design.for_cart_item ) %> >
+									<%= cart_product.custom_name or cart_product.product.title %>
+								</option>
+							<% end %>
+							<% @cart.package_items.each do | cart_package_item | %>
+								<option value="package_item_<%= cart_package_item.cart_index %>" <%= selected_string( cart_package_item == cart_design.for_cart_item ) %> >
+									<%= (cart_package_item.custom_name and not cart_package_item.custom_name.empty?) ? cart_package_item.custom_name : cart_package_item.product.title %>
+								</option>
+							<% end %>
+							</select>
+						<% end %>
+					</td>
+				</tr>
+				
+				<%	options = cart_design.design_options
+						options.keys.sort{ |a,b| a.id <=> b.id }.each do | option | 
+							value = options[ option ] %>
+						
+				<tr id="<%= option.label.camelize + 'Row' %>">
+					<td align="right">
+						<%= option.customer_label %>:
+					</td>
+					<td width="40%">
+						<%= design_options_select( option.label.to_sym, cart_design.soft_options[ option.label.to_sym ] ) %>
+					</td>
+				</tr>
+				
+				<% end %>
+				
+				<% unless cart_design.reorder? %>
+				<tr>
+					<td align="right" valign="top">
+						Text:
+					</td>
+					<td width="40%">
+						<textarea id="copy" name="copy" rows="6" cols="30" wrap="physical"><%= cart_design.copy %></textarea>
+					</td>
+				</tr>
+				
+				<% end %>
+			
+				<tr>
+					<td align="right" valign="top">
+						Comments:
+					</td>
+					<td width="40%">
+						<textarea name="comments" rows="4" cols="30" wrap="physical" ><%= cart_design.comments %></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td align="right">
+						<div id="spinny"></div>
+					</td>
+					<td width="40%">
+						<input type="image" src="/images/save-changes-btn.gif" alt="" name="save_changes" id="saveChanges" />
+					</td>
+				</tr>
+			</table>
+			<% end %>
+			
+			<%= observe_form "editDesign_#{design_index}", :url => { :action => 'edit_design', :save => true, :design_index => design_index }, 
+																				:with => "" %>
+																				
+			<%= observe_form "editDesign_#{design_index}", :function => "$(\"spinny\").update(\"<img src='/images/status_loading.gif'/> \")" %>
+			
+																				
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>

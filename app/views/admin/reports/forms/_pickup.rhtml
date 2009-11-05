@@ -1,0 +1,67 @@
+
+<form id="pickup_form" name="pickup_form">
+<table>
+	<tr>
+		<td valign="top" width="15%">
+			Batch:<br/>
+			<% batches = Order.find(:all, :select => "orders.batch, count(orders.batch) as num", :order => "orders.batch DESC", :group => "orders.batch", :limit => 20, :conditions => "SUBSTRING(orders.batch,1,1)='0'" ).collect {|o| [o.batch, o.num]} %>
+			<select  name="batch" id="batch" onchange="<%= remote_function(:url => report_pickup_list_url, :with => "Form.serialize('pickup_form')") %>;javascript:change();" >
+			<option value='3'></option>
+            <% for batches in batches%>
+            
+             <option value="<%= batches[0]%>"><%= batches[0]%> (<%= batches[1]%>)</option>
+            <%end%>
+            </select></td>
+		<td valign="top" width="25%">
+			Status:<br/>
+<%= select_tag "Search_by_status",  options_for_select(statuses_array, 'Boxed/Completed'),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "find_by_status"}, :with=>"'Search_by_status='+escape($F('Search_by_status'))")%>
+	
+		</td>
+		<td style="padding-left: 24px;" valign="top" width="60%">
+			<%= mag_button_to_function	'Print Invoices', "window.open('#{report_pickup_list_url}?print=true&new=true&batch=' + $('batch').value)",
+			 														:class => 'yellow' %>
+			<%= mag_button_to_function	"Make Completed", "if (confirm('Are you sure you want to make these orders Boxed/Completed? This cannot be undone.')) { #{remote_function(:url => report_pickup_make_completed_url(), :with => "'batch=' + $('batch').value")}}",
+																	:class => 'yellow'
+			 %>
+			 <div style="padding-top:4px;">
+			<%= mag_button_to_function	"Print List", "window.open('#{report_pickup_list_url}?print=true&completed=true')",
+			 														:class => 'yellow'%>
+			<%= mag_button_to_function "Export List", "window.location='#{report_ship_export_url}?method=pickup&batch=' + $('batch').value",
+			 														:class => 'yellow' %>
+			 														</div>
+		</td>
+		
+	</tr>
+	<tr>
+	    <td colspan="2" style="padding:2px;">
+	       <span style="font-weight:bold; font-family:Verdana; color:#000; font-size:12px;">To make global changes click here:</span> <a class="selected" href="javascript:void(0);" onclick="javascript:show_me();"><span style="font-weight:bold; font-family:Verdana; color:#42658B; font-size:12px; text-decoration:underline;">Global_change</span></a>
+	    </td>
+	    
+	</tr>
+	<tr>
+	   <td colspan="3" style="padding:2px;">
+	      <div id='Global_change' style="display:none; float:left;">
+	      <span style="font-family:Verdana; color:#000; font-size:12px;">Selecting the status from here changes the status for entire batch selected above.</span>
+	      <br/>
+        Status:    <%= select_tag "Search_by_status_1",  options_for_select(statuses_array, 'Boxed/Completed'),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "status_change_1"},  :with=>"'batch_id='+escape($F('batch'))+ '&Search_by_status=' +escape($F('Search_by_status_1'))")%>
+
+<!-- Code is commented -->
+<% if false %>	    
+	    Run A:
+			<%= select_tag 'run_A', options_for_select((1..20).to_a),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "status_change_run"},  :with=>"'batch_id='+escape($F('batch'))+ '&run_A=' +escape($F('run_A'))") %>
+	    Run B:
+      <%= select_tag 'run_B', options_for_select((1..20).to_a),:onchange=>remote_function(:url => { :controller =>"admin/reports", :action => "status_change_run"},  :with=>"'batch_id='+escape($F('batch'))+ '&run_B=' +escape($F('run_B'))") %>
+<% end %>
+		    </div> 
+	   </td>
+	 </tr>
+</table>
+</form>
+
+<hr class="nice">
+<script>
+	 
+	setTimeout("<%= remote_function(	:url => report_pickup_list_url, :with => "Form.serialize('pickup_form')") %>",1)
+	</script>
+	
+	

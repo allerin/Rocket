@@ -1,0 +1,16 @@
+<table width="162" border="0" cellspacing="0" cellpadding="4" align="right">
+	<tr>
+		<td align="left">Layout: </td>
+		<td align="right"><%= number_to_currency( cart_design.base_price ) %></td>
+	</tr>
+
+	<tr>
+		<td align="left">Options: </td>
+		<td align="right"><%= number_to_currency( cart_design.options_price ) %></td>
+	</tr>
+
+	<tr>
+		<td align="left"><b>Item Total:</b></td>
+		<td align="right"><b><%= number_to_currency( cart_design.total_price )%></b></td>
+	</tr>
+</table>

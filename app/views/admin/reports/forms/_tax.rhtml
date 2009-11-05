@@ -1,0 +1,23 @@
+<form id="tax_form" name="tax_form">
+<table style="margin-bottom: -8px">
+	<tr>
+		<td>
+			Month:
+			<% combos = ((1..Time.now.month).collect { |x| [Time.now.year,x] } + (1..12).inject([]) { |a, m| a += (2003..Time.now.year-1).collect { |y| [y,m] } }).sort.reverse %>
+			<%= select_tag 'month', options_for_select(combos.collect{|x| [(x.last.to_s + '/' + x.first.to_s)] })  %>
+		</td>
+		<td style="display: none;">
+		</td>
+		<td style="padding-left: 24px;">
+			<%= mag_button_to_function	"Print List", "window.open('#{report_tax_list_url}?print=true&month=' + $('month').value)",
+			 														:class => 'yellow'%>
+		</td>
+	</tr>
+</table>
+</form>
+	<script>
+	new Form.EventObserver($("tax_form"), function() { <%= remote_function(:url => report_tax_list_url, 
+																																					:with => "Form.serialize('tax_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_tax_list_url, :with => "Form.serialize('tax_form')") %>", 500)
+	</script>

@@ -1,0 +1,40 @@
+<table class="productsTable" width="100%">
+	<thead>
+		<tr>
+			<th colspan="2">
+				Notes
+				<span style="padding-left: 12px">[<%= link_to_function 'Add', "$('new_comment_row').style.display='table-row'" %>]</span>
+			</th>
+		</tr>
+	</thead>
+	<tr style="display: none;" id="new_comment_row">
+		<td width="30%" valign="top">
+			<strong><%= @current_user.full_name %></strong><br/>
+			<%= Time.now.strftime("%B %d, %Y at %I:%M %p")%>
+		</td>
+		<td width="68%">
+			<textarea id="comment" name="comment" rows="3" cols="46"></textarea>
+			[<%= link_to_function 'Save', remote_function(:url => add_invoice_comment_url(:invoice_id => @record.id),
+																						:with => "Form.Element.serialize('comment')") %>]
+		</td>
+	</tr>
+	<% if @record.comments.empty? %>
+	<tr>
+		<td width="30%">
+			No notes.
+		</td>
+		<td width="68%"></td>
+	</tr>
+	<% end %>
+	<% @record.comments.each do |comment| %>
+	<tr>
+		<td width="30%" valign="top">
+			<strong><%= comment.user.full_name if comment.user %></strong><br/>
+			<%= comment.created_at.strftime("%B %d, %Y at %I:%M %p")%>
+		</td>
+		<td width="68%">
+			<%= comment.comment %>
+		</td>
+	</tr>
+	<% end %>
+</table>

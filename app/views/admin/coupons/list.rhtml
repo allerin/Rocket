@@ -1,0 +1,46 @@
+<div id="subnav" style="width:100%">
+<ul>
+	<li>
+		<%= link_to	'Add Coupon', { :action => 'edit' }, :id => 'addNewCoupon'		%>
+	</li>
+</ul>
+</div>
+<div id="data" class="list">
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Code</td>
+		<td>Discount</td>
+		<td> &nbsp;
+		</td>
+	</tr>
+	
+<% for coupon in @coupons %> 
+<tr class="productIndex" id='coupon_<%= coupon.id %>' >
+	<td>
+		<%= link_to coupon.name, admin_edit_coupon_url(coupon), :id => "coupon_link_#{coupon.id}" %>
+	</td>
+	<td>
+		<%= coupon.code %>
+	</td>
+	<td>
+		<%= coupon.discount %>
+	</td>
+	<td class="linky"><%= link_to_function "Remove", "if (confirm('Are you sure you want to remove coupon #{coupon.name} (#{coupon.code})? This operation cannot be undone.')) {#{remote_function(:url => admin_remove_coupon_url(coupon))}}" %></td>
+</tr>
+
+<% end %>
+</table>
+
+<% if @coupons.length == 0 %>
+
+   <div class="product-list">
+      <p>No Coupons Found</p>
+   </div>
+
+<% end %>
+</div>
+
+
+

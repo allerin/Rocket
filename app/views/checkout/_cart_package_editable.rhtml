@@ -1,0 +1,22 @@
+<% view = params[:view] || params[:action]    %>
+	
+	<% cart_package.package_items.each do |item| %>
+		<%= render :partial => 'edit_package_item', :locals => { :item => item, :view => view }	%>
+	<% end %>
+
+<div align="right">
+<table width="359" border="0" cellspacing="2" cellpadding="0">
+	<% cart_package.package.product_options.each do | option | %>
+	<tr>
+		<td>
+			<div class="" align="right">
+				<%= option.title %> : <%= cart_package.option_values[option].label %>
+			</div>
+		</td>
+	</tr>
+	<% end %>
+</table>
+<p></p>
+<p><span class="subhead">Kit Total: <%= number_to_currency(cart_package.total_price) %></span></p>
+</div>
+

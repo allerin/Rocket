@@ -1,0 +1,59 @@
+
+	<p><img src="/images/title-cart.gif" alt="" height="33" width="350" border="0" /><br />
+		<img src="/images/checkout-graph1.gif" alt="" height="29" width="550" border="0" /></p>
+	<% if @cart.length > 0 %>
+		<p>You have the following items in your cart:<br />
+		</p>
+		
+		<% @cart.packages.each do |cart_package| %>
+			<div id="cart_package_<%= cart_package.cart_index %>">
+				<%= render :partial => 'cart_package_editable', :locals => { :cart_package => cart_package }  %>
+				<br/>
+				<br/>
+			</div>
+		<% end %>
+		
+		<%	@cart.products.reverse.each do | cart_product | %>
+			<div id="cart_product_<%= cart_product.cart_index %>">
+				
+				<%= render :partial => 'edit_product', :locals => { :cart_product => cart_product } %>
+				
+				<br />
+				<br />
+			</div>
+		<% end %>
+
+		<%	@cart.design_jobs.each do | cart_design |  %>
+			<div id="design_job_<%= cart_design.cart_index %>">
+				<%= render :partial => 'edit_design', :locals => { :cart_design => cart_design } %>
+			<br />
+			<br />
+			</div>
+		<% end %>
+	
+	<% else %>
+		<p>There are no items in your cart.</p>
+	<% end %>
+	<table width="550" border="0" cellspacing="2" cellpadding="0">
+		<% if @cart.length > 0 %>
+		<tr>
+			<td align="right">
+				<div align="right">
+					<%= render :partial => 'cart_totals' %>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">
+				<%= link_to_signin(image_tag('checkout-btn.gif'), shipping_info_url) %>
+			</td>
+		</tr>
+		<% end %>
+		<tr>
+			<td align="right">
+				<%= link_to image_tag('/images/cont-shop-btn.gif', :style => "border-width:0px"), 
+										( { :controller => 'products', :action => 'index' } )
+				%>
+			</td>
+		</tr>
+	</table>

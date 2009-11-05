@@ -1,0 +1,170 @@
+<% cart_index = cart_product.cart_index  %>
+<% form_tag( { :action => 'edit_cart' }, :name => "editCart_#{cart_index}", :id => "editCart_#{cart_index}" ) do %>
+<table width="550" border="0" cellspacing="0" cellpadding="0">
+
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr>
+		<td bgcolor="#999999" width="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td>
+				
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="6">
+				<tr height="19">
+					<td colspan="2" align="left" bgcolor="#999999" height="19">
+						<div class="subhead-white">
+							<%= cart_product.product.title %>
+						</div>
+					</td>
+					<td align="right" bgcolor="#999999" width="215" height="19">
+						<div class="white-nav" align="right">
+							<%= link_to "Remove this item #{image_tag('/images/close-btn.gif', :border => 0) }",
+													{ :view => 'review_cart_editable', :action => 'remove_product', :cart_index => cart_index },
+													:id => "remove_link_#{cart_index}", 
+													:onclick => %Q{new Effect.Puff($("cart_product_#{cart_index}"),{duration:0.5}); #{remote_function( :url => { :view => 'review_cart', :action => 'remove_product', :cart_index => cart_index})}; return false;}	%>
+																
+						</div>
+					</td>
+				</tr>
+				<tr height="25">
+					<td align="right" height="25">	
+						<input type="hidden" name="cart_index" id="cartIndex" value="<%= cart_index %>">
+						
+						<strong>Custom Name</strong>
+					</td>
+					<td width="40%" height="25">
+						<%= text_field_tag	"custom_name", 
+																( cart_product.custom_name or 'Enter a name for this item'),
+																:id => "product[#{cart_index}][custom_name]",
+																:size => 24, :maxlength => 25
+						%>
+					</td>
+					<td rowspan="20" align="right" valign="bottom" bgcolor="#ececec" width="200">
+						<%= render :partial => 'cart_product_totals', :locals => { :cart_product => cart_product } %>
+					</td>
+				</tr>
+				
+				<tr height="25">
+					<td height="25">
+						<div align="left"></div>
+					</td>
+					<td width="40%" height="25">
+					<!-- Original Code -->
+						<%= image_tag cart_product.product.cart_image %>
+					
+					<!-- new code for changing appropriate images -->
+					
+					<!-- end of new code -->
+					</td>
+				</tr>
+				
+				<tr>
+					<td align="right">Size</td>
+					<td width="40%">
+						<%= select_tag	"product_id", 
+														options_for_select( cart_product.product.product_page.enabled_products.collect{ |p| [ ( dimensions_nice(p.width, p.height) + "\""), p.id ] }, cart_product.product.id ),
+														:id => "product[#{cart_index}][product_id]"
+						%>
+					</td>
+				</tr>
+
+				<tr>
+					<td align="right">Quantity</td>
+					<td width="40%">
+						<%=	select_tag	"quantity",
+														quantity_options(cart_product.product, cart_product.quantity),
+														:id => "product[#{cart_index}][quantity]"
+						%>
+					</td>
+				</tr>
+
+		<%	cart_product.product.product_options.each do | option |	%>
+	
+				<tr <%= option.never_visible ? "style='display: none;'" : "" %>>
+					<td align="right">
+						<%= option.title %>
+					</td>
+					<td width="40%">
+						<%= product_options_select( cart_product.product, option, cart_product.soft_options[option.title.downcase] ) %>
+					</td>
+				</tr>
+					<% if option.title.downcase == "mailing" %>
+				<tr class="mail_quantity">
+					<td align="right">
+						Quantity To Be Mailed
+					</td>
+					<td width="40%">
+						<input type="text" size="8" name="mailing_quantity" id="mailing_quantity" value="<%= cart_product.mailing_quantity %>">
+						
+						<script>
+						if ( $('product_options[mailing]') && $('product_options[mailing]').value == 'None' ) { $$('tr.mail_quantity').each( function( trow ) { trow.style.display = 'none'; } ) } else { $$('tr.mail_quantity').each( function( trow ) { trow.style.display = 'table-row'; } ) }
+						</script>
+						
+					</td>
+				</tr>
+				<% end %>
+			<% end %>			
+			
+			<tr>
+				<td align="right" valign="top">
+					Comments
+				</td>
+				<td width="40%">
+					<input type="text" size="30" name="comments" id="comments" maxlength="100" value="<%= cart_product.comments %>">
+					<br/>
+					Additional notes if desired; Custom bindery, trim, folding, die cut, etc. Please do not ask for color matching, text changes, etc. We print all files as received in accordance to our guidelines.
+				</td>
+			</tr>
+			
+			<tr>
+					<td align="right">Tax Exempt</td>
+					<td>
+						<select name="products[<%= cart_product.cart_index %>][tax_exempt]" style="font-size:8pt" onchange="if (this.value == 'none' || this.value=='mail') { $('products[<%= cart_product.cart_index %>][reseller_id]').value = ''; };">
+							<option value="none">None</option>
+							<option value="resale" <%= "SELECTED" if (params[:products] and params[:products][cart_product.cart_index.to_s] and params[:products][cart_product.cart_index.to_s][:tax_exempt] == 'resale') or ( cart_product.reseller_id and not cart_product.reseller_id.empty?) %>>Resale</option>
+							<option value="mail" <%= "SELECTED" if (params[:products] and params[:products][cart_product.cart_index.to_s] and params[:products][cart_product.cart_index.to_s][:tax_exempt] == 'mail') or cart_product.mail_house %>>Direct Mail </option>
+						</select>
+					</td>
+				</tr>
+				
+				<tr id="product_<%= cart_product.cart_index %>_reseller" style="<%= 'display: none;' unless (params[:products] and params[:products][cart_product.cart_index.to_s] and params[:products][cart_product.cart_index.to_s][:tax_exempt] == 'resale') or (cart_product.reseller_id and not cart_product.reseller_id.empty?) %>">
+					<td align="right" width="100">CA Resale #</td>
+					<td width="40%"><input type="text" name="reseller_id" id="products[<%= cart_product.cart_index %>][reseller_id]" value="<%= cart_product.reseller_id %>" maxlength="15"></td>
+				</tr>
+				
+				<tr id="" style="<%= 'display: none;' unless (params[:products] and params[:products][cart_product.cart_index.to_s] and params[:products][cart_product.cart_index.to_s][:tax_exempt] == 'resale') or (cart_product.reseller_id and not cart_product.reseller_id.empty?) %>">
+					<td align="left" colspan="2">CA Residents with a valid reseller's license only. Enter your permit number above. You must fax us a copy of the CA Resale Certificate Form (below) for our records. A copy of your Seller's Permit is NOT acceptable. Once accepted, this form will remain on file for one year. Fax the completed form to (415) 357-0804.<br/><br/>
+						<b>Please note:</b> a resale number can ONLY be used if the postcard themselves are being resold. Using a resale number for self promotion, marketing or advertising to avoid sales tax is not allowable by law. <b>If you do not intend to resell these cards, please leave this field blank.</b><br/><br/>
+						<%= link_to 'CA Reseller Form', "/forms/rocket_resale.pdf" %>
+						</td>
+				</tr>
+				
+				<tr id="" style="<%= 'display: none;' unless (params[:products] and params[:products][cart_product.cart_index.to_s] and params[:products][cart_product.cart_index.to_s][:tax_exempt] == 'mail') or (cart_product.mail_house) %>">
+					<td align="left" colspan="2">If your entire order is being sent directly to a mail house, your order can be tax-exempt. In order to quality, you must print out and fax in the form below to (415) 357-0804. A separate form must be completed for each order being mailed. We keep the form on file with your order for tax purposes.<br/><br/>
+						<b>Please note:</b> if you plan to print more than your mailing list quantity and plan to pick up or ship it in CA, you will be charged tax on those pieces.<br/><br/>
+						<%= link_to 'Mail House Form', "/forms/rocket_mailhouse.pdf" %>
+						</td>
+				</tr>
+			
+				<tr>
+					<td align="right">
+						<div id="spinny"></div>
+					</td>
+					<td width="40%">
+						<input type="image" src="/images/save-changes-btn.gif" alt="" name="save_changes" id="saveChanges" />
+					</td>
+				</tr>
+			</table>
+			
+		</td>
+		<td bgcolor="#999999" width="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>
+<% end %>
+<%= observe_form "editCart_#{cart_index}", :url => { :action => 'edit_cart', :save => true, 
+																											:view => 'review_cart', :cart_index => cart_index }, :with => "" %>
+																				
+<%= observe_form "editCart_#{cart_index}", :function => "$$(\"#editCart_#{cart_index} #spinny\").first().update(\"<img src='/images/status_loading.gif'/> \")" %>

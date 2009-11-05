@@ -1,0 +1,202 @@
+<div id="data">
+<div id="product" class="panel left fullwidth">
+<div class="title">
+	<%= @record.title %>					
+</div>
+<div class="content">
+	
+	
+	<% form_tag( {:action => 'edit', :id => @record.id, :view => 'detail'} ,  :id => 'editProduct' ) do %>
+	
+	<div id="productInfo">
+		<label for="product[title]" class="productLabel">Name</label>
+		<%= secure_text_field( @record, :title, "product[title]", :size => 20 ) %>
+		<br class="clear">
+		
+		<label for="product[sku]" class="productLabel">SKU</label>
+		<%= secure_text_field( @record, :sku, "product[sku]", :size => 8 ) %>
+		<br class="clear">
+		
+		<label for="product[product_code]" class="productLabel">Code</label>
+		<%= secure_text_field( @record, :product_code, "product[product_code]", :size => 8 ) %>
+		<br class="clear">
+		
+		<label for="product[disabled]" class="productLabel">Disabled</label>		
+		<%= secure_check_box( @record, 
+													:disabled, 
+													"product[disabled]", @record.disabled ) %>
+		<br class="clear">
+		
+		<label for="product[sort_order]" class="productLabel">Sort Order</label>
+		<%= secure_text_field( @record, :sort_order, "product[sort_order]", :size => 3 ) %>
+		<br class="clear">
+		
+		<label for="product[height]" class="productLabel">Height</label>
+		<%= secure_text_field( @record, :height, "product[height]", :size => 6 ) %>
+		<br class="clear">
+		
+		<label for="product[width]" class="productLabel">Width</label>
+		<%= secure_text_field( @record, :width,  "product[width]", :size => 6 ) %>
+		<br class="clear">
+		
+		<label for="product[clarifying_info]" class="productLabel">Menu Text</label>
+		<%= secure_text_field( @record, :clarifying_info, "product[clarifying_info]", :size => 16 ) %>
+		<br class="clear">
+		
+		<label for="product[setup_price]"  class="productLabel">Setup Price</label>
+		<%= secure_text_field( @record, :setup_price, "product[setup_price]", :size => 8 ) %>
+		<br class="clear">
+		
+		<label for="product[turnaround_offset]"  class="productLabel">Turnaround Offset</label>
+		<%= secure_text_field( @record, :turnaround_offset, "product[turnaround_offset]", :size => 2 ) %>
+		<br class="clear">
+		
+		<label for="product[product_page_id]" class="productLabel">Product Page</label>
+		<%= secure_select(  @record, 
+		                		'product_page_id', 
+		                		'product[product_page_id]', 
+		                		@product_pages.inject([ '' ]) { | a, p | a << [ p.name, p.id ] } ) %>
+		<br class="clear"> 
+		
+		<label for="product[cart_image]"  class="productLabel">Cart  Image</label>
+		<%= secure_text_field( @record, :cart_image, "product[cart_image]", :size => 16 ) %>
+		<br class="clear">
+		
+		<table>
+			<tr>
+				<td></td>
+				<td>1-Side</td>
+				<td>2-Side</td>
+			</tr>
+			<tr>
+				<td><label for="product[one_sided_layout_price]" class="productLabel">Layout Price</label>
+				<td><%= secure_text_field( @record, :one_sided_layout_price, "product[one_sided_layout_price]", :size => 6 ) %></td>
+				<td><%= secure_text_field( @record, :two_sided_layout_price, "product[two_sided_layout_price]", :size => 6 ) %></td>
+			</tr>
+			<tr>
+				<td><label for="product[one_sided_design_price]" class="productLabel">Design Price</label>
+				<td><%= secure_text_field( @record, :one_sided_design_price, "product[one_sided_design_price]", :size => 6 ) %></td>
+				<td><%= secure_text_field( @record, :two_sided_design_price, "product[two_sided_design_price]", :size => 6 ) %></td>
+			</tr>
+		</table>
+		
+		<label for="product[weight_per_unit]" class="productLabel">Weight Per Unit</label>
+		<%= secure_text_field( @record, :weight_per_unit, "product[weight_per_unit]", :size => 6 ) %><br class="clear">
+		<label for="product[weight_per_unit]" class="productLabel">Weight Unit Size</label>
+		<%= secure_text_field( @record, :weight_unit_size, "product[weight_unit_size]", :size => 4 ) %><br class="clear">
+		
+		<label for="product[default_quantity]" class="productLabel">Default Quantity</label>
+		<%= secure_select(  @record, 
+		                		'default_quantity', 
+		                		'product[default_quantity]', 
+		                		@record.quantity_options.collect { | q | [ q, q ] } ) %>
+		<br class="clear">
+		
+		<label for="product[price_zones]" class="productLabel">Markups</label>
+		
+		<div id="priceZones">
+			<table>
+				<tr>
+					<td>MaxQuantity</td>
+					<td>Markup</td>
+					<td>Increment</td>
+				</tr>
+				<% for price_zone in @record.price_zones %>
+				<tr>
+					<td>
+						<%= secure_text_field( price_zone, :max_quantity,  "price_zones[#{price_zone.id}][max_quantity]", :size => 6 ) %>
+					</td>
+					<td>
+						<%= secure_text_field( price_zone, :markup,  "price_zones[#{price_zone.id}][markup]", :size => 6 ) %>
+					</td>
+					<td>
+						<%= secure_text_field( price_zone, :quantity_increment,  "price_zones[#{price_zone.id}][quantity_increment]", :size => 6 ) %>
+					</td>
+				</tr>
+				<% end %>
+				<% if @record.can_write?(:price_zones) %>
+				<tr>
+					<td>
+						<%= text_field_tag "new_price_zone[max_quantity]", nil, :size => 6 %>
+					</td>
+					<td>
+						<%= text_field_tag "new_price_zone[markup]", nil, :size => 6 %>
+					</td>
+					<td>
+						<%= text_field_tag "new_price_zone[quantity_increment]", nil, :size => 6 %>
+					</td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+		<br class="clear">
+	</div>
+	
+	
+	
+	<div class="productOptions">
+		<ul id="productOptions">
+		Options
+			
+			<% for option in @record.product_options %>
+				<li class="productOption"><%= option.title %></li>
+				<ul class="productOptionValues">
+				<% for option_value in option.product_option_values %>
+					<%	if @record.product_option_values.include?(option_value) 
+								checked = true 
+								if @record.product_option_values.find(option_value.id).default and @record.product_option_values.find(option_value.id).default.to_i == 1
+									default = true
+								else
+									default = false
+								end
+							else
+								checked, default = false 
+							end 
+							
+							
+							%>
+								<li class="productOptionValue"> 
+								<%= secure_check_box( @record, 
+																			:product_option_values, 
+																			"product_option_values[#{option_value.id}]", checked ) %>
+								
+								<%= secure_radio_button( @record, :product_option_values, "product_option_value_defaults[#{option.id}]", option_value.id, default, :class => 'default_radio' ) %>
+								<label class="productOptionValue"><%= option_value.label %></label>
+								
+								<% if option.title.downcase == "ink" 
+										makeready = option_value.make_readies.find(:first, :conditions => "product_id = #{@record.id}") %>
+								<label for="makereadies[<%= option_value.id %>]" class="makeReadyLabel">MR</label>
+								<input type="text" name="makereadies[<%= option_value.id %>]" size="6" value="<%= makeready.price if makeready %>">
+								<% end %>
+								<br class="clear">
+								</li>
+				<% end %>
+				</ul>
+			<% end %>
+			
+			<% if @record.can_write?(:product_option_values) and (ProductOption.find(:all) - @record.product_options ).length > 0 %>
+			<li class="productOption">
+				<% new_options = "<option value='none' SELECTED>Additional Options</option>" %>
+				<% new_options += options_for_select((ProductOption.find(:all) - @record.product_options ).collect { |po| [ po.title, po.id ] }) %>
+				<%= select_tag( "new_product_option", new_options ) %>
+				
+				<input type="submit" name="add_product_option" value="Add" id="add_product_option">
+				
+				<br class="clear">
+				
+			</li>
+			<% end %>
+		</ul>
+	</div>
+	
+	<br class="clear">
+
+	<input type="submit" value="Save Product" name="save_product" id="save_product">
+	
+<% end %>
+
+<br class="clear">
+</div>
+</div>
+</div>
+

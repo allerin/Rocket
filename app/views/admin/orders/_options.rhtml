@@ -1,0 +1,55 @@
+<% if @record.product %>
+
+<style>
+ table.productsTable select { max-width: 120px !important; }
+</style>
+
+<table width="100%">
+	<tr>
+		<td valign="top" id="option_set_0" width="33%">
+			<%= render :partial => 'option_set', :locals => { :i => 0 }%>
+		</td>
+		<td valign="top" id="option_set_1" width="33%">
+			<%= render :partial => 'option_set', :locals => { :i => 1 }%>
+		</td>
+		<td valign="top" width="33%">
+			<table class="productsTable" width="100%" id="extra-charges">
+				<thead>
+					<tr>
+						<th>Charges [<%= link_to_function 'Add', "showNextCharge()" %>]</th>
+						<th>Amount</th>
+					</tr>
+					<% @record.extra_charges.each_with_index do |charge, i| %>
+						<tr style=''>
+							<td><%= text_field_tag "charges[#{i}][name]", charge.name, :size => 16 %></td>
+							<td><%= text_field_tag "charges[#{i}][price]", charge.price, :size => 6 %></td>
+						</tr>
+					<% end %>
+					<% (@record.extra_charges.length..(@record.extra_charges.length + 10)).each do |i| %>
+					<tr id="new_charges[<%= i %>]" style='display:none;'>
+						<td><%= text_field_tag "charges[#{i}][name]", '', :size => 16 %></td>
+						<td><%= text_field_tag "charges[#{i}][price]", '', :size => 6 %></td>
+					</tr>
+					<% end %>
+				</thead>
+			</table>
+		</td>
+	</tr>
+	
+</table>
+
+<script>
+	function showNextCharge() {
+		done = false;
+		$A($('extra-charges').getElementsByTagName('tr')).each(function(row) {
+			if (!done && row.style.display == 'none') {
+				row.style.display='table-row';
+				done = true;
+			}
+		})
+	}
+</script>
+<div style="clear: both;"></div>
+		
+<% end %>
+

@@ -1,0 +1,94 @@
+<table class=" tax_report" cellspacing="2">
+	<thead>
+		<tr>
+			
+			<th width="60">Company</th>
+			<th>Invoiced</th>
+			
+			<th>Current</th>
+			<th>30-59</th>
+			<th>60-89</th>
+			<th>90+</th>
+			<th>Balance</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+	<% i = 1 %>
+	<%	current_total = 0.0 
+	 		total_30 = 0.0 
+			total_60 = 0.0 
+			total_90 = 0.0
+			total = 0.0 %> 
+	<% @orders.each do |order| %>
+		<% elapsed = (order.invoice and order.invoice.sent_at) ? ((Time.now.to_i - order.invoice.sent_at.to_i) / 60 / 60 / 24) : 0 %>
+		<%	if elapsed < 30 
+					current_total += order.amount_due
+				elsif elapsed >= 30 and elapsed < 60
+					total_30 += order.amount_due
+				elsif elapsed >= 60 and elapsed < 90
+					total_60 += order.amount_due
+				else
+					total_90 += order.amount_due
+				end 
+				total += order.amount_due %>
+		<tr class="tax_report">
+		
+			<td ><label style="width: 80px; height: 14px; overflow: hidden;"><%= order.invoice.customer.company || order.invoice.address.company %></label></td>
+			<td><%= order.invoice.sent_at.strftime("%m/%d/%y") if order.invoice and order.invoice.sent_at %></td>
+			
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '') if elapsed < 30 %></td>
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '') if (elapsed >= 30 and elapsed < 60) %></td>
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '') if (elapsed >= 60 and elapsed < 90) %></td>
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '') if (elapsed >= 90) %></td>
+			<td class="numeric"><%= number_to_currency(order.amount_due, :unit => '') %></td>
+			
+		</tr>	
+		<% if i.modulo(45).zero? and not i.zero? %>
+</table><br/>
+<table class=" tax_report" cellspacing="2">
+		<thead>
+		<tr>
+			<th>Job</th>
+			<th>Company</th>
+			<th>Start</th>
+			<th>Elapsed</th>
+			<th>Current</th>
+			<th>30-59</th>
+			<th>60-89</th>
+			<th>90+</th>
+			<th>Balance</th>
+			<th>Batch</th>
+		</tr>
+	</thead>
+	<tbody>	
+		<% end %>
+		<% i += 1 %>
+	<% end %>
+	<tr class="tax_report grand_total">
+		<td colspan="2" class="grand_total_label" valign="center">Grand Totals</td>	
+		<td class="numeric"><%= number_to_currency(current_total, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(total_30, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(total_60, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(total_90, :unit => '') %></td>
+		<td class="numeric"><%= number_to_currency(total, :unit => '') %>
+		<td colspan="1">&nbsp;</td>
+	</tr>
+	</tbody>
+</table>
+
+<style>
+	table.tax_report { width: 680px; margin-left: 8px; margin-top: -8px; page-break-after: always;}
+	tr.tax_report td { font-size: 12px; }
+	tr.tax_report td.numeric { text-align: right; }
+	th.numeric { text-align: right;}
+	tr.grand_total td { height: 28px; border-top: 2px solid black; }
+	td.grand_total_label { padding-right: 4px; font-size: 12px !important; font-weight: bold; text-align: right; }
+	
+	table.tax_report thead tr {
+	background-color: black;
+	color: white;
+	font-size: .8em;
+	text-align: left;
+}
+</style>

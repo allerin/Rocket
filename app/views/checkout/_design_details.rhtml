@@ -1,0 +1,178 @@
+
+	<table width="548" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><img src="/images/design-title-main.gif" alt="" height="33" width="350" border="0" /></td>
+		</tr>
+		<tr>
+			<td>
+				<% form_tag( { :action => 'design_details' }, :name => 'designDetailsForm', :id => "designDetailsForm" ) do %>
+					<div align="left">
+						<table width="530" border="0" cellspacing="0" cellpadding="0">
+
+							<tr>
+								<td colspan="3"><img src="/images/design-orderform-tab-pt2.gif" alt="" height="30" width="530" border="0" /></td>
+							</tr>
+							<tr>
+								<td width="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+								<td>
+									<table width="505" border="0" cellspacing="2" cellpadding="8">
+										<tr>
+											<td width="72%"><span class="small">Please answer the following questions about your layout:</span></td>
+
+											<td rowspan="7"></td>
+										</tr>
+										<tr>
+											<td width="72%">
+												Name this layout:
+													<input name="custom_name" type="text" size="24" value="<%= params[:custom_name] %>">
+											</td>
+										</tr>
+										<tr>
+											<td width="72%">
+											This layout is for:
+												<% if @cart.products.empty? and @cart.packages.empty? %>
+													<select name="for_product_id" id="for_product_id">
+														<% Product.find(:all, :order => 'product_page_id', :conditions => "disabled IS NULL or disabled=0" ).each do |product| %>
+														<% next unless product.one_sided_layout_price.to_f > 0 or product.two_sided_layout_price.to_f > 0 %>
+															<option value="<%= product.id %>" <%= selected_string( product.id.to_s == params[:for_product_id] ) %> ><%= product.title %></option>
+														<% end %>
+													</select>
+													<%= observe_field 'for_product_id', :url => { :action => 'design_details' }, 
+																														:with => "for_product_id" %>
+
+												<% else %>
+													<select name="for_cart_item" id="for_cart_item">
+													<% @cart.products.each do | cart_product | %>
+														<option value="product_<%= cart_product.cart_index %>" <%= selected_string( cart_product == @cart_design.for_cart_item ) %> >
+															<%= cart_product.custom_name or cart_product.product.title %>
+														</option>
+													<% end %>
+													<% @cart.package_items.each do | cart_package_item | %>
+														<option value="package_item_<%= cart_package_item.cart_index %>" <%= selected_string( cart_package_item == @cart_design.for_cart_item ) %> >
+															<%= (cart_package_item.custom_name and not cart_package_item.custom_name.empty?) ? cart_package_item.custom_name : cart_package_item.product.title %>
+														</option>
+													<% end %>
+													</select>
+													<%= observe_field 'for_cart_item', :url => { :action => 'design_details' }, 
+																														:with => "for_cart_item" %>
+
+												<% end %>
+											</td>
+										</tr>
+										
+										<% if @cart_design.product.one_sided_layout_price and @cart_design.product.two_sided_layout_price and @cart_design.product.one_sided_layout_price > 0 and @cart_design.product.two_sided_layout_price > 0 %>
+										<tr>
+											<td width="72%">
+												Number of sides:
+												<%= design_options_select( :sides, params[:sides] ) %>
+											</td>
+										</tr>
+										<% end %>
+										
+										<tr>
+											<td width="72%"><span class="subhead">Images</span>
+												<p>Number of images I am supplying: 
+													<%= design_options_select( :number_of_images, params[:number_of_images] ) %>
+												</p>
+											</td>
+										</tr>
+										<tr>
+											<td width="72%">Image/Logo format:
+												<%= design_options_select( :image_format, params[:image_format] ) %> 
+												<br />
+											</td>
+										</tr>
+
+										<tr>
+											<td width="72%">I am providing my images via:
+												<%= design_options_select( :image_delivery, params[:image_delivery] ) %> 
+											</td>
+										</tr>
+										<tr>
+											<td width="72%">Image cropping: 
+												<%= design_options_select( :image_cropping, params[:image_cropping] ) %>
+											</td>
+										</tr>
+										<tr>
+											<td width="72%">Image borders: 
+												<%= design_options_select( :image_borders, params[:image_borders] ) %>
+											</td>
+										</tr>
+										<tr>
+
+											<td width="72%"><span class="subhead">Mock-Up</span>
+												<p>I am providing my mock-up via: 
+													<%= design_options_select( :mockup_delivery, params[:mockup_delivery] ) %>
+												</p>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2"><span class="subhead">Text</span>
+
+												<p>I am providing the text for my layout via:
+													<%= design_options_select( :copy_delivery, params[:copy_delivery] ) %> 
+												</p
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">Please type or paste the text for your layout into the following text area:
+												<p><textarea name="copy" rows="17" cols="60" wrap="physical"><%= params[:copy] %></textarea></p>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2"><span class="subhead">Proofs</span>
+
+												<p>I would like a printed color proof ($20) of my job: 
+													<%= design_options_select( :proof, params[:proof] ) %>
+												</p>
+											</td>
+										</tr>
+										<tr>
+
+											<td colspan="2" >I would like to receive a proof of my layout via: 
+												<%= design_options_select( :proof_delivery, params[:proof_delivery] ) %>
+											</td>
+										</tr>
+										<tr>
+
+											<td colspan="2"><span class="subhead">Fonts</span>
+												<p>We offer 22 different fonts that you can use in your layout. <br />
+													<a href="/forms/Rocket-Font-Menu.pdf"><span class="small">Download PDF of font menu.</span></a> </p>
+												<p>Please choose the fonts that you would like for your layout (maximum 2):</p>
+												<p>
+													Font #1
+													<%= design_options_select( :font_1, params[:font_1] ) %> 
+
+													
+													Font #2
+													<%= design_options_select( :font_2, params[:font_2] ) %> 
+												</p>
+												<p>You can describe how you would like these fonts used in the comments area.</p>
+												<p>Comments</p>
+												<p>Please provide any special instructions for image, text and font use here:</p>
+
+												<p><textarea name="comments" rows="17" cols="60" wrap="physical"><%= params[:comments] %></textarea></p>
+												<p>If need clarification on any aspect of your design order or would like to discuss an issue that is not described in this order form, please send an email to:  <a href="mailto:design@rocketpostcards.com">design@rocketpostcards.com</a></p>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<input type="image" name="submit" src="/images/add-to-cart-btn.gif" alt="" value="submit"/>
+											</td>
+										</tr>
+
+									</table>
+								</td>
+								<td width="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+							</tr>
+							<tr height="1">
+								<td colspan="3" height="1" background="/images/grey-1px-square.gif"><img src="/images/grey-1px-square.gif" alt="" height="1" width="1" border="0" /></td>
+							</tr>
+						</table>
+					</div>
+
+				<% end %>
+			</td>
+		</tr>
+	</table>
+ 

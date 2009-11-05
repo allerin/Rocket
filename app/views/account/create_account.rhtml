@@ -1,0 +1,201 @@
+<%	
+		params[:customer] ||= {}
+		params[:customer][:billing_address] ||= {}
+		params[:customer][:shipping_address] ||= {}
+		
+		states = { 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas', 'AA' => 'Armed Forces Americas', 'AE' => 'Armed Forces Europe', 'AP' => 'Armed Forces Pacific', 'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DC' => 'D.C.', 'DE' => 'Delaware', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas', 'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey', 'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'PR' => 'Puerto Rico', 'RI' => 'Rhode Island', 'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah', 'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin', 'WY' => 'Wyoming' }.invert.sort{ |a,b| a[0] <=> b[0] }
+%>
+
+<td valign="top" width="569">
+	<p><img src="/images/title-cart.gif" alt="" height="33" width="350" border="0" /><br />
+		<img src="/images/checkout-graph1.gif" alt="" height="29" width="550" border="0" /></p>
+	<div class="subhead">
+		<p>CREATE A NEW ACCOUNT</p>
+	</div>
+
+	<% form_tag( { :action => 'create_account' }, :name => 'create_account', :id => "createAccount" ) do %>
+
+	<p>Set up your new account by providing the following information. The next time you visit us, all you will need is be your email address and password to place an order.</p>
+	
+	<% if flash[:error] %>
+		<div class="error">
+			<%= flash[:error] %>
+		</div class="error">
+	<% end %>
+	
+	<table width="447" border="0" cellspacing="0" cellpadding="6">
+		<tr>
+			<td align="right">Email Address:</td>
+			<td><input type="text" name="customer[email]" value="<%= params[:customer][:email] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">Password:</td>
+
+			<td><input type="password" name="customer[password]" size="19" /></td>
+		</tr>
+		<tr>
+			<td align="right">Confirm Password:</td>
+			<td>
+				<div class="small">
+					<input type="password" name="customer[confirm_password]" size="19" /></div>
+			</td>
+
+		</tr>
+		<tr>
+			<td class="subhead" colspan="2" align="right">
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td class="subhead" align="right">BILLING ADDRESS</td>
+
+			<td></td>
+		</tr>
+		<tr>
+			<td align="right">First Name:</td>
+			<td><input type="text" name="customer[billing_address][first_name]" value="<%= params[:customer][:billing_address][:first_name] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">Last Name:</td>
+			<td><input type="text" name="customer[billing_address][last_name]" value="<%= params[:customer][:billing_address][:last_name] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">Company:</td>
+			<td><input type="text" name="customer[billing_address][company]" value="<%= params[:customer][:billing_address][:company] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">Business Category:</td>
+			<td>
+				<%= select_tag 'customer[kind]', options_for_select([	'Artist/Gallery', 'Personal', 'Small Business', 'Corporate','Event', 'Club', 'Theater/Performance', 'Media', 'Other'], params[:customer][:kind])%>
+				
+			</td>
+		</tr>		
+		<tr>
+			<td align="right">Address Line 1:</td>
+
+			<td><input type="text" name="customer[billing_address][address_1]" value="<%= params[:customer][:billing_address][:address_1] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">Address Line 2:</td>
+			<td><input type="text" name="customer[billing_address][address_2]" value="<%= params[:customer][:billing_address][:address_2] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">City:</td>
+			<td><input type="text" name="customer[billing_address][city]" value="<%= params[:customer][:billing_address][:city] %>" size="31" /></td>
+		</tr>
+		<tr>
+			<td align="right">State:</td>
+			<td><select name="customer[billing_address][state]" class="sitewideinput">
+					<%= options_for_select( states, params[:customer][:billing_address][:state] ) %>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Zip Code:</td>
+			<td><input type="text" name="customer[billing_address][zip]" value="<%= params[:customer][:billing_address][:zip] %>" size="10" /></td>
+		</tr>
+		<tr>
+			<td align="right">Phone Number:</td>
+			<td><input type="text" name="customer[billing_address][phone]" value="<%= params[:customer][:billing_address][:phone] %>" size="20" /></td>
+		</tr>
+		<tr>
+			<td align="right">Fax Number:</td>
+			<td><input type="text" name="customer[billing_address][fax]" value="<%= params[:customer][:billing_address][:fax] %>" size="20" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="right">
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td class="subhead" align="right">SHIPPING ADDRESS</td>
+			<td>
+				<input type="checkbox" id="same_address" name="same_address" value="1" <%= "checked = 'checked'" if params[:same_address] == "1" %> /> Same as billing address.
+				
+				<script>
+					if ($('same_address').checked) {	$$('tr.shippingAddress').each( function(tr) { Effect.Fade( tr, { duration: 0.4} ); } ) }
+					
+					Event.observe('same_address', 'click', function(e){ 
+						if ($('same_address').checked) { 
+							$$('tr.shippingAddress').each( function(tr) { Effect.Fade( tr, { duration: 0.4} ); } ) }
+						else { 
+							$$('tr.shippingAddress').each( function(tr) { Effect.Appear( tr, { duration: 0.5 } ); } ) }
+					})
+				</script>
+				
+			
+			</td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">First Name:</td>
+			<td><input type="text" name="customer[shipping_address][first_name]" value="<%= params[:customer][:shipping_address][:first_name] %>" size="31" class="shippingAddress" /></td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">Last Name:</td>
+			<td><input type="text" name="customer[shipping_address][last_name]" value="<%= params[:customer][:shipping_address][:last_name] %>" size="31" class="shippingAddress" /></td>
+		</tr>
+		<tr class="shippingAddress">
+
+			<td align="right"  >Address Line 1:</td>
+			<td><input type="text" name="customer[shipping_address][address_1]" value="<%= params[:customer][:shipping_address][:address_1] %>" size="31" class="shippingAddress"/></td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">Address Line 2:</td>
+			<td><input type="text" name="customer[shipping_address][address_2]" value="<%= params[:customer][:shipping_address][:address_1] %>" size="31" class="shippingAddress"/></td>
+		</tr>
+		<tr class="shippingAddress" >
+
+			<td align="right">City:</td>
+			<td><input type="text" name="customer[shipping_address][city]" value="<%= params[:customer][:shipping_address][:city] %>" size="31" class="shippingAddress" /></td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">State:</td>
+			<td>
+				<select name="customer[shipping_address][state]" class="sitewideinput" class="shippingAddress">
+					<%= options_for_select( states, params[:customer][:shipping_address][:state] ) %>
+				</select>
+			</td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">Zip Code:</td>
+			<td><input type="text" name="customer[shipping_address][zip]" value="<%= params[:customer][:shipping_address][:zip] %>" size="10" class="shippingAddress" /></td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">Phone Number:</td>
+			<td><input type="text" name="customer[shipping_address][phone]" value="<%= params[:customer][:shipping_address][:phone] %>" size="20" class="shippingAddress" /></td>
+		</tr>
+		<tr class="shippingAddress" >
+			<td align="right">Fax Number:</td>
+			<td><input type="text" name="customer[shipping_address][fax]" value="<%= params[:customer][:shipping_address][:fax] %>" size="20" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="right">
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<%= check_box_tag "customer[send_promo]", 1, true %>
+				Send me promotional materials.
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="right">
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>CA Merchants who intend to resale our products must provide a valid resale license number:</p>
+	<div align="left">
+		<div class="subhead">
+			<p>CA Resale # <input type="text" name="customer[reseller_id]" size="31" value="<%= params[:customer][:reseller_id] %>" /></p>
+
+		</div>
+		<p><span class="tiny">CA Residents with a valid resellers license only. Enter your permit number above. You must fax us a copy of the Resale Certificate Form (below) for our records, a copy of your Seller's Permit is NOT acceptable. Once accepted, this form will remain on file for one year. Fax the completed form to (415) 357-0804. <a href="reg1668RESALE.pdf">Download form.</a></span></p>
+		<p><span class="tiny">Please note: a resale number can ONLY be used if the postcards themselves are being resold. Using a resale number for self promotion, marketing or advertising to avoid sales tax is not allowable by law. If you do not intend to resell these cards, please leave this field blank.</span></p>
+	</div>
+	<p align="center"><input type="image" src="/images/submit-btn.gif" alt="" /></p>
+	
+	<% end %>
+</td>

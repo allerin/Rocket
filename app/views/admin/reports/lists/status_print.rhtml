@@ -1,0 +1,8 @@
+<h1 style="margin-left: 6px; font-size: 1.8em; margin-bottom: 0px;">
+<%= params[:batch] %> Status <%= params[:run] %> Report
+</h1>
+<%= render :partial => "admin/reports/lists/status" %>
+
+<% if params[:print] %>
+	<script>setTimeout('window.print()', 500)</script>
+<% end %>

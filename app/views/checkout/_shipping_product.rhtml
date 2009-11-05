@@ -1,0 +1,152 @@
+<%= stylesheet_link_tag 'ibox' %>
+<%= javascript_include_tag 'ibox' %>
+
+<iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
+
+<% shipping_address =  cart_product.shipping_address || @current_customer.shipping_address  
+	 cart_index = cart_product.cart_index %>
+
+<table width="550" border="0" cellspacing="0" cellpadding="0">
+	<tr height="1">
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="14">
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+		<td height="14">
+			<table class="small" width="550" border="0" cellspacing="0" cellpadding="8">
+				<tr height="19">
+					<td align="left" bgcolor="#999999" width="182" height="19">
+						<div class="subhead-white">
+							<%= cart_product.product.title %>
+						</div>
+					</td>
+					<td align="left" bgcolor="#999999" width="18" height="19"></td>
+					<td align="right" bgcolor="#999999" width="284" height="19">
+						<div class="white-nav">
+							
+						</div>
+					</td>
+				</tr>
+				<tr height="18">
+
+					<td rowspan="3" valign="top" bgcolor="#ececec" width="182" height="264">
+						<strong><%= cart_product.custom_name %></strong>
+						<div class="subhead"></div>
+						
+						<p><%= image_tag cart_product.product.cart_image %></p>
+						<p>Size: <%= dimensions_nice cart_product.product.width, cart_product.product.height %>"</p>
+						<p>Quantity: <%= cart_product.quantity %> </p>
+						
+						<%	cart_product.product_options.each do | option, value | 
+									next if option.never_visible %>						
+							<p><%= option.title %>: <%= value.customer_label or value.label %></p>
+						<% 	if option.title == "Mailing" and value.label.downcase != "none" %>
+									<p>Quantity To Be Mailed: <%= cart_product.mailing_quantity %></p>
+						<% 	end 
+						 	end %>
+						
+						<% if cart_product.reseller_id %>
+						<p>Reseller ID: <%= cart_product.reseller_id.empty? ? 'None' : cart_product.reseller_id %></p>
+						<% end %>
+						
+						<p>
+							Comments: <%= (cart_product.comments and not cart_product.comments.empty?) ? cart_product.comments : 'None' %>
+						</p>
+						
+						<p>
+							<%= link_to 'Return To Cart To Edit This Item',
+							 						{ :view => 'review_cart', :action => 'review_cart', :edit_item => cart_index },
+													:id => "edit_item_#{cart_index}"
+							%>
+						</p>
+
+					</td>
+					<td align="right" valign="top" width="18" height="18"></td>
+					<td valign="middle" width="284" height="18">
+						<strong>
+							Quantity to be shipped: <%= cart_product.actual_shipping_quantity %>
+						</strong>
+					</td>
+				</tr>
+				<tr height="18">
+					<td align="right" valign="middle" width="18" height="18">
+						<input type="radio" name="product[<%= cart_index %>][shipping_location]" value="pickup" id="product[<%= cart_index %>][shipping_location][pickup]" <%= checked_string( cart_product.shipping_address.nil? ) %>/>
+					</td>
+					<td valign="middle" width="284" height="18">
+						I will pick up this item at Rocket. <%= link_to 'Get Directions', contactus_url, :target => "_blank" %>
+					</td>
+				</tr>
+				<tr height="196">
+					<td align="right" valign="top" width="18" height="196">
+						<input type="radio" name="product[<%= cart_index %>][shipping_location]" value="ship" id="product[<%= cart_index %>][shipping_location][ship]"  <%= checked_string( cart_product.shipping_address ) %>/>
+					</td>
+					<td valign="top" width="284" height="196">
+						<span class="subhead">Ship This Item To:</span>
+						<p>Choose shipping method:
+						</p>
+						<p>
+						</p>
+						<p>
+							<%= select_tag "product[#{cart_index}][shipping_method_id]", 
+															options_for_select( cart_product.shipping_methods.collect{ |s| [s.name, s.id ] }, cart_product.shipping_method_id ),
+															:id =>  "product[#{cart_index}][shipping_method_id]" %>
+							
+						</p>
+						<p>
+							<%= shipping_address.first_name + " " + shipping_address.last_name %><br />
+							<%= shipping_address.street_1 %><br />
+							<%= ( shipping_address.street_2 + '<br />' ) if shipping_address.street_2 and not shipping_address.street_2.empty? %>
+							<%= shipping_address.city + ", " + shipping_address.state + " " + shipping_address.zip %><br />
+							<%= shipping_address.phone %>
+						</p>
+
+						<p>
+							<%= link_to 'Change Shipping Address',
+							 						{ :action => 'change_address', :edit_item => cart_index }, :id => "change_shipping_#{cart_index}" %>
+              
+              <br/><br/><br/>
+				            
+				                <% @order = Order.find(@order) %>
+                                <span id="order11_<%= @order.id %>" >
+                                   <%= link_to "<strong style='font-size:11pt;'>Upload Artwork</strong>", { :controller => "upload", :action => "aa", :id => @order.id}, 
+                                	   :rel => "ibox?type=3&height=280&width=350" %>
+                                </span>
+            	     
+            </p>
+
+
+						<script>
+							 if ( $('product[<%= cart_index %>][shipping_location][pickup]').checked ) {  $('product[<%= cart_index %>][shipping_method_id]').disabled = true  }   else {  	$('product[<%= cart_index %>][shipping_method_id]').disabled = false;  }  
+							 init_ibox();
+						</script>
+						
+						<%= observe_form 'shippingInfoForm', :function => "if ( $('product[#{cart_index}][shipping_location][pickup]').checked ) {  	$('product[#{cart_index}][shipping_method_id]').disabled = true;  	 }  else {  	$('product[#{cart_index}][shipping_method_id]').disabled = false;   }" %>
+
+						</td>
+				</tr>
+				<tr height="84">
+					<td bgcolor="#ececec" width="182" height="84">
+						<%= render :partial => 'cart_product_totals', :locals => { :cart_product => cart_product } %>
+					</td>
+					<td width="18" height="84"></td>
+					<td align="right" valign="bottom" width="284" height="84">
+						<table width="282" border="0" cellspacing="0" cellpadding="4">
+							<tr>
+								<td><b>Shipping Cost:</b></td>
+								<td align="right"><b><div id="spinny"><%= number_to_currency cart_product.shipping_price %></span></b></td>
+				            </tr>
+
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td bgcolor="#999999" width="1" height="14"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+	<tr height="1">
+
+		<td colspan="3" bgcolor="#999999" height="1"><img src="/images/1px-spacer.gif" alt="" height="1" width="1" border="0" /></td>
+	</tr>
+</table>
+<br />
+<br />

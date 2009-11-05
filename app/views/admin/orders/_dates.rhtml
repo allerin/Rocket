@@ -1,0 +1,3 @@
+<span id="batch">Batch <%= @record.batch %></span>
+<span id="start">Start <%= @record.start_date.strftime("%a %m-%d-%y") if @record['start_date'] %></span>
+<span id="due">Due <%= @record['due_date'].strftime("%a %m-%d-%y") if @record['due_date'] %></span>

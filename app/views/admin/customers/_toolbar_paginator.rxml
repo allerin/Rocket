@@ -1,0 +1,27 @@
+xml.hbox(:id => 'toolbar-paginator') { |hbox|
+  hbox.toolbarbutton :id => "previous-page", :image => "/images/icons/book_previous.png", :dir => 'reverse',
+                     :oncommand => remote_function( :url => { :action => 'search_xul', :page => (paginator.current.number - 1 unless paginator.current.number == 1) }, 
+                     :loading => "$('spinner').removeAttribute('hidden');", 
+                     :complete => "$('spinner').setAttribute('hidden', 'true');", 
+                     :with => "Form.serialize('list-toolbar')")
+                     
+  xml.vbox { |vbox|
+    vbox.spacer :flex => 1
+    vbox.hbox{ |pages| 
+      pages.label :value => "Page ", :style => "margin-right: 0px; margin-left: 0px;"
+      pages.hbox(:width => '32px', :align => 'center') { |hb|
+        hb.spacer :flex => 1
+        hb.label :value => paginator.current.number, :id => 'page_number', :style => "margin-right: 0px; margin-left: 0px;"
+        hb.label :value => "/", :style => "margin-right: 0px; margin-left: 0px;"
+        hb.label :value => paginator.last.number, :id => 'total_pages', :style => "margin-right: 0px; margin-left: 0px;"
+        hb.spacer :flex => 1
+      }
+    }
+    vbox.spacer :flex => 1
+  }
+  hbox.toolbarbutton  :id => "next-page", :image => "/images/icons/book_next.png", 
+                      :oncommand => remote_function( :url => { :action => 'search_xul', :page => (paginator.current.number + 1 unless paginator.current.number == paginator.last.number) }, 
+                      :loading => "$('spinner').removeAttribute('hidden'); ", 
+                      :complete => "$('spinner').setAttribute('hidden', 'true');", 
+                      :with => "Form.serialize('list-toolbar')")  
+}

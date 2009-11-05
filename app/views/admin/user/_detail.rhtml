@@ -1,0 +1,73 @@
+
+
+<div id="data">
+<div id="user" class="panel left fullwidth">
+<div class="title">
+	Edit User 
+</div>
+<div class="content">
+
+	<% form_tag( {:action => 'edit', :id => @record.id} ,  :id => 'editUser' ) do %>
+
+	<label for="screen_name" class="userField">Username</label>
+	<input id="screen_name" class="userField" name="user[screen_name]" value="<%= @record.screen_name %>">
+	
+	<label for="first_name" class="userField">First Name</label>
+	<input id="first_name" class="userField" name="user[first_name]" value="<%= @record.first_name %>">
+	
+	<br class="clear">
+
+	<label for="email" class="userField">Email</label>
+	<input id="email" class="userField" name="user[email]" value="<%= @record.email %>">
+	
+	<label for="last_name" class="userField">Last Name</label>
+	<input id="last_name" class="userField" name="user[last_name]" value="<%= @record.last_name %>">
+	
+	<br class="clear">
+	
+	<div class="groupsBox">
+		<div class="collectionHeading">Roles</div>
+		<% for role in @roles %>
+		
+			<% checked = ("checked='checked'" if @record.role == role ) or "checked='unchecked'" %>
+
+				<div class="collectionItem">
+				<input type="radio" id="user[role_<%= role.id %>]" name="user[role_id]" value="<%= role.id %>" <%= checked %> >
+				<label for="user[role_<%= role.id %>]"><%= role.title %></label>
+				</div>
+
+				<br class="clear">
+		<% end %>
+	</div>
+	
+	<div class="newPasswordBox">
+		<div class="passwordInstructions">
+			Leave the password fields blank unless you want to assign this user a new password.
+		</div>
+	
+		<label for="password" class="userField">Password</label>
+		<input id="password" class="userField" name="password" value="" type="password">
+	
+		<br class="clear">
+	
+		<label for="password_confirmation" class="userField">Confirm</label>
+		<input id="password_confirmation" class="userField" name="password_confirmation" value="" type="password">
+	
+		<br class="clear">
+	
+	</div>
+	
+	<br class="clear">
+	
+	<div class="formSubmit">		
+		<input type="submit" value="Save User">
+	</div>
+	<div id="formStatus"></div>
+	
+	<br class="clear">
+	
+	<% end %>
+</div>
+
+</div>
+</div>

@@ -1,0 +1,18 @@
+<div id="data" class="list">
+
+<table>
+<% for record in @records %> 
+<tr class="orderIndex" id='order_<%= record.id %>' >
+<%= render( :partial => "list_table_row", :locals => { :order => record, :loading => @loading, :complete => @complete } ) %>
+</tr>
+<% end %>
+</table>
+
+<% if @records.length == 0 %>
+
+   <div class="invoice-list">
+      <p>No Orders Found</p>
+   </div>
+
+<% end %>
+</div>

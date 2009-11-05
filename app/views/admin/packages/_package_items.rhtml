@@ -1,0 +1,85 @@
+<ul id="package_items_list">
+<% @package.package_items.each do |item| %>
+		
+<li class="packageItem">	
+	<%= secure_select(  item, 
+		                	:product_id,
+		                	"package_items[#{item.id}][product_id]",  
+		                	@products.collect { | p | [ (p.title ), p.id ] } ) %>
+	
+
+	<%= link_to_remote 'Remove', :url => remove_product_from_package_url(:package_id => (@package.id or 'new'), :package_item_id => (item.id or 'new')) %>
+	<br class="clear">
+	
+	<label>Override Name:</label>
+	<%= secure_text_field( item, :custom_name, "package_items[#{item.id}][custom_name]", :size => 20 )%>
+	<br class="clear">
+	
+	<label>Default Quantity:</label>
+	<%= secure_select(  item, 
+		                	'default_quantity', 
+		                	"package_items[#{item.id}][default_quantity]", 
+		                	(item.quantity_options.collect { | q | [ q, q ] } rescue []) ) %>
+		
+	<br class="clear">
+	
+	<label>Min Quantity:</label>
+	<%= secure_text_field( item, :min_quantity, "package_items[#{item.id}][min_quantity]", :size => 4 ) %>
+	<br class="clear">
+	
+	<label>Max Quantity:</label>
+	<%= secure_text_field( item, :max_quantity, "package_items[#{item.id}][max_quantity]", :size => 4 ) %>
+	<br class="clear">
+	
+	<label>Max Versions:</label>
+	<%= secure_text_field( item, :max_versions, "package_items[#{item.id}][max_versions]", :size => 2 ) %>
+	<br class="clear">
+	
+	<label>Version Surcharge:</label>
+	<%= secure_text_field( item, :version_surcharge, "package_items[#{item.id}][version_surcharge]", :size => 6 ) %>
+	<br class="clear">
+
+	<ul id="package_item_options" class="productOptionValues"> 
+	<% item.options.each do |option| %>
+		<li class="productOptionValue"><%= option.title %>
+			<ul class="productOptionValues">
+				<% option.product_option_values.each do | value | %>
+				<% item_value = item.package_item_option_values.to_a.find { |v| v.product_option_value == value } %>
+				<li class="productOptionValue">
+					<%= secure_check_box( item, 
+														:package_item_option_values, 
+														"package_items[#{item.id}][option_values][#{value.id}]", item_value ) %>
+								
+			<%= secure_radio_button(item, 
+															:package_item_option_values, 
+															"package_items[#{item.id}][defaults][#{option.id}]",
+															value.id, 
+															(item_value.default if item_value), 
+															:class => 'default_radio' ) %>
+					
+					<label class="productOptionValue"><%= value.label %></label>
+					<br class="clear">
+				</li>
+				<% end %>
+			</ul>
+		</li>
+	<% end %>
+	
+	<li class="productOptionValue"> 
+		<% new_options = "<option value='none' SELECTED>Additional Options</option>" %>
+		<% new_options += options_for_select((ProductOption.find(:all) - item.options ).collect { |po| [ po.title, po.id ] }) %>
+		<%= select_tag( "package_items[#{item.id}][new_option]", new_options ) %>
+		<%= link_to_remote 'Add Option',	:url => add_package_item_option_url(:item_id => item.id), 
+		  																:with => "Form.Element.serialize('package_items[#{item.id}][new_option]')" %>
+		<br class="clear">			
+	</li>
+	</ul>
+
+</li>	
+<% end %>
+
+<% if @package.package_items.length == 0 %>
+<h4>There are no products in this package.</h4>
+<% end %>
+
+</ul>

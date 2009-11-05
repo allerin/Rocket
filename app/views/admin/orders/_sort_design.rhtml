@@ -1,0 +1,6 @@
+sort:
+<ul id="sortOptions">
+<%= link_to_design_sort('job no.', 'design_orders.id DESC', 'design_orders.id') %>
+<%= link_to_design_sort('status', 'status, design_orders.id DESC', 'status DESC, design_orders.id DESC') %>
+<%= link_to_design_sort('designer', 'designer DESC, design_orders.id DESC', 'designer, design_orders.id DESC') %>
+</ul>	

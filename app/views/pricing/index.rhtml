@@ -1,0 +1,40 @@
+<table><tr><td>
+
+<hr>
+
+<% @products.each do |product| %>
+
+<p><b><%= product.title %></b></p>
+
+<% form_tag(nil, :id => product.id) do %>
+<%= hidden_field_tag "id", product.id %>
+
+<p>Quantity: <%= select_tag "qty", options_for_select(@qtys) %></p>
+
+<% @price_opts = {} %>
+<% product.options_map.each_pair do |opt, vals| -%>
+<% @price_opts[opt] = vals.first %>
+<p><%= opt.to_s.capitalize %>: 
+<% if vals.length == 1 %>
+<%= vals[0].to_s %>
+<% else %>
+<%= select :product_option_value, opt.to_sym, vals %>
+<% end -%>
+</p><% end -%>
+
+<% @price = number_to_currency(product.price_for(@qtys[0], 1.0, @price_opts)) %>
+<div id="<%= product.id %>_price"><%= render :partial=>'price' %></div>
+
+<% end %>
+
+<%= observe_form product.id, :frequency => 0.5, 
+      :update => (product.id.to_s + "_price"),
+      :url => { :controller => 'pricing', :action => 'price' },
+      :with => "Form.serialize('" + product.id.to_s + "')", 
+      :complete => visual_effect(:highlight, (product.id.to_s + "_price"), :duration => 0.5 ) %>
+
+<hr>
+  
+<% end -%>
+
+</td></tr></table>

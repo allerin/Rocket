@@ -1,0 +1,27 @@
+<% form_tag( {:controller => 'upload', :action => "send_email", :order_id => order.id}, :name => "order[#{order.id}][send_email]", :id => "order[#{order.id}][send_email]" ) do %>
+
+<p>Please email instructions to:</p>
+<table width="213" border="0" cellspacing="0" cellpadding="4">
+	<tr>
+		<td align="right">Email:</td>
+		<td><input type="text" name="email" size="24" /></td>
+	</tr>
+	<tr>
+		<td align="right">Confirm Email:</td>
+		<td><input type="text" name="email_confirm" size="24" /></td>
+	</tr>
+	<tr>
+		<td align="right"></td>
+		<td><input type="image" src="/images/send-email-btn.gif" alt="" name="send_email" /></td>
+	</tr>
+</table>
+
+<% end %>
+
+<% if flash[:error] %>
+<p class="error"><%= flash[:error] %></p>
+<% end %>
+
+<% if flash[:email] %>
+	<p>Uploading instructions have been sent to <%= flash[:email] %>.</p>
+<% end %>

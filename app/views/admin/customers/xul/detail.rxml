@@ -1,0 +1,10 @@
+xml.groupbox(:id => "container") { |container|
+  container.caption { |caption| 
+    caption.label :value => "Rocket Postcards: Customers", :class => 'header'
+  }
+  
+  container << render( :partial => 'admin/customers/xul/detail_toolbar' )
+  
+  container << render( :partial => 'admin/customers/xul/detail' )
+  
+}

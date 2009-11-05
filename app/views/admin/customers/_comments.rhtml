@@ -1,0 +1,31 @@
+<table width="100%" cellspacing="6">
+	<tr style="display: none;" id="new_comment_row">
+		<td width="100px;" valign="top" class="label">
+			<strong><%= @current_user.full_name %></strong><br/>
+			<%= Time.now.strftime("%B %d, %Y at %I:%M %p")%>
+		</td>
+		<td width="90%">
+			<textarea id="comment" name="comment" rows="3" cols="58"></textarea>
+			[<%= link_to_function 'Save', remote_function(:url => add_customer_comment_url(:customer_id => @record.id),
+																						:with => "Form.Element.serialize('comment')") %>]
+		</td>
+	</tr>
+	<% if @record.comments.empty? %>
+	<tr>
+		<td width="100%" class="label" style="text-align: left;">
+			No notes.
+		</td>
+	</tr>
+	<% end %>
+	<% @record.comments.each do |comment| %>
+	<tr>
+		<td width="30%" valign="top" class="label">
+			<strong><%= comment.user.full_name if comment.user %></strong><br/>
+			<%= comment.created_at.strftime("%B %d, %Y at %I:%M %p")%>
+		</td>
+		<td width="68%" valign="top">
+			<%= comment.comment %>
+		</td>
+	</tr>
+	<% end %>
+</table>

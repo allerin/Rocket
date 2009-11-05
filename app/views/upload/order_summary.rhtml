@@ -1,0 +1,57 @@
+<% if @name == 'drop' %>
+<p>Thank You! Authorization of your payment was successful and we are awaiting your files. 
+    Below is a summary of your order. An email has also been sent to you with this order 
+    summary. When tracking the progress of your items, use the Rocket job numbers assigned 
+    to each item in your order.
+</p><br />
+<% elsif @name == 'email' %>
+<p>Thank You! Authorization of your payment was successful and an email has been sent to 
+    your designer. Below is a summary of your order. An email has also been sent to you with 
+    this order summary. When tracking the progress of your items, use the Rocket job numbers 
+    assigned to each item in your order.
+</p><br />
+<% else %>
+<p>Thank You! Authorization of your payment was successful and your files have been 
+   received. Below is a summary of your order. An email has also been sent to you 
+   with this order summary. When tracking the progress of your items, use the Rocket 
+   job numbers assigned to each item in your order.
+</p><br />
+<% end %>
+
+<strong>Here are the details of your order.</strong><br /><br />
+
+ROCKET INVOICE # <%= @order.invoice_id %><br /><br />
+
+------------------<br />
+ROCKET JOB # <%= @order.full_job_number %><br />
+Brochure<br />
+Enter a name for this ite<br />
+
+Size: <%= dimensions_nice @order.product_width, @order.product_height %><br />
+Quantity: <%= @order.quantity %><br />
+
+<!--
+Folding: Z-Trifold
+Ink: Color Front, Blank Back
+Paper: 100# Gloss Text
+Perforation: None
+Proofing: JPEG
+Turnaround: 3-Day
+-->
+
+Ship To:Customer Pickup<br />
+
+Quantity: <%= @order.quantity %><br />
+
+Printing: $<%= @order.price %><br />
+Tax: $0.00<br />
+Item Total: $<%= @order.total %><br /><br />
+
+------------------<br />
+PAYMENT METHOD : Check<br />
+
+Your payment was successfully authorized for $<%= @order.total %><br />
+
+Order Subtotals:<br />
+Printing: $<%= @order.price %><br />
+ Order Total: $<%= @order.total %><br />

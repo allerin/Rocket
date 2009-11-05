@@ -1,0 +1,45 @@
+<table width="182" border="0" cellspacing="0" cellpadding="4">
+	<% if item.discount > 0 %>
+	<tr>
+		<td align="left">Printing (Base):</td>
+		<td align="right">
+			<%=	number_to_currency( item.base_price ) %>
+		</td>
+	</tr>	
+	<tr>
+		<td align="left">Discount:</td>
+		<td align="right">
+			-<%=	number_to_currency( item.discount ) %>
+		</td>
+	</tr>
+	<% else %>
+	<tr>
+		<td align="left">Printing:</td>
+		<td align="right">
+			<%=	number_to_currency( item.price ) %>
+		</td>
+	</tr>
+	<% end %>
+	<% if @show_shipping and item.shipping_price > 0 %>
+	<tr>
+		<td align="left">Shipping:</td>
+		<td align="right">
+			<%= number_to_currency  item.shipping_price  %>
+		</td>
+	</tr>
+	<% end %>
+	<% if @show_tax and item.tax > 0 %>
+	<tr>
+		<td align="left">Tax:</td>
+		<td align="right">
+			<%= number_to_currency  item.tax  %>
+		</td>
+	</tr>
+	<% end %>
+	<tr>
+		<td align="left"><b>Item Total:</b></td>
+		<td align="right">
+			<b><%= number_to_currency item.total_price %></b>
+		</td>
+	</tr>
+</table>

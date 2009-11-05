@@ -1,0 +1,71 @@
+<% if address %>
+<% address_update_action = "update_address_field" -%>
+
+<form id="address_form_<%= address.id %>" method="post" action="<%= update_address_url(:order_id => @record.id, :id => address.id)%>">	
+<table>
+
+<td class="label" width="120">First</td>
+<td>
+	<%= secure_text_field(address, 'first_name', "address[#{address.id}][first_name]", :size => 14) %>
+</td>
+<td class="label">Company</td>
+<td>
+	<%= secure_text_field(address, 'company', "address[#{address.id}][company]", :size => 14) %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Last</td>
+<td>
+	<%= secure_text_field(address, 'last_name', "address[#{address.id}][last_name]", :size => 14) %>
+</td>
+<td class="label">Phone</td>
+<td>
+	<%= secure_text_field(address, 'phone', "address[#{address.id}][phone]", :size => 14) %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Add1</td>
+<td>
+	<%= secure_text_field(address, 'street_1', "address[#{address.id}][street_1]", :size => 14) %>
+</td>
+<td class="label">State</td>
+<td>
+	<%= secure_text_field(address, 'state', "address[#{address.id}][state]", :size => 2) %>
+</td>
+</tr>
+
+<tr>
+<td class="label">Add2</td>
+<td>
+	<%= secure_text_field(address, 'street_2', "address[#{address.id}][street_2]", :size => 14) %>
+</td>
+<td class="label">Zip</td>
+<td>
+	<%= secure_text_field(address, 'zip', "address[#{address.id}][zip]", :size => 5) %>
+</td>
+</tr>
+
+<tr>
+<td class="label">City</td>
+<td>
+	<%= secure_text_field(address, 'city', "address[#{address.id}][city]", :size => 14) %>
+</td>
+<td class="label">Country</td>
+<td>
+	<%= secure_text_field(address, 'country', "address[#{address.id}][country]", :size => 14) %>
+</td>
+</tr>
+
+</table>
+</form>
+
+<%= observe_form("address_form_#{address.id}", :function => remote_function(:url => update_address_url(:order_id => @record.id, :id => address.id), :with => "Form.serialize('address_form_#{address.id}')")) %>
+
+<% else %>
+<p style="text-align:center;">
+Customer Pickup
+</p>
+
+<% end %>

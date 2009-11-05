@@ -1,0 +1,13 @@
+<div id="quicksearch">
+<%= form_remote_tag(	:html => {:action => url_for({:action => 'show', :controller => '/admin/customers' }),
+ 																:name => 'quicksearch_form',
+																:id => 'quicksearch_form' },
+											:url => {:action => 'show', :controller => '/admin/customers' },
+											:update => 'application' )  %>
+							
+<input class="quicksearch" id="search" name="search" type="text" value="<%= session[:quicksearch] %>" size="20"> 
+<input type="image" src="/images/search.gif" name="submit" id="quicksearchSubmit" onclick="$('quicksearch_form').submit()">
+<input type="image" src="/images/clear.gif" name="clear" id="quicksearchClear" onclick="$('search').value=''">
+
+</form>
+</div>

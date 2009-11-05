@@ -1,0 +1,31 @@
+<form id="design_form" name="design_form">
+<table style="margin-bottom: -8px">
+	<tr>
+		<td class="formLabel">Designer</td>
+		<td>
+			<% designers = DesignOrder.find(:all, :select => "DISTINCT design_orders.designer", :order => "design_orders.designer ASC" ).collect(&:designer).insert(0,['']) %>
+			<%= select_tag	'designer', 
+											options_for_select(designers, params[:designer])  %>
+		</td>
+		<td class="formLabel" style="padding-left: 12px;">
+			Pay Period
+		</td>
+		<td class="formLabel">
+			<%= text_field_tag 'start_date', nil, :size => 8 %> &nbsp;-
+		</td>
+		<td>
+			<%= text_field_tag 'end_date', nil, :size => 8 %>
+		</td>
+	</tr>
+</table>
+</form>
+	<script>
+	new Form.EventObserver($("design_form"), function() { <%= remote_function(:url => report_design_list_url, 
+																																					:with => "Form.serialize('design_form')") %> }); 
+	
+	setTimeout("<%= remote_function(	:url => report_design_list_url, :with => "Form.serialize('design_form')") %>", 500)
+	</script>
+	
+	<style>
+	td.formLabel { text-align: right; font-size: 12px; font-weight: bold;}
+	</style>

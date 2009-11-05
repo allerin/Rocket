@@ -1,0 +1,85 @@
+<td valign="top" width="350">
+	<table width="543" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><img src="/images/design-title-main.gif" alt="" height="33" width="350" border="0" /></td>
+		</tr>
+		<tr>
+			<td>
+				<table width="99%" border="0" cellspacing="0" cellpadding="10">
+					<tr>
+
+						<td>
+							<div align="left">
+																	<table width="64" border="0" cellspacing="2" cellpadding="0" align="right">
+																		<tr>
+																			<td><img src="/images/design-your-vision.jpg" alt="" height="173" width="225" align="right" border="0" hspace="12"/></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				<div align="center">
+																					<a href="<%= design_instructions_url %>">
+																					<img src="/images/design-order-btn1.gif" alt="" height="209" width="188" border="0" />
+																					</a>
+																				</div>
+																			</td>
+																		</tr>
+																	</table>
+																	Whether you need an eye-catching custom design for your next project, or you know exactly what you want but need help, Rocket's design department can get the job done right - and for the right price.
+																	<p>We offer two types of design services:</p>
+																	<p><span class="subhead">Layout</span></p>
+																	<p>We create a finished project based on your mock-up and the components you provide. Layout service includes image, text, logo placement, project management and archiving your files for future orders. </p>
+
+																	<p><span class="small">* Two rounds of revisions are included with your layout. Each additional round $15.</span></p>
+																	<p><span class="small">* Up to three digital images or two scans are included. Each additional digital image $15. Each additional scan $20. </span></p>
+																	<p><span class="subhead">Custom Design</span></p>
+																	<p>We collaborate with you to create a tailor-made design based on your vision and our experience. First we establish the purpose and goal of your project then create an original design which communicates a clear, effective message. We are versatile and take pride in producing fresh and innovative designs in a wide range of styles. </p>
+																	<p>Base prices for custom designs are calculated according to industry standards. Additional design time is billed at $75 per hour. Please call to discuss your project.<span class="small"> </span></p>
+																	<p><span class="small">* Up to three digital images or two scans are included. Each additional digital image $15. Each additional scan $20. </span></p>
+
+																	<p><span class="small">* Three rounds of revisions are included with your custom design. Each additional round is $15.</span></p>
+																	<p></p>
+																	<p><span class="subhead">Layout and Custom Design Fees</span></p>
+																	<table width="505" border="0" cellspacing="0" cellpadding="6" bgcolor="#fcecbd">
+																		<tr>
+																			<td bgcolor="#9c9ea0"><font color="white"><span class="subhead">Product</span></font></td>
+																			<td align="center" bgcolor="#9c9ea0" width="20%"><font color="white"><span class="subhead">Layout</span></font></td>
+
+																			<td align="center" bgcolor="#9c9ea0"><font color="white"><span class="subhead">Custom Design</span></font></td>
+																		</tr>
+									
+									<% @enabled_product_pages.collect { |page| page.enabled_products }.flatten.each do | product | %>
+										<% if product.one_sided_layout_price and product.two_sided_layout_price %>
+									<tr>
+										<td><%= product.title %>: <span class="small"><%= product.title == "Brochure" ? "Half-fold" : "1-Sided" %></span></td>
+										<td align="center" width="20%"><%= number_to_currency(product.one_sided_layout_price, :precision => 0) %></td>
+										<td align="center"><%= number_to_currency(product.one_sided_design_price, :precision => 0) %></td>
+									</tr>
+									<tr>
+										<td><%= product.title %>: <span class="small"><%= product.title == "Brochure" ? "Letter-fold, Tri-fold" : "2-Sided" %></span></td>
+										<td align="center" width="20%"><%= number_to_currency(product.two_sided_layout_price, :precision => 0) %></td>
+										<td align="center"><%= number_to_currency(product.two_sided_design_price, :precision => 0) %></td>
+									</tr>
+										<% elsif (product.one_sided_layout_price or product.two_sided_layout_price or product.one_sided_design_price or product.two_sided_design_price)%>
+										<tr>
+											<td><%= product.title %></td>
+											<td align="center" width="20%"><%= number_to_currency((product.one_sided_layout_price  || product.two_sided_layout_price), :precision => 0) %></td>
+											<td align="center"><%= number_to_currency((product.one_sided_design_price || product.two_sided_design_price), :precision => 0) %></td>
+									</tr>
+										<% end %>
+									<% end %>
+									<tr>
+										<td>Club Flyer</td>
+										<td colspan="2" align="center"><span class="small">Limited availibility. $75 per hour. Please call.</span></td>
+
+									</tr>
+								</table>
+		
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+</td>

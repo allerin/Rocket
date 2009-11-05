@@ -1,0 +1,80 @@
+  <table>
+    <tr>
+        <td style="width:15%;" valign="top">
+            <div class="job_column">
+    	       <label class="job_number"><%= link_to order.full_job_number, show_order_url(:id => order.id), :id => "#{order.id}"	%></label><br/>
+    	    <div style="color:red;font-size:12px;text-align:center;">
+    	       Color<br/><br/> <b><%= order.color_code %></b>
+            </div>
+            </div>
+        </td>
+        <td style="width:10%;" valign="top">
+            <div class="job_column job_image">
+                <% if order.art_upload_method=='now'%>
+					         <img src="admin/reports/show_me/<%= order.id %>" alt="1" width="60px" height="60px" border="1" align="left"/>
+							<%else%>
+							 <div style="border: 1px dotted gray; width: 50px; height: 60px;" class="thumbnailPlaceholder">
+		
+	</div>
+							<%end%>
+    	    </div>
+        </td>
+        <td style="width:20%;" valign="top">
+            <div class="job_column job_details">
+	           <label class="sku"><%= order.product_sku %></label>
+	           <label class="product_name"><%= order.product_title %></label><br/><br/>
+	           <label class="height">height:<%= order.product_height %></label>
+	           <label class="width">width:<%= order.product_width %></label><br/><br/>
+	           <label class="last_name"><%= order.invoice.customer.last_name %></label>
+	           <label class="first_name"><%= order.invoice.customer.first_name %></label><br/><br/>
+	           <label class="email"><%= order.invoice.customer.email %></label><br/><br/>
+	           <span style="font-size:10px;text-align:right;font-weight:bold;">Qty:&nbsp;<%= order.quantity %>  </span>
+            </div>
+        </td>
+        <td style="width:35%;" valign="top">
+            <div class="job_column">
+                <div class="prepress_comments" style="overflow:scroll; height:80px;">
+ 	              <%= order.prepress_comments.collect { |c| "<strong> <br/> " + 
+				    c.user.first_name + 
+				    c.created_at.strftime(" (%m/%d/%y %H:%M)</strong> ") +
+				    c.comment }.join(' ') %>
+				  <br/>
+	       </div>
+	       [<%= link_to_function 'Add', "$('new_press_comment_container_#{order.id}').style.display='block';" %>]
+	       <div class="new_press_comment" id="new_press_comment_container_<%= order.id %>" style="display:none; ">
+		      <%= form_remote_tag(:url => report_add_comment_url(:kind => 'PrePress', :order_id => order.id, :batch => params[:batch], :run => params[:run], :view => "status_order")).gsub('amp;','') %> 
+		      <br/>
+			  <%= text_field_tag "new_press_comment_#{order.id}", nil, :size => 20, :style => "float: left;" %><br/><br/>
+			  <input style="float:left;border:none;" src="images/save.gif" type='image' value='save'/>
+			 <a style="font-size:13px; color:#666; padding-left:4px;" href="javascript:void(0);" onclick="javascript:Effect.toggle('new_press_comment_container_<%= order.id %>', 'blind');">Cancel</a>
+		     </form>
+	       </div>
+           <br/><br/>
+	       <span style="color:red;font-size:10px;text-align:left;font-weight:bold;float:left;"> Amt Due:&nbsp;$<%= order.price %> </span><label class="paid_label">Paid Date:&nbsp;12/04/2008<%= order.paid_at.strftime("%m/%d/%y") if order.paid_at %></label>
+	       </div>
+            </td>
+            <td style="width:20%;" valign="top">
+            <div style="height:150px;">
+	        <div class="runs" style="float:left;">
+		    <label class="run">A:</label> 
+		    <label class="print_only run_print"><%= order.run_a %></label>
+		    <%= select_tag("order_#{order.id}_run_a", options_for_select((1..20).to_a.insert(0,nil), order.run_a.to_i), :onchange => remote_function(:url => report_change_run_url, :with => "'side=a&order_id=#{order.id}&run=' + $('order_#{order.id}_run_a').value"), :class => "screen_only") %>
+		    <br/><br/>
+		    <label class="run">B:</label> 
+		    <label class="print_only run_print"><%= order.run_b %></label>
+		    <%= select_tag("order_#{order.id}_run_b", options_for_select((1..20).to_a.insert(0,nil), order.run_b.to_i), :onchange => remote_function(:url => report_change_run_url, :with => "'side=b&order_id=#{order.id}&run=' + $('order_#{order.id}_run_b').value"),
+										:class => "screen_only") %>
+	       </div>
+	       <div class="batch_proof">
+		   <label class="batch"><%= order.batch %></label><br style="clear: none;"/>
+		   <br/><label class="proof"><%= order.proof_type %></label>
+	       </div><br/><br/><br/><br/><br style="clear: both;">
+           <span style="font-size:10px;color:red;"> status <%=  order.status%></span>
+	       <div style="float:right;"><%= select_tag "order_status_#{order.id}", options_for_select(statuses_array, order.status), :onchange => remote_function(:url => report_change_status_url(:order_id => order.id), :with => "'status=' + $('order_status_#{order.id}').value"),
+	       :style => "width: 140px", :class => "screen_only" %></div>
+	
+	       <label class="print_only status_print"><%= order.status%></label>
+           </div>				
+        </td>
+    </tr>
+  </table>

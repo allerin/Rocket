@@ -1,0 +1,26 @@
+<div id="subnav">
+<%= link_to_function 'advanced search', "$('search_container').style.display='block';" %>
+|
+
+<span id="sort">
+<%= render :partial => 'sort_design'%>
+</span>
+</div>
+
+<%= render :partial => "admin/components/quicksearch"%>
+
+<div id="content">
+<%= render(:partial => "search_design")%>
+
+<%= render(:partial => 'list_design') %>
+
+<div id="paginator">
+<% pagination_links_each(@pages, {:name => :page, :window_size => 10, :always_show_anchors => true, :delimiter => '  |  ', :link_to_current_page => false}) do |n| %>
+	<%= link_to(n, list_design_orders_url(:page => n)) %>		
+<% end %>
+</div>
+
+
+</div>
+
+<%= render :partial => "admin/components/status" %>

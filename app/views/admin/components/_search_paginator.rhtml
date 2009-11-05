@@ -1,0 +1,9 @@
+<div id="paginator">
+
+<% pagination_links_each(@pages, {:name => :page, :window_size => 10, :always_show_anchors => true, :delimiter => '  |  ', :link_to_current_page => false}) do |n| %>
+
+	<%= link_to_function(n, remote_function(:url => advanced_order_search_url(:page => n), :with => "Form.serialize('search_form')")) %>		
+
+<% end %>
+
+</div>

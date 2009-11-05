@@ -1,0 +1,110 @@
+<%	address_rows = @current_customer.addresses.reverse.inject( [ [] ] ) { | rows, address |
+  if this_row = rows.find { |r| r.length < 2  }
+    this_row << address
+  else
+    rows << [ address ]
+  end
+ 	rows }
+
+	states = { 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas', 'AA' => 'Armed Forces Americas', 'AE' => 'Armed Forces Europe', 'AP' => 'Armed Forces Pacific', 'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DC' => 'D.C.', 'DE' => 'Delaware', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas', 'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey', 'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'PR' => 'Puerto Rico', 'RI' => 'Rhode Island', 'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah', 'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin', 'WY' => 'Wyoming' }.invert.sort{ |a,b| a[0] <=> b[0] }
+	
+%>
+
+<td valign="top" width="562" align="left">
+	<% form_tag( { :action => 'address_book' }, :name => 'address_book', :id => "changeAddressForm" ) do %>
+	<div class="subhead">
+		<p>
+			<img src="/images/prod-title-address-bk.gif" alt="" height="33" width="350" border="0" /><br />
+		</p>
+			<p>Choose A New Default Shipping Address</p>
+	</div>
+		<div align="left">
+		<table width="450" border="0" cellspacing="0" cellpadding="8">
+		<% address_rows.each do | row | %>
+			<tr>
+				<% row.each do | address | %>
+					<td valign="top">
+						<input type="image" src="/images/ship-to-btn.gif" name="ship_to_address" value="<%= address.id %>" id="address_<%= address.id %>" >
+						<p>Label: <%= address.label %></p>
+						<p>
+							<%= address.first_name + " " + address.last_name %><br />
+							<%= address.street_1 %><br />
+							<%= ( address.street_2 + '<br />' ) if address.street_2 and not address.street_2.empty? %>
+							<%= address.city + ", " + address.state + " " + address.zip %><br />
+							<%= address.phone %>
+						</p>
+						<p>
+							<%= link_to image_tag('edit-btn.gif', :style => 'border-width: 0px;'), { :action => 'edit_address', :address_id => address.id, :edit_item => params[:edit_item] } %>
+						</p>
+					</td>
+				<% end %>
+			</tr>	
+		<% end %>
+		</table>
+		
+	<% end %>
+	<% form_tag( { :action => 'new_address'}, :name => 'new_address', :id => "newAddressForm" ) do %>
+	</div>
+	<div class="subhead">
+		<p>Add A New Shipping Address</p>
+	</div>
+	<table class="small" width="415" border="0" cellspacing="0" cellpadding="4">
+		<tr>
+			<td align="right">Label:</td>
+			<td><input type="text" name="new_address[label]" size="35" /></td>
+
+		</tr>
+		<tr>
+			<td align="right">First Name:</td>
+			<td><input type="text" name="new_address[first_name]" size="35" /></td>
+		</tr>
+		<tr>
+			<td align="right">Last Name:</td>
+			<td><input type="text" name="new_address[last_name]" size="35" /></td>
+		</tr>
+		<tr>
+			<td align="right">Company:</td>
+			<td><input type="text" name="new_address[company]" size="35" /></td>
+		</tr>
+		<tr>
+			<td align="right">Address Line 1:</td>
+			<td><input type="text" name="new_address[street_1]" size="35" /></td>
+
+		</tr>
+		<tr>
+			<td align="right">Address Line 2:</td>
+			<td><input type="text" name="new_address[street_2]" size="35" /></td>
+		</tr>
+		<tr>
+			<td align="right">City:</td>
+			<td><input type="text" name="new_address[city]" size="24" /></td>
+
+		</tr>
+		<tr>
+			<td align="right">State:</td>
+			<td>
+				<select name="new_address[state]">
+				<%= options_for_select( states) %>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">ZIP:</td>
+			<td><input type="text" name="new_address[zip]" size="10" /></td>
+
+		</tr>
+		<tr>
+			<td align="right">Phone Number:</td>
+			<td><input type="text" name="new_address[phone]" size="24" /></td>
+		</tr>
+		<tr>
+			<td align="right"></td>
+			<td>
+				<input type="image" src="/images/save-btn.gif" name="new_address" id="newAddress" >
+			</td>
+		</tr>
+	</table>
+	<% end %>
+	<p></p>
+	<div align="right"></div>
+</td>

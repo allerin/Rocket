@@ -1,0 +1,58 @@
+<%
+@loading = "$('status').innerHTML = '" + image_tag('spin.gif', :size=>'12x12') + " Loading'"
+@complete = "$('status').innerHTML = '" + image_tag('done.gif', :size=>'12x12') + "  Done'; "
+%>
+
+<div id="subnav">
+<ul>
+<% if @view == 'detail' %>
+
+<li>
+<%=	link_to	'back to list',
+ 						{ :view => 'list', :page => session[:page], :action => 'show' },
+						:id => 'backToList' %>
+</li>				
+
+<li>
+	<%= link_to 'Previous', { :view => 'detail', :action => 'show', :id => @previous_record.id } if @previous_record %>
+</li>
+<li>
+	<%= link_to 'Next', { :view => 'detail', :action => 'show', :id => @next_record.id } if @next_record %>
+</li>
+
+<% else %>
+	<% if (session[:products_key] and not session[:products_key].empty? ) || (session[:products_value] and not session[:products_values].empty? ) %>
+
+<li>
+	<%= link_to 'list all', 
+				{ :view => 'list', :page => 1, :all => true, :key => nil, :value => nil },
+				:id => 'listAll' %>
+
+	
+	<% end %>
+	
+	<li>
+<strong>
+<%= link_to 'List Packages', admin_list_packages_url %>
+</strong>
+</li>
+<li>
+	<strong>
+		<%= link_to 'List Coupons', admin_list_coupons_url %>
+	</strong>
+</li>
+
+<% end %>
+
+
+
+</ul>
+</div>
+
+<%= render :partial => "admin/components/quicksearch"%>
+
+<div id="content">
+<%= render :partial => "admin/components/record_viewer" %>
+</div>
+
+<%= render :partial => "admin/components/status" %>
